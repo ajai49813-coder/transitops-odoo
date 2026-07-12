@@ -7,7 +7,8 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <field name="status" widget="statusbar" statusbar_visible="active,maintenance,inactive,retired"/>
+                    <field name="status" widget="statusbar"
+                           statusbar_visible="active,maintenance,inactive,retired"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -33,35 +34,13 @@
                     </group>
                     <notebook>
                         <page string="Trips" name="trips">
-                            <field name="trip_ids" readonly="1">
-                                <list>
-                                    <field name="name"/>
-                                    <field name="origin"/>
-                                    <field name="destination"/>
-                                    <field name="scheduled_date"/>
-                                    <field name="status"/>
-                                </list>
-                            </field>
+                            <field name="trip_ids" readonly="1"/>
                         </page>
                         <page string="Fuel Records" name="fuel">
-                            <field name="fuel_ids" readonly="1">
-                                <list>
-                                    <field name="date"/>
-                                    <field name="quantity_liters"/>
-                                    <field name="total_cost"/>
-                                </list>
-                            </field>
+                            <field name="fuel_ids" readonly="1"/>
                         </page>
                         <page string="Maintenance" name="maintenance">
-                            <field name="maintenance_ids" readonly="1">
-                                <list>
-                                    <field name="name"/>
-                                    <field name="maintenance_type"/>
-                                    <field name="scheduled_date"/>
-                                    <field name="status"/>
-                                    <field name="cost"/>
-                                </list>
-                            </field>
+                            <field name="maintenance_ids" readonly="1"/>
                         </page>
                         <page string="Notes">
                             <field name="notes"/>
@@ -78,7 +57,7 @@
         <field name="name">transit.vehicle.list</field>
         <field name="model">transit.vehicle</field>
         <field name="arch" type="xml">
-            <list>
+            <tree>
                 <field name="name"/>
                 <field name="license_plate"/>
                 <field name="vehicle_type"/>
@@ -93,7 +72,7 @@
                        decoration-danger="status == 'retired'"
                        decoration-muted="status == 'inactive'"/>
                 <field name="insurance_expiry"/>
-            </list>
+            </tree>
         </field>
     </record>
 

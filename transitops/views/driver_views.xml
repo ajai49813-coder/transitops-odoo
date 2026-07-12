@@ -6,7 +6,8 @@
         <field name="arch" type="xml">
             <form>
                 <header>
-                    <field name="status" widget="statusbar" statusbar_visible="active,on_leave,inactive,suspended"/>
+                    <field name="status" widget="statusbar"
+                           statusbar_visible="active,on_leave,inactive,suspended"/>
                 </header>
                 <sheet>
                     <div class="oe_title">
@@ -32,15 +33,7 @@
                     </group>
                     <notebook>
                         <page string="Trips">
-                            <field name="trip_ids" readonly="1">
-                                <list>
-                                    <field name="name"/>
-                                    <field name="origin"/>
-                                    <field name="destination"/>
-                                    <field name="scheduled_date"/>
-                                    <field name="status"/>
-                                </list>
-                            </field>
+                            <field name="trip_ids" readonly="1"/>
                         </page>
                         <page string="Notes">
                             <field name="notes"/>
@@ -56,7 +49,7 @@
         <field name="name">transit.driver.list</field>
         <field name="model">transit.driver</field>
         <field name="arch" type="xml">
-            <list>
+            <tree>
                 <field name="name"/>
                 <field name="employee_id"/>
                 <field name="phone"/>
@@ -70,7 +63,7 @@
                        decoration-warning="status == 'on_leave'"
                        decoration-danger="status == 'suspended'"
                        decoration-muted="status == 'inactive'"/>
-            </list>
+            </tree>
         </field>
     </record>
 

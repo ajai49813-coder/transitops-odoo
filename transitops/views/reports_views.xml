@@ -28,7 +28,7 @@
     <record id="action_report_vehicles" model="ir.actions.act_window">
         <field name="name">Vehicle Report</field>
         <field name="res_model">transit.vehicle</field>
-        <field name="view_mode">pivot,graph,list</field>
+        <field name="view_mode">pivot,graph,tree</field>
         <field name="search_view_id" ref="view_transit_vehicle_search"/>
     </record>
 
@@ -58,7 +58,7 @@
     <record id="action_report_trips" model="ir.actions.act_window">
         <field name="name">Trip Report</field>
         <field name="res_model">transit.trip</field>
-        <field name="view_mode">pivot,graph,list</field>
+        <field name="view_mode">pivot,graph,tree</field>
         <field name="search_view_id" ref="view_transit_trip_search"/>
     </record>
 
@@ -91,7 +91,7 @@
     <record id="action_report_fuel" model="ir.actions.act_window">
         <field name="name">Fuel Report</field>
         <field name="res_model">transit.fuel</field>
-        <field name="view_mode">pivot,graph,list</field>
+        <field name="view_mode">pivot,graph,tree</field>
         <field name="search_view_id" ref="view_transit_fuel_search"/>
     </record>
 
@@ -122,7 +122,7 @@
     <record id="action_report_drivers" model="ir.actions.act_window">
         <field name="name">Driver Report</field>
         <field name="res_model">transit.driver</field>
-        <field name="view_mode">pivot,graph,list</field>
+        <field name="view_mode">pivot,graph,tree</field>
         <field name="search_view_id" ref="view_transit_driver_search"/>
     </record>
 
@@ -153,7 +153,7 @@
     <record id="action_report_maintenance" model="ir.actions.act_window">
         <field name="name">Maintenance Report</field>
         <field name="res_model">transit.maintenance</field>
-        <field name="view_mode">pivot,graph,list</field>
+        <field name="view_mode">pivot,graph,tree</field>
         <field name="search_view_id" ref="view_transit_maintenance_search"/>
     </record>
 

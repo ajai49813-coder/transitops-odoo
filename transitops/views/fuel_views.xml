@@ -31,11 +31,11 @@
         </field>
     </record>
 
-    <record id="view_transit_fuel_list" model="ir.ui.view">
-        <field name="name">transit.fuel.list</field>
+    <record id="view_transit_fuel_tree" model="ir.ui.view">
+        <field name="name">transit.fuel.tree</field>
         <field name="model">transit.fuel</field>
         <field name="arch" type="xml">
-            <list>
+            <tree>
                 <field name="name"/>
                 <field name="date"/>
                 <field name="vehicle_id"/>
@@ -46,7 +46,7 @@
                 <field name="cost_per_liter"/>
                 <field name="total_cost"/>
                 <field name="odometer_reading"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -73,7 +73,7 @@
     <record id="action_transit_fuel" model="ir.actions.act_window">
         <field name="name">Fuel Records</field>
         <field name="res_model">transit.fuel</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="view_transit_fuel_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Log your first fuel record!</p>

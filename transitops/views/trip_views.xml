@@ -41,13 +41,13 @@
                     <notebook>
                         <page string="Fuel Records">
                             <field name="fuel_ids">
-                                <list editable="bottom">
+                                <tree editable="bottom">
                                     <field name="date"/>
                                     <field name="quantity_liters"/>
                                     <field name="cost_per_liter"/>
                                     <field name="total_cost"/>
                                     <field name="fuel_station"/>
-                                </list>
+                                </tree>
                             </field>
                         </page>
                         <page string="Notes">
@@ -60,11 +60,11 @@
         </field>
     </record>
 
-    <record id="view_transit_trip_list" model="ir.ui.view">
-        <field name="name">transit.trip.list</field>
+    <record id="view_transit_trip_tree" model="ir.ui.view">
+        <field name="name">transit.trip.tree</field>
         <field name="model">transit.trip</field>
         <field name="arch" type="xml">
-            <list>
+            <tree>
                 <field name="name"/>
                 <field name="vehicle_id"/>
                 <field name="driver_id"/>
@@ -78,7 +78,7 @@
                        decoration-warning="status == 'scheduled'"
                        decoration-muted="status == 'draft'"
                        decoration-danger="status == 'cancelled'"/>
-            </list>
+            </tree>
         </field>
     </record>
 
@@ -113,7 +113,7 @@
     <record id="action_transit_trip" model="ir.actions.act_window">
         <field name="name">Trips</field>
         <field name="res_model">transit.trip</field>
-        <field name="view_mode">list,form</field>
+        <field name="view_mode">tree,form</field>
         <field name="search_view_id" ref="view_transit_trip_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">Schedule your first trip!</p>
