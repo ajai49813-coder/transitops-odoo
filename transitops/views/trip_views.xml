@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Trip Tree View with row color coding -->
+    <record id="view_transport_trip_tree" model="ir.ui.view">
+        <field name="name">transport.trip.tree</field>
+        <field name="model">transport.trip</field>
+        <field name="arch" type="xml">
+            <tree string="Trips" 
+                  decoration-success="status == 'completed'" 
+                  decoration-info="status == 'in_progress'" 
+                  decoration-warning="status == 'scheduled'" 
+                  decoration-danger="status == 'cancelled'">
+                <field name="trip_id" decoration-bf="1"/>
+                <field name="name" class="fw-bold"/>
+                <field name="vehicle_id" widget="many2one_avatar"/>
+                <field name="driver_id" widget="many2one_avatar"/>
+                <field name="route_id" decoration-it="1"/>
+                <field name="departure_time"/>
+                <field name="expected_arrival_time"/>
+                <field name="progress" widget="progressbar" string="Progress"/>
+                <field name="status" widget="badge" 
+                       decoration-success="status == 'completed'" 
+                       decoration-info="status == 'in_progress'" 
+                       decoration-warning="status == 'scheduled'" 
+                       decoration-danger="status == 'cancelled'"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Trip Form View -->
+    <record id="view_transport_trip_form" model="ir.ui.view">
+        <field name="name">transport.trip.form</field>
+        <field name="model">transport.trip</field>
+        <field name="arch" type="xml">
+            <form string="Trip">
+                <header>
+                    <button name="action_start" string="Start Trip" type="object" class="oe_highlight btn-primary" invisible="status != 'scheduled'" icon="fa-play"/>
+                    <button name="action_simulate_movement" string="Track GPS Movement" type="object" class="oe_highlight btn-info" icon="fa-location-arrow" invisible="status != 'in_progress'"/>
+                    <button name="action_complete" string="Complete Trip" type="object" class="oe_highlight btn-success" invisible="status != 'in_progress'" icon="fa-check"/>
+                    <button name="action_cancel" string="Cancel Trip" type="object" invisible="status in ('completed', 'cancelled')" icon="fa-times"/>
+                    <button name="action_reset" string="Reset to Scheduled" type="object" invisible="status not in ('completed', 'cancelled')" icon="fa-refresh"/>
+                    <field name="status" widget="statusbar" statusbar_visible="scheduled,in_progress,completed,cancelled"/>
+                </header>
+                <sheet>
+                    <!-- Status Ribbons for instant visual recognition -->
+                    <widget name="web_ribbon" title="Completed" bg_color="bg-success" invisible="status != 'completed'"/>
+                    <widget name="web_ribbon" title="Cancelled" bg_color="bg-danger" invisible="status != 'cancelled'"/>
+                    <widget name="web_ribbon" title="In Progress" bg_color="bg-info" invisible="status != 'in_progress'"/>
+                    
+                    <div class="oe_title">
+                        <label for="trip_id" class="oe_edit_only"/>
+                        <h1>
+                            <field name="trip_id" class="text-primary"/>
+                        </h1>
+                        <label for="name" class="oe_edit_only"/>
+                        <h2>
+                            <field name="name" placeholder="e.g. Morning Commute"/>
+                        </h2>
+                    </div>
+                    
+                    <group>
+                        <group name="trip_logistics" string="Route &amp; Allocations">
+                            <label for="route_id"/>
+                            <div class="o_row">
+                                <span class="fa fa-road text-muted mr-1"/>
+                                <field name="route_id"/>
+                            </div>
+                            <label for="vehicle_id"/>
+                            <div class="o_row">
+                                <span class="fa fa-bus text-muted mr-1"/>
+                                <field name="vehicle_id" options="{'no_create': True}"/>
+                            </div>
+                            <label for="driver_id"/>
+                            <div class="o_row">
+                                <span class="fa fa-user text-muted mr-1"/>
+                                <field name="driver_id" options="{'no_create': True}"/>
+                            </div>
+                            <field name="progress" widget="progressbar"/>
+                            <field name="color" invisible="1"/>
+                        </group>
+                        
+                        <group name="trip_schedule" string="Schedule &amp; Distances">
+                            <field name="start_location" readonly="1" force_save="1"/>
+                            <field name="end_location" readonly="1" force_save="1"/>
+                            <field name="departure_time"/>
+                            <field name="expected_arrival_time"/>
+                            <field name="actual_arrival_time" invisible="status != 'completed'"/>
+                            <field name="distance"/>
+                        </group>
+                    </group>
+                    
+                    <!-- Advanced live tracking section -->
+                    <group name="live_tracking" string="Real-Time GPS Tracking Details">
+                        <group string="GPS Coordinates">
+                            <field name="tracking_status" widget="radio" options="{'horizontal': true}"/>
+                            <label for="current_latitude"/>
+                            <div class="o_row">
+                                <span class="fa fa-map-marker text-muted mr-1"/>
+                                <field name="current_latitude"/>
+                                <span class="ml-2 mr-2">/</span>
+                                <field name="current_longitude"/>
+                            </div>
+                            <field name="last_updated_time"/>
+                        </group>
+                        <group string="Tracking Analytics">
+                            <label for="speed"/>
+                            <div class="o_row">
+                                <span class="fa fa-tachometer text-muted mr-1"/>
+                                <field name="speed"/>
+                                <span class="text-muted">km/h</span>
+                            </div>
+                            <field name="eta"/>
+                            <field name="distance_completed"/>
+                            <field name="current_stop_id"/>
+                        </group>
+                    </group>
+                    
+                    <group name="route_visualization" string="Route Visualization Details">
+                        <group>
+                            <field name="remaining_stops"/>
+                        </group>
+                        <group>
+                            <field name="distance_covered"/>
+                            <field name="remaining_distance"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Trip Kanban View with color index mapping -->
+    <record id="view_transport_trip_kanban" model="ir.ui.view">
+        <field name="name">transport.trip.kanban</field>
+        <field name="model">transport.trip</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="status" class="o_kanban_small_column" quick_create="false" default_order="departure_time desc">
+                <field name="id"/>
+                <field name="trip_id"/>
+                <field name="name"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <field name="route_id"/>
+                <field name="progress"/>
+                <field name="status"/>
+                <field name="color"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_color_{{record.color.raw_value}} oe_kanban_global_click o_kanban_record_has_image_fill shadow-sm rounded">
+                            <div class="oe_kanban_details">
+                                <div class="o_kanban_record_top d-flex justify-content-between align-items-center mb-1">
+                                    <strong class="o_kanban_record_title text-primary fs-6">
+                                        <field name="trip_id"/>
+                                    </strong>
+                                </div>
+                                <div class="mb-2">
+                                    <span class="fw-bold text-dark"><field name="name"/></span>
+                                </div>
+                                <div class="o_kanban_record_body text-muted small mt-1">
+                                    <div class="d-flex align-items-center mb-1">
+                                        <span class="fa fa-road text-muted mr-2" style="width: 14px;"/>
+                                        <span>Route: <field name="route_id"/></span>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-1">
+                                        <span class="fa fa-bus text-muted mr-2" style="width: 14px;"/>
+                                        <span>Vehicle: <field name="vehicle_id"/></span>
+                                    </div>
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="fa fa-user text-muted mr-2" style="width: 14px;"/>
+                                        <span>Driver: <field name="driver_id"/></span>
+                                    </div>
+                                    <div class="mt-2" t-if="record.progress.raw_value &gt; 0 or record.status.raw_value == 'in_progress'">
+                                        <field name="progress" widget="progressbar"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Trip Calendar View -->
+    <record id="view_transport_trip_calendar" model="ir.ui.view">
+        <field name="name">transport.trip.calendar</field>
+        <field name="model">transport.trip</field>
+        <field name="arch" type="xml">
+            <calendar string="Trips Calendar" 
+                      date_start="departure_time" 
+                      date_stop="expected_arrival_time" 
+                      color="status" 
+                      quick_create="false">
+                <field name="trip_id"/>
+                <field name="name"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Trip Graph View -->
+    <record id="view_transport_trip_graph" model="ir.ui.view">
+        <field name="name">transport.trip.graph</field>
+        <field name="model">transport.trip</field>
+        <field name="arch" type="xml">
+            <graph string="Trips Analytics" type="bar" sample="1">
+                <field name="route_id"/>
+                <field name="status"/>
+                <field name="distance" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Trip Pivot View -->
+    <record id="view_transport_trip_pivot" model="ir.ui.view">
+        <field name="name">transport.trip.pivot</field>
+        <field name="model">transport.trip</field>
+        <field name="arch" type="xml">
+            <pivot string="Trips Performance Matrix" sample="1">
+                <field name="route_id" type="row"/>
+                <field name="status" type="col"/>
+                <field name="distance" type="measure"/>
+                <field name="progress" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Trip Search View -->
+    <record id="view_transport_trip_search" model="ir.ui.view">
+        <field name="name">transport.trip.search</field>
+        <field name="model">transport.trip</field>
+        <field name="arch" type="xml">
+            <search string="Search Trips">
+                <field name="trip_id"/>
+                <field name="name"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <field name="route_id"/>
+                <separator/>
+                <filter string="Scheduled" name="filter_scheduled" domain="[('status', '=', 'scheduled')]"/>
+                <filter string="In Progress" name="filter_in_progress" domain="[('status', '=', 'in_progress')]"/>
+                <filter string="Completed" name="filter_completed" domain="[('status', '=', 'completed')]"/>
+                <filter string="Cancelled" name="filter_cancelled" domain="[('status', '=', 'cancelled')]"/>
+                <separator/>
+                <filter string="Departure Date" name="filter_departure_time" date="departure_time"/>
+                <filter string="Expected Arrival" name="filter_expected_arrival" date="expected_arrival_time"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Driver" name="group_driver" context="{'group_by': 'driver_id'}"/>
+                    <filter string="Vehicle" name="group_vehicle" context="{'group_by': 'vehicle_id'}"/>
+                    <filter string="Route" name="group_route" context="{'group_by': 'route_id'}"/>
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Trip Action -->
+    <record id="action_transport_trip" model="ir.actions.act_window">
+        <field name="name">Trips</field>
+        <field name="res_model">transport.trip</field>
+        <field name="view_mode">tree,kanban,calendar,graph,pivot,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Trip
+            </p>
+            <p>
+                Schedule trips, assign drivers and vehicles, and track real-time progress and times.
+            </p>
+        </field>
+    </record>
+</odoo>

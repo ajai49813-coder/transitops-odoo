@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Root Menu -->
+    <menuitem id="menu_transitops_root"
+              name="TransitOps"
+              sequence="10"/>
+
+    <!-- Submenus -->
+    <!-- Live Dashboard Menu -->
+    <menuitem id="menu_transitops_dashboard"
+              name="Dashboard"
+              parent="menu_transitops_root"
+              action="action_transport_dashboard"
+              sequence="5"/>
+
+    <menuitem id="menu_transitops_trip"
+              name="Trip Management"
+              parent="menu_transitops_root"
+              action="action_transport_trip"
+              sequence="20"/>
+
+    <menuitem id="menu_transitops_route"
+              name="Route Management"
+              parent="menu_transitops_root"
+              action="action_transport_route"
+              sequence="30"/>
+</odoo>

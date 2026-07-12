@@ -1,0 +1,1409 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!-- Vehicle Brands -->
+        <record id="brand_toyota" model="fleet.vehicle.model.brand">
+            <field name="name">Toyota</field>
+        </record>
+        <record id="brand_ford" model="fleet.vehicle.model.brand">
+            <field name="name">Ford</field>
+        </record>
+        <record id="brand_mercedes" model="fleet.vehicle.model.brand">
+            <field name="name">Mercedes-Benz</field>
+        </record>
+
+        <!-- Vehicle Models -->
+        <record id="model_coaster" model="fleet.vehicle.model">
+            <field name="name">Coaster Bus</field>
+            <field name="brand_id" ref="brand_toyota"/>
+        </record>
+        <record id="model_transit" model="fleet.vehicle.model">
+            <field name="name">Transit Van</field>
+            <field name="brand_id" ref="brand_ford"/>
+        </record>
+        <record id="model_sprinter" model="fleet.vehicle.model">
+            <field name="name">Sprinter Shuttle</field>
+            <field name="brand_id" ref="brand_mercedes"/>
+        </record>
+        <record id="model_hiace" model="fleet.vehicle.model">
+            <field name="name">HiAce Commuter</field>
+            <field name="brand_id" ref="brand_toyota"/>
+        </record>
+
+        <!-- 15 Drivers (res.partner) -->
+        <record id="driver_1" model="res.partner">
+            <field name="name">James Smith</field>
+            <field name="email">driver.james.smith@transitops.demo</field>
+            <field name="phone">+1-555-0101</field>
+            <field name="is_company" eval="False"/>
+        </record>
+        <record id="driver_2" model="res.partner">
+            <field name="name">John Jones</field>
+            <field name="email">driver.john.jones@transitops.demo</field>
+            <field name="phone">+1-555-0102</field>
+            <field name="is_company" eval="False"/>
+        </record>
+        <record id="driver_3" model="res.partner">
+            <field name="name">Robert Taylor</field>
+            <field name="email">driver.robert.taylor@transitops.demo</field>
+            <field name="phone">+1-555-0103</field>
+            <field name="is_company" eval="False"/>
+        </record>
+        <record id="driver_4" model="res.partner">
+            <field name="name">Michael Brown</field>
+            <field name="email">driver.michael.brown@transitops.demo</field>
+            <field name="phone">+1-555-0104</field>
+            <field name="is_company" eval="False"/>
+        </record>
+        <record id="driver_5" model="res.partner">
+            <field name="name">William Wilson</field>
+            <field name="email">driver.william.wilson@transitops.demo</field>
+            <field name="phone">+1-555-0105</field>
+            <field name="is_company" eval="False"/>
+        </record>
+        <record id="driver_6" model="res.partner">
+            <field name="name">David Thomas</field>
+            <field name="email">driver.david.thomas@transitops.demo</field>
+            <field name="phone">+1-555-0106</field>
+            <field name="is_company" eval="False"/>
+        </record>
+        <record id="driver_7" model="res.partner">
+            <field name="name">Richard Anderson</field>
+            <field name="email">driver.richard.anderson@transitops.demo</field>
+            <field name="phone">+1-555-0107</field>
+            <field name="is_company" eval="False"/>
+        </record>
+        <record id="driver_8" model="res.partner">
+            <field name="name">Joseph Martin</field>
+            <field name="email">driver.joseph.martin@transitops.demo</field>
+            <field name="phone">+1-555-0108</field>
+            <field name="is_company" eval="False"/>
+        </record>
+        <record id="driver_9" model="res.partner">
+            <field name="name">Thomas Jackson</field>
+            <field name="email">driver.thomas.jackson@transitops.demo</field>
+            <field name="phone">+1-555-0109</field>
+            <field name="is_company" eval="False"/>
+        </record>
+        <record id="driver_10" model="res.partner">
+            <field name="name">Charles White</field>
+            <field name="email">driver.charles.white@transitops.demo</field>
+            <field name="phone">+1-555-0110</field>
+            <field name="is_company" eval="False"/>
+        </record>
+        <record id="driver_11" model="res.partner">
+            <field name="name">Christopher Harris</field>
+            <field name="email">driver.christopher.harris@transitops.demo</field>
+            <field name="phone">+1-555-0111</field>
+            <field name="is_company" eval="False"/>
+        </record>
+        <record id="driver_12" model="res.partner">
+            <field name="name">Daniel Martin</field>
+            <field name="email">driver.daniel.martin@transitops.demo</field>
+            <field name="phone">+1-555-0112</field>
+            <field name="is_company" eval="False"/>
+        </record>
+        <record id="driver_13" model="res.partner">
+            <field name="name">Matthew Garcia</field>
+            <field name="email">driver.matthew.garcia@transitops.demo</field>
+            <field name="phone">+1-555-0113</field>
+            <field name="is_company" eval="False"/>
+        </record>
+        <record id="driver_14" model="res.partner">
+            <field name="name">Anthony Martinez</field>
+            <field name="email">driver.anthony.martinez@transitops.demo</field>
+            <field name="phone">+1-555-0114</field>
+            <field name="is_company" eval="False"/>
+        </record>
+        <record id="driver_15" model="res.partner">
+            <field name="name">Mark Robinson</field>
+            <field name="email">driver.mark.robinson@transitops.demo</field>
+            <field name="phone">+1-555-0115</field>
+            <field name="is_company" eval="False"/>
+        </record>
+        <!-- 20 Vehicles (fleet.vehicle) -->
+        <record id="vehicle_1" model="fleet.vehicle">
+            <field name="model_id" ref="model_coaster"/>
+            <field name="license_plate">TXS-4890</field>
+            <field name="driver_id" ref="driver_1"/>
+        </record>
+        <record id="vehicle_2" model="fleet.vehicle">
+            <field name="model_id" ref="model_transit"/>
+            <field name="license_plate">FDP-2032</field>
+            <field name="driver_id" ref="driver_2"/>
+        </record>
+        <record id="vehicle_3" model="fleet.vehicle">
+            <field name="model_id" ref="model_sprinter"/>
+            <field name="license_plate">MBZ-9041</field>
+            <field name="driver_id" ref="driver_3"/>
+        </record>
+        <record id="vehicle_4" model="fleet.vehicle">
+            <field name="model_id" ref="model_hiace"/>
+            <field name="license_plate">TYS-7731</field>
+            <field name="driver_id" ref="driver_4"/>
+        </record>
+        <record id="vehicle_5" model="fleet.vehicle">
+            <field name="model_id" ref="model_coaster"/>
+            <field name="license_plate">TXS-8890</field>
+            <field name="driver_id" ref="driver_5"/>
+        </record>
+        <record id="vehicle_6" model="fleet.vehicle">
+            <field name="model_id" ref="model_transit"/>
+            <field name="license_plate">FDP-4022</field>
+            <field name="driver_id" ref="driver_6"/>
+        </record>
+        <record id="vehicle_7" model="fleet.vehicle">
+            <field name="model_id" ref="model_sprinter"/>
+            <field name="license_plate">MBZ-1049</field>
+            <field name="driver_id" ref="driver_7"/>
+        </record>
+        <record id="vehicle_8" model="fleet.vehicle">
+            <field name="model_id" ref="model_hiace"/>
+            <field name="license_plate">TYS-1132</field>
+            <field name="driver_id" ref="driver_8"/>
+        </record>
+        <record id="vehicle_9" model="fleet.vehicle">
+            <field name="model_id" ref="model_coaster"/>
+            <field name="license_plate">TXS-6654</field>
+            <field name="driver_id" ref="driver_9"/>
+        </record>
+        <record id="vehicle_10" model="fleet.vehicle">
+            <field name="model_id" ref="model_transit"/>
+            <field name="license_plate">FDP-9021</field>
+            <field name="driver_id" ref="driver_10"/>
+        </record>
+        <record id="vehicle_11" model="fleet.vehicle">
+            <field name="model_id" ref="model_sprinter"/>
+            <field name="license_plate">MBZ-3321</field>
+            <field name="driver_id" ref="driver_11"/>
+        </record>
+        <record id="vehicle_12" model="fleet.vehicle">
+            <field name="model_id" ref="model_hiace"/>
+            <field name="license_plate">TYS-9912</field>
+            <field name="driver_id" ref="driver_12"/>
+        </record>
+        <record id="vehicle_13" model="fleet.vehicle">
+            <field name="model_id" ref="model_coaster"/>
+            <field name="license_plate">TXS-1243</field>
+            <field name="driver_id" ref="driver_13"/>
+        </record>
+        <record id="vehicle_14" model="fleet.vehicle">
+            <field name="model_id" ref="model_transit"/>
+            <field name="license_plate">FDP-8802</field>
+            <field name="driver_id" ref="driver_14"/>
+        </record>
+        <record id="vehicle_15" model="fleet.vehicle">
+            <field name="model_id" ref="model_sprinter"/>
+            <field name="license_plate">MBZ-6677</field>
+            <field name="driver_id" ref="driver_15"/>
+        </record>
+        <record id="vehicle_16" model="fleet.vehicle">
+            <field name="model_id" ref="model_hiace"/>
+            <field name="license_plate">TYS-5544</field>
+            <field name="driver_id" ref="driver_1"/>
+        </record>
+        <record id="vehicle_17" model="fleet.vehicle">
+            <field name="model_id" ref="model_coaster"/>
+            <field name="license_plate">TXS-8761</field>
+            <field name="driver_id" ref="driver_2"/>
+        </record>
+        <record id="vehicle_18" model="fleet.vehicle">
+            <field name="model_id" ref="model_transit"/>
+            <field name="license_plate">FDP-4433</field>
+            <field name="driver_id" ref="driver_3"/>
+        </record>
+        <record id="vehicle_19" model="fleet.vehicle">
+            <field name="model_id" ref="model_sprinter"/>
+            <field name="license_plate">MBZ-1234</field>
+            <field name="driver_id" ref="driver_4"/>
+        </record>
+        <record id="vehicle_20" model="fleet.vehicle">
+            <field name="model_id" ref="model_hiace"/>
+            <field name="license_plate">TYS-4321</field>
+            <field name="driver_id" ref="driver_5"/>
+        </record>
+        <!-- 12 Routes (transport.route) -->
+        <record id="route_1" model="transport.route">
+            <field name="route_id">RT-001</field>
+            <field name="name">Route New York to Baltimore</field>
+            <field name="source">New York</field>
+            <field name="destination">Baltimore</field>
+            <field name="total_distance" eval="78.9"/>
+            <field name="estimated_travel_time" eval="1.2"/>
+        </record>
+        <record id="route_2" model="transport.route">
+            <field name="route_id">RT-002</field>
+            <field name="name">Route Boston to Newark</field>
+            <field name="source">Boston</field>
+            <field name="destination">Newark</field>
+            <field name="total_distance" eval="71.1"/>
+            <field name="estimated_travel_time" eval="1.1"/>
+        </record>
+        <record id="route_3" model="transport.route">
+            <field name="route_id">RT-003</field>
+            <field name="name">Route Philadelphia to Trenton</field>
+            <field name="source">Philadelphia</field>
+            <field name="destination">Trenton</field>
+            <field name="total_distance" eval="229.9"/>
+            <field name="estimated_travel_time" eval="3.5"/>
+        </record>
+        <record id="route_4" model="transport.route">
+            <field name="route_id">RT-004</field>
+            <field name="name">Route Washington to Providence</field>
+            <field name="source">Washington</field>
+            <field name="destination">Providence</field>
+            <field name="total_distance" eval="84.0"/>
+            <field name="estimated_travel_time" eval="1.3"/>
+        </record>
+        <record id="route_5" model="transport.route">
+            <field name="route_id">RT-005</field>
+            <field name="name">Route Baltimore to Hartford</field>
+            <field name="source">Baltimore</field>
+            <field name="destination">Hartford</field>
+            <field name="total_distance" eval="278.9"/>
+            <field name="estimated_travel_time" eval="4.3"/>
+        </record>
+        <record id="route_6" model="transport.route">
+            <field name="route_id">RT-006</field>
+            <field name="name">Route Newark to New Haven</field>
+            <field name="source">Newark</field>
+            <field name="destination">New Haven</field>
+            <field name="total_distance" eval="139.4"/>
+            <field name="estimated_travel_time" eval="2.1"/>
+        </record>
+        <record id="route_7" model="transport.route">
+            <field name="route_id">RT-007</field>
+            <field name="name">Route Trenton to Stamford</field>
+            <field name="source">Trenton</field>
+            <field name="destination">Stamford</field>
+            <field name="total_distance" eval="118.3"/>
+            <field name="estimated_travel_time" eval="1.8"/>
+        </record>
+        <record id="route_8" model="transport.route">
+            <field name="route_id">RT-008</field>
+            <field name="name">Route Providence to Jersey City</field>
+            <field name="source">Providence</field>
+            <field name="destination">Jersey City</field>
+            <field name="total_distance" eval="155.1"/>
+            <field name="estimated_travel_time" eval="2.4"/>
+        </record>
+        <record id="route_9" model="transport.route">
+            <field name="route_id">RT-009</field>
+            <field name="name">Route Hartford to New York</field>
+            <field name="source">Hartford</field>
+            <field name="destination">New York</field>
+            <field name="total_distance" eval="147.8"/>
+            <field name="estimated_travel_time" eval="2.3"/>
+        </record>
+        <record id="route_10" model="transport.route">
+            <field name="route_id">RT-010</field>
+            <field name="name">Route New Haven to Boston</field>
+            <field name="source">New Haven</field>
+            <field name="destination">Boston</field>
+            <field name="total_distance" eval="56.2"/>
+            <field name="estimated_travel_time" eval="0.9"/>
+        </record>
+        <record id="route_11" model="transport.route">
+            <field name="route_id">RT-011</field>
+            <field name="name">Route Stamford to Philadelphia</field>
+            <field name="source">Stamford</field>
+            <field name="destination">Philadelphia</field>
+            <field name="total_distance" eval="50.8"/>
+            <field name="estimated_travel_time" eval="0.8"/>
+        </record>
+        <record id="route_12" model="transport.route">
+            <field name="route_id">RT-012</field>
+            <field name="name">Route Jersey City to Washington</field>
+            <field name="source">Jersey City</field>
+            <field name="destination">Washington</field>
+            <field name="total_distance" eval="279.7"/>
+            <field name="estimated_travel_time" eval="4.3"/>
+        </record>
+        <!-- Route Stops (transport.route.stop) -->
+        <record id="stop_1_1" model="transport.route.stop">
+            <field name="route_id" ref="route_1"/>
+            <field name="name">Waypoint New York North</field>
+            <field name="sequence">10</field>
+            <field name="distance_from_start" eval="23.7"/>
+        </record>
+        <record id="stop_1_2" model="transport.route.stop">
+            <field name="route_id" ref="route_1"/>
+            <field name="name">Waypoint Baltimore South</field>
+            <field name="sequence">20</field>
+            <field name="distance_from_start" eval="55.2"/>
+        </record>
+        <record id="stop_1_3" model="transport.route.stop">
+            <field name="route_id" ref="route_1"/>
+            <field name="name">Baltimore Terminal</field>
+            <field name="sequence">30</field>
+            <field name="distance_from_start" eval="78.9"/>
+        </record>
+        <record id="stop_2_1" model="transport.route.stop">
+            <field name="route_id" ref="route_2"/>
+            <field name="name">Waypoint Boston North</field>
+            <field name="sequence">10</field>
+            <field name="distance_from_start" eval="21.3"/>
+        </record>
+        <record id="stop_2_2" model="transport.route.stop">
+            <field name="route_id" ref="route_2"/>
+            <field name="name">Waypoint Newark South</field>
+            <field name="sequence">20</field>
+            <field name="distance_from_start" eval="49.8"/>
+        </record>
+        <record id="stop_2_3" model="transport.route.stop">
+            <field name="route_id" ref="route_2"/>
+            <field name="name">Newark Terminal</field>
+            <field name="sequence">30</field>
+            <field name="distance_from_start" eval="71.1"/>
+        </record>
+        <record id="stop_3_1" model="transport.route.stop">
+            <field name="route_id" ref="route_3"/>
+            <field name="name">Waypoint Philadelphia North</field>
+            <field name="sequence">10</field>
+            <field name="distance_from_start" eval="69.0"/>
+        </record>
+        <record id="stop_3_2" model="transport.route.stop">
+            <field name="route_id" ref="route_3"/>
+            <field name="name">Waypoint Trenton South</field>
+            <field name="sequence">20</field>
+            <field name="distance_from_start" eval="160.9"/>
+        </record>
+        <record id="stop_3_3" model="transport.route.stop">
+            <field name="route_id" ref="route_3"/>
+            <field name="name">Trenton Terminal</field>
+            <field name="sequence">30</field>
+            <field name="distance_from_start" eval="229.9"/>
+        </record>
+        <record id="stop_4_1" model="transport.route.stop">
+            <field name="route_id" ref="route_4"/>
+            <field name="name">Waypoint Washington North</field>
+            <field name="sequence">10</field>
+            <field name="distance_from_start" eval="25.2"/>
+        </record>
+        <record id="stop_4_2" model="transport.route.stop">
+            <field name="route_id" ref="route_4"/>
+            <field name="name">Waypoint Providence South</field>
+            <field name="sequence">20</field>
+            <field name="distance_from_start" eval="58.8"/>
+        </record>
+        <record id="stop_4_3" model="transport.route.stop">
+            <field name="route_id" ref="route_4"/>
+            <field name="name">Providence Terminal</field>
+            <field name="sequence">30</field>
+            <field name="distance_from_start" eval="84.0"/>
+        </record>
+        <record id="stop_5_1" model="transport.route.stop">
+            <field name="route_id" ref="route_5"/>
+            <field name="name">Waypoint Baltimore North</field>
+            <field name="sequence">10</field>
+            <field name="distance_from_start" eval="83.7"/>
+        </record>
+        <record id="stop_5_2" model="transport.route.stop">
+            <field name="route_id" ref="route_5"/>
+            <field name="name">Waypoint Hartford South</field>
+            <field name="sequence">20</field>
+            <field name="distance_from_start" eval="195.2"/>
+        </record>
+        <record id="stop_5_3" model="transport.route.stop">
+            <field name="route_id" ref="route_5"/>
+            <field name="name">Hartford Terminal</field>
+            <field name="sequence">30</field>
+            <field name="distance_from_start" eval="278.9"/>
+        </record>
+        <record id="stop_6_1" model="transport.route.stop">
+            <field name="route_id" ref="route_6"/>
+            <field name="name">Waypoint Newark North</field>
+            <field name="sequence">10</field>
+            <field name="distance_from_start" eval="41.8"/>
+        </record>
+        <record id="stop_6_2" model="transport.route.stop">
+            <field name="route_id" ref="route_6"/>
+            <field name="name">Waypoint New Haven South</field>
+            <field name="sequence">20</field>
+            <field name="distance_from_start" eval="97.6"/>
+        </record>
+        <record id="stop_6_3" model="transport.route.stop">
+            <field name="route_id" ref="route_6"/>
+            <field name="name">New Haven Terminal</field>
+            <field name="sequence">30</field>
+            <field name="distance_from_start" eval="139.4"/>
+        </record>
+        <record id="stop_7_1" model="transport.route.stop">
+            <field name="route_id" ref="route_7"/>
+            <field name="name">Waypoint Trenton North</field>
+            <field name="sequence">10</field>
+            <field name="distance_from_start" eval="35.5"/>
+        </record>
+        <record id="stop_7_2" model="transport.route.stop">
+            <field name="route_id" ref="route_7"/>
+            <field name="name">Waypoint Stamford South</field>
+            <field name="sequence">20</field>
+            <field name="distance_from_start" eval="82.8"/>
+        </record>
+        <record id="stop_7_3" model="transport.route.stop">
+            <field name="route_id" ref="route_7"/>
+            <field name="name">Stamford Terminal</field>
+            <field name="sequence">30</field>
+            <field name="distance_from_start" eval="118.3"/>
+        </record>
+        <record id="stop_8_1" model="transport.route.stop">
+            <field name="route_id" ref="route_8"/>
+            <field name="name">Waypoint Providence North</field>
+            <field name="sequence">10</field>
+            <field name="distance_from_start" eval="46.5"/>
+        </record>
+        <record id="stop_8_2" model="transport.route.stop">
+            <field name="route_id" ref="route_8"/>
+            <field name="name">Waypoint Jersey City South</field>
+            <field name="sequence">20</field>
+            <field name="distance_from_start" eval="108.6"/>
+        </record>
+        <record id="stop_8_3" model="transport.route.stop">
+            <field name="route_id" ref="route_8"/>
+            <field name="name">Jersey City Terminal</field>
+            <field name="sequence">30</field>
+            <field name="distance_from_start" eval="155.1"/>
+        </record>
+        <record id="stop_9_1" model="transport.route.stop">
+            <field name="route_id" ref="route_9"/>
+            <field name="name">Waypoint Hartford North</field>
+            <field name="sequence">10</field>
+            <field name="distance_from_start" eval="44.3"/>
+        </record>
+        <record id="stop_9_2" model="transport.route.stop">
+            <field name="route_id" ref="route_9"/>
+            <field name="name">Waypoint New York South</field>
+            <field name="sequence">20</field>
+            <field name="distance_from_start" eval="103.5"/>
+        </record>
+        <record id="stop_9_3" model="transport.route.stop">
+            <field name="route_id" ref="route_9"/>
+            <field name="name">New York Terminal</field>
+            <field name="sequence">30</field>
+            <field name="distance_from_start" eval="147.8"/>
+        </record>
+        <record id="stop_10_1" model="transport.route.stop">
+            <field name="route_id" ref="route_10"/>
+            <field name="name">Waypoint New Haven North</field>
+            <field name="sequence">10</field>
+            <field name="distance_from_start" eval="16.9"/>
+        </record>
+        <record id="stop_10_2" model="transport.route.stop">
+            <field name="route_id" ref="route_10"/>
+            <field name="name">Waypoint Boston South</field>
+            <field name="sequence">20</field>
+            <field name="distance_from_start" eval="39.3"/>
+        </record>
+        <record id="stop_10_3" model="transport.route.stop">
+            <field name="route_id" ref="route_10"/>
+            <field name="name">Boston Terminal</field>
+            <field name="sequence">30</field>
+            <field name="distance_from_start" eval="56.2"/>
+        </record>
+        <record id="stop_11_1" model="transport.route.stop">
+            <field name="route_id" ref="route_11"/>
+            <field name="name">Waypoint Stamford North</field>
+            <field name="sequence">10</field>
+            <field name="distance_from_start" eval="15.2"/>
+        </record>
+        <record id="stop_11_2" model="transport.route.stop">
+            <field name="route_id" ref="route_11"/>
+            <field name="name">Waypoint Philadelphia South</field>
+            <field name="sequence">20</field>
+            <field name="distance_from_start" eval="35.6"/>
+        </record>
+        <record id="stop_11_3" model="transport.route.stop">
+            <field name="route_id" ref="route_11"/>
+            <field name="name">Philadelphia Terminal</field>
+            <field name="sequence">30</field>
+            <field name="distance_from_start" eval="50.8"/>
+        </record>
+        <record id="stop_12_1" model="transport.route.stop">
+            <field name="route_id" ref="route_12"/>
+            <field name="name">Waypoint Jersey City North</field>
+            <field name="sequence">10</field>
+            <field name="distance_from_start" eval="83.9"/>
+        </record>
+        <record id="stop_12_2" model="transport.route.stop">
+            <field name="route_id" ref="route_12"/>
+            <field name="name">Waypoint Washington South</field>
+            <field name="sequence">20</field>
+            <field name="distance_from_start" eval="195.8"/>
+        </record>
+        <record id="stop_12_3" model="transport.route.stop">
+            <field name="route_id" ref="route_12"/>
+            <field name="name">Washington Terminal</field>
+            <field name="sequence">30</field>
+            <field name="distance_from_start" eval="279.7"/>
+        </record>
+        <!-- 50 Trips (transport.trip) -->
+        <record id="trip_1" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00001</field>
+            <field name="name">Trip TRIP/2026/07/00001: New York Express</field>
+            <field name="vehicle_id" ref="vehicle_1"/>
+            <field name="driver_id" ref="driver_1"/>
+            <field name="route_id" ref="route_1"/>
+            <field name="start_location">New York</field>
+            <field name="end_location">Baltimore</field>
+            <field name="departure_time" eval="2026-07-11 12:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-11 13:24:00"/>
+            <field name="actual_arrival_time" eval="2026-07-11 13:12:00"/>
+            <field name="distance" eval="78.9"/>
+            <field name="distance_completed" eval="78.9"/>
+            <field name="current_location">Baltimore</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_2" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00002</field>
+            <field name="name">Trip TRIP/2026/07/00002: Boston Express</field>
+            <field name="vehicle_id" ref="vehicle_2"/>
+            <field name="driver_id" ref="driver_2"/>
+            <field name="route_id" ref="route_2"/>
+            <field name="start_location">Boston</field>
+            <field name="end_location">Newark</field>
+            <field name="departure_time" eval="2026-07-10 11:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-10 12:18:00"/>
+            <field name="actual_arrival_time" eval="2026-07-10 12:06:00"/>
+            <field name="distance" eval="71.1"/>
+            <field name="distance_completed" eval="71.1"/>
+            <field name="current_location">Newark</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_3" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00003</field>
+            <field name="name">Trip TRIP/2026/07/00003: Philadelphia Express</field>
+            <field name="vehicle_id" ref="vehicle_3"/>
+            <field name="driver_id" ref="driver_3"/>
+            <field name="route_id" ref="route_3"/>
+            <field name="start_location">Philadelphia</field>
+            <field name="end_location">Trenton</field>
+            <field name="departure_time" eval="2026-07-09 10:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-09 13:42:00"/>
+            <field name="actual_arrival_time" eval="2026-07-09 13:30:00"/>
+            <field name="distance" eval="229.9"/>
+            <field name="distance_completed" eval="229.9"/>
+            <field name="current_location">Trenton</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_4" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00004</field>
+            <field name="name">Trip TRIP/2026/07/00004: Washington Express</field>
+            <field name="vehicle_id" ref="vehicle_4"/>
+            <field name="driver_id" ref="driver_4"/>
+            <field name="route_id" ref="route_4"/>
+            <field name="start_location">Washington</field>
+            <field name="end_location">Providence</field>
+            <field name="departure_time" eval="2026-07-12 11:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-12 12:18:00"/>
+            <field name="distance" eval="84.0"/>
+            <field name="distance_completed" eval="42.5"/>
+            <field name="current_location">En Route</field>
+            <field name="status">in_progress</field>
+            <field name="tracking_status">simulated</field>
+            <field name="current_latitude" eval="40.58531"/>
+            <field name="current_longitude" eval="-73.7989"/>
+            <field name="speed" eval="58.6"/>
+            <field name="last_updated_time" eval="2026-07-12 12:00:00"/>
+        </record>
+        <record id="trip_5" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00005</field>
+            <field name="name">Trip TRIP/2026/07/00005: Baltimore Express</field>
+            <field name="vehicle_id" ref="vehicle_5"/>
+            <field name="driver_id" ref="driver_5"/>
+            <field name="route_id" ref="route_5"/>
+            <field name="start_location">Baltimore</field>
+            <field name="end_location">Hartford</field>
+            <field name="departure_time" eval="2026-07-13 16:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-13 20:18:00"/>
+            <field name="distance" eval="278.9"/>
+            <field name="status">scheduled</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_6" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00006</field>
+            <field name="name">Trip TRIP/2026/07/00006: Newark Express</field>
+            <field name="vehicle_id" ref="vehicle_6"/>
+            <field name="driver_id" ref="driver_6"/>
+            <field name="route_id" ref="route_6"/>
+            <field name="start_location">Newark</field>
+            <field name="end_location">New Haven</field>
+            <field name="departure_time" eval="2026-07-10 07:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-10 09:06:00"/>
+            <field name="distance" eval="139.4"/>
+            <field name="status">cancelled</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_7" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00007</field>
+            <field name="name">Trip TRIP/2026/07/00007: Trenton Express</field>
+            <field name="vehicle_id" ref="vehicle_7"/>
+            <field name="driver_id" ref="driver_7"/>
+            <field name="route_id" ref="route_7"/>
+            <field name="start_location">Trenton</field>
+            <field name="end_location">Stamford</field>
+            <field name="departure_time" eval="2026-07-09 12:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-09 14:00:00"/>
+            <field name="actual_arrival_time" eval="2026-07-09 13:48:00"/>
+            <field name="distance" eval="118.3"/>
+            <field name="distance_completed" eval="118.3"/>
+            <field name="current_location">Stamford</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_8" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00008</field>
+            <field name="name">Trip TRIP/2026/07/00008: Providence Express</field>
+            <field name="vehicle_id" ref="vehicle_8"/>
+            <field name="driver_id" ref="driver_8"/>
+            <field name="route_id" ref="route_8"/>
+            <field name="start_location">Providence</field>
+            <field name="end_location">Jersey City</field>
+            <field name="departure_time" eval="2026-07-08 11:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-08 13:36:00"/>
+            <field name="actual_arrival_time" eval="2026-07-08 13:24:00"/>
+            <field name="distance" eval="155.1"/>
+            <field name="distance_completed" eval="155.1"/>
+            <field name="current_location">Jersey City</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_9" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00009</field>
+            <field name="name">Trip TRIP/2026/07/00009: Hartford Express</field>
+            <field name="vehicle_id" ref="vehicle_9"/>
+            <field name="driver_id" ref="driver_9"/>
+            <field name="route_id" ref="route_9"/>
+            <field name="start_location">Hartford</field>
+            <field name="end_location">New York</field>
+            <field name="departure_time" eval="2026-07-11 10:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-11 12:30:00"/>
+            <field name="actual_arrival_time" eval="2026-07-11 12:18:00"/>
+            <field name="distance" eval="147.8"/>
+            <field name="distance_completed" eval="147.8"/>
+            <field name="current_location">New York</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_10" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00010</field>
+            <field name="name">Trip TRIP/2026/07/00010: New Haven Express</field>
+            <field name="vehicle_id" ref="vehicle_10"/>
+            <field name="driver_id" ref="driver_10"/>
+            <field name="route_id" ref="route_10"/>
+            <field name="start_location">New Haven</field>
+            <field name="end_location">Boston</field>
+            <field name="departure_time" eval="2026-07-12 11:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-12 11:54:00"/>
+            <field name="distance" eval="56.2"/>
+            <field name="distance_completed" eval="31.6"/>
+            <field name="current_location">En Route</field>
+            <field name="status">in_progress</field>
+            <field name="tracking_status">simulated</field>
+            <field name="current_latitude" eval="40.28191"/>
+            <field name="current_longitude" eval="-74.28201"/>
+            <field name="speed" eval="52.3"/>
+            <field name="last_updated_time" eval="2026-07-12 12:00:00"/>
+        </record>
+        <record id="trip_11" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00011</field>
+            <field name="name">Trip TRIP/2026/07/00011: Stamford Express</field>
+            <field name="vehicle_id" ref="vehicle_11"/>
+            <field name="driver_id" ref="driver_11"/>
+            <field name="route_id" ref="route_11"/>
+            <field name="start_location">Stamford</field>
+            <field name="end_location">Philadelphia</field>
+            <field name="departure_time" eval="2026-07-13 16:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-13 16:48:00"/>
+            <field name="distance" eval="50.8"/>
+            <field name="status">scheduled</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_12" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00012</field>
+            <field name="name">Trip TRIP/2026/07/00012: Jersey City Express</field>
+            <field name="vehicle_id" ref="vehicle_12"/>
+            <field name="driver_id" ref="driver_12"/>
+            <field name="route_id" ref="route_12"/>
+            <field name="start_location">Jersey City</field>
+            <field name="end_location">Washington</field>
+            <field name="departure_time" eval="2026-07-10 07:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-10 11:18:00"/>
+            <field name="distance" eval="279.7"/>
+            <field name="status">cancelled</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_13" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00013</field>
+            <field name="name">Trip TRIP/2026/07/00013: New York Express</field>
+            <field name="vehicle_id" ref="vehicle_13"/>
+            <field name="driver_id" ref="driver_13"/>
+            <field name="route_id" ref="route_1"/>
+            <field name="start_location">New York</field>
+            <field name="end_location">Baltimore</field>
+            <field name="departure_time" eval="2026-07-11 12:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-11 13:24:00"/>
+            <field name="actual_arrival_time" eval="2026-07-11 13:12:00"/>
+            <field name="distance" eval="78.9"/>
+            <field name="distance_completed" eval="78.9"/>
+            <field name="current_location">Baltimore</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_14" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00014</field>
+            <field name="name">Trip TRIP/2026/07/00014: Boston Express</field>
+            <field name="vehicle_id" ref="vehicle_14"/>
+            <field name="driver_id" ref="driver_14"/>
+            <field name="route_id" ref="route_2"/>
+            <field name="start_location">Boston</field>
+            <field name="end_location">Newark</field>
+            <field name="departure_time" eval="2026-07-10 11:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-10 12:18:00"/>
+            <field name="actual_arrival_time" eval="2026-07-10 12:06:00"/>
+            <field name="distance" eval="71.1"/>
+            <field name="distance_completed" eval="71.1"/>
+            <field name="current_location">Newark</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_15" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00015</field>
+            <field name="name">Trip TRIP/2026/07/00015: Philadelphia Express</field>
+            <field name="vehicle_id" ref="vehicle_15"/>
+            <field name="driver_id" ref="driver_15"/>
+            <field name="route_id" ref="route_3"/>
+            <field name="start_location">Philadelphia</field>
+            <field name="end_location">Trenton</field>
+            <field name="departure_time" eval="2026-07-09 10:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-09 13:42:00"/>
+            <field name="actual_arrival_time" eval="2026-07-09 13:30:00"/>
+            <field name="distance" eval="229.9"/>
+            <field name="distance_completed" eval="229.9"/>
+            <field name="current_location">Trenton</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_16" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00016</field>
+            <field name="name">Trip TRIP/2026/07/00016: Washington Express</field>
+            <field name="vehicle_id" ref="vehicle_16"/>
+            <field name="driver_id" ref="driver_1"/>
+            <field name="route_id" ref="route_4"/>
+            <field name="start_location">Washington</field>
+            <field name="end_location">Providence</field>
+            <field name="departure_time" eval="2026-07-12 11:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-12 12:18:00"/>
+            <field name="distance" eval="84.0"/>
+            <field name="distance_completed" eval="24.5"/>
+            <field name="current_location">En Route</field>
+            <field name="status">in_progress</field>
+            <field name="tracking_status">simulated</field>
+            <field name="current_latitude" eval="40.63409"/>
+            <field name="current_longitude" eval="-73.8573"/>
+            <field name="speed" eval="70.3"/>
+            <field name="last_updated_time" eval="2026-07-12 12:00:00"/>
+        </record>
+        <record id="trip_17" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00017</field>
+            <field name="name">Trip TRIP/2026/07/00017: Baltimore Express</field>
+            <field name="vehicle_id" ref="vehicle_17"/>
+            <field name="driver_id" ref="driver_2"/>
+            <field name="route_id" ref="route_5"/>
+            <field name="start_location">Baltimore</field>
+            <field name="end_location">Hartford</field>
+            <field name="departure_time" eval="2026-07-13 16:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-13 20:18:00"/>
+            <field name="distance" eval="278.9"/>
+            <field name="status">scheduled</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_18" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00018</field>
+            <field name="name">Trip TRIP/2026/07/00018: Newark Express</field>
+            <field name="vehicle_id" ref="vehicle_18"/>
+            <field name="driver_id" ref="driver_3"/>
+            <field name="route_id" ref="route_6"/>
+            <field name="start_location">Newark</field>
+            <field name="end_location">New Haven</field>
+            <field name="departure_time" eval="2026-07-10 07:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-10 09:06:00"/>
+            <field name="distance" eval="139.4"/>
+            <field name="status">cancelled</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_19" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00019</field>
+            <field name="name">Trip TRIP/2026/07/00019: Trenton Express</field>
+            <field name="vehicle_id" ref="vehicle_19"/>
+            <field name="driver_id" ref="driver_4"/>
+            <field name="route_id" ref="route_7"/>
+            <field name="start_location">Trenton</field>
+            <field name="end_location">Stamford</field>
+            <field name="departure_time" eval="2026-07-09 12:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-09 14:00:00"/>
+            <field name="actual_arrival_time" eval="2026-07-09 13:48:00"/>
+            <field name="distance" eval="118.3"/>
+            <field name="distance_completed" eval="118.3"/>
+            <field name="current_location">Stamford</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_20" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00020</field>
+            <field name="name">Trip TRIP/2026/07/00020: Providence Express</field>
+            <field name="vehicle_id" ref="vehicle_20"/>
+            <field name="driver_id" ref="driver_5"/>
+            <field name="route_id" ref="route_8"/>
+            <field name="start_location">Providence</field>
+            <field name="end_location">Jersey City</field>
+            <field name="departure_time" eval="2026-07-08 11:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-08 13:36:00"/>
+            <field name="actual_arrival_time" eval="2026-07-08 13:24:00"/>
+            <field name="distance" eval="155.1"/>
+            <field name="distance_completed" eval="155.1"/>
+            <field name="current_location">Jersey City</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_21" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00021</field>
+            <field name="name">Trip TRIP/2026/07/00021: Hartford Express</field>
+            <field name="vehicle_id" ref="vehicle_1"/>
+            <field name="driver_id" ref="driver_6"/>
+            <field name="route_id" ref="route_9"/>
+            <field name="start_location">Hartford</field>
+            <field name="end_location">New York</field>
+            <field name="departure_time" eval="2026-07-11 10:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-11 12:30:00"/>
+            <field name="actual_arrival_time" eval="2026-07-11 12:18:00"/>
+            <field name="distance" eval="147.8"/>
+            <field name="distance_completed" eval="147.8"/>
+            <field name="current_location">New York</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_22" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00022</field>
+            <field name="name">Trip TRIP/2026/07/00022: New Haven Express</field>
+            <field name="vehicle_id" ref="vehicle_2"/>
+            <field name="driver_id" ref="driver_7"/>
+            <field name="route_id" ref="route_10"/>
+            <field name="start_location">New Haven</field>
+            <field name="end_location">Boston</field>
+            <field name="departure_time" eval="2026-07-12 11:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-12 11:54:00"/>
+            <field name="distance" eval="56.2"/>
+            <field name="distance_completed" eval="22.0"/>
+            <field name="current_location">En Route</field>
+            <field name="status">in_progress</field>
+            <field name="tracking_status">simulated</field>
+            <field name="current_latitude" eval="40.73313"/>
+            <field name="current_longitude" eval="-74.39587"/>
+            <field name="speed" eval="53.7"/>
+            <field name="last_updated_time" eval="2026-07-12 12:00:00"/>
+        </record>
+        <record id="trip_23" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00023</field>
+            <field name="name">Trip TRIP/2026/07/00023: Stamford Express</field>
+            <field name="vehicle_id" ref="vehicle_3"/>
+            <field name="driver_id" ref="driver_8"/>
+            <field name="route_id" ref="route_11"/>
+            <field name="start_location">Stamford</field>
+            <field name="end_location">Philadelphia</field>
+            <field name="departure_time" eval="2026-07-13 16:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-13 16:48:00"/>
+            <field name="distance" eval="50.8"/>
+            <field name="status">scheduled</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_24" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00024</field>
+            <field name="name">Trip TRIP/2026/07/00024: Jersey City Express</field>
+            <field name="vehicle_id" ref="vehicle_4"/>
+            <field name="driver_id" ref="driver_9"/>
+            <field name="route_id" ref="route_12"/>
+            <field name="start_location">Jersey City</field>
+            <field name="end_location">Washington</field>
+            <field name="departure_time" eval="2026-07-10 07:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-10 11:18:00"/>
+            <field name="distance" eval="279.7"/>
+            <field name="status">cancelled</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_25" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00025</field>
+            <field name="name">Trip TRIP/2026/07/00025: New York Express</field>
+            <field name="vehicle_id" ref="vehicle_5"/>
+            <field name="driver_id" ref="driver_10"/>
+            <field name="route_id" ref="route_1"/>
+            <field name="start_location">New York</field>
+            <field name="end_location">Baltimore</field>
+            <field name="departure_time" eval="2026-07-11 12:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-11 13:24:00"/>
+            <field name="actual_arrival_time" eval="2026-07-11 13:12:00"/>
+            <field name="distance" eval="78.9"/>
+            <field name="distance_completed" eval="78.9"/>
+            <field name="current_location">Baltimore</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_26" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00026</field>
+            <field name="name">Trip TRIP/2026/07/00026: Boston Express</field>
+            <field name="vehicle_id" ref="vehicle_6"/>
+            <field name="driver_id" ref="driver_11"/>
+            <field name="route_id" ref="route_2"/>
+            <field name="start_location">Boston</field>
+            <field name="end_location">Newark</field>
+            <field name="departure_time" eval="2026-07-10 11:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-10 12:18:00"/>
+            <field name="actual_arrival_time" eval="2026-07-10 12:06:00"/>
+            <field name="distance" eval="71.1"/>
+            <field name="distance_completed" eval="71.1"/>
+            <field name="current_location">Newark</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_27" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00027</field>
+            <field name="name">Trip TRIP/2026/07/00027: Philadelphia Express</field>
+            <field name="vehicle_id" ref="vehicle_7"/>
+            <field name="driver_id" ref="driver_12"/>
+            <field name="route_id" ref="route_3"/>
+            <field name="start_location">Philadelphia</field>
+            <field name="end_location">Trenton</field>
+            <field name="departure_time" eval="2026-07-09 10:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-09 13:42:00"/>
+            <field name="actual_arrival_time" eval="2026-07-09 13:30:00"/>
+            <field name="distance" eval="229.9"/>
+            <field name="distance_completed" eval="229.9"/>
+            <field name="current_location">Trenton</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_28" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00028</field>
+            <field name="name">Trip TRIP/2026/07/00028: Washington Express</field>
+            <field name="vehicle_id" ref="vehicle_8"/>
+            <field name="driver_id" ref="driver_13"/>
+            <field name="route_id" ref="route_4"/>
+            <field name="start_location">Washington</field>
+            <field name="end_location">Providence</field>
+            <field name="departure_time" eval="2026-07-12 11:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-12 12:18:00"/>
+            <field name="distance" eval="84.0"/>
+            <field name="distance_completed" eval="52.1"/>
+            <field name="current_location">En Route</field>
+            <field name="status">in_progress</field>
+            <field name="tracking_status">simulated</field>
+            <field name="current_latitude" eval="41.0663"/>
+            <field name="current_longitude" eval="-73.97007"/>
+            <field name="speed" eval="68.7"/>
+            <field name="last_updated_time" eval="2026-07-12 12:00:00"/>
+        </record>
+        <record id="trip_29" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00029</field>
+            <field name="name">Trip TRIP/2026/07/00029: Baltimore Express</field>
+            <field name="vehicle_id" ref="vehicle_9"/>
+            <field name="driver_id" ref="driver_14"/>
+            <field name="route_id" ref="route_5"/>
+            <field name="start_location">Baltimore</field>
+            <field name="end_location">Hartford</field>
+            <field name="departure_time" eval="2026-07-13 16:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-13 20:18:00"/>
+            <field name="distance" eval="278.9"/>
+            <field name="status">scheduled</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_30" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00030</field>
+            <field name="name">Trip TRIP/2026/07/00030: Newark Express</field>
+            <field name="vehicle_id" ref="vehicle_10"/>
+            <field name="driver_id" ref="driver_15"/>
+            <field name="route_id" ref="route_6"/>
+            <field name="start_location">Newark</field>
+            <field name="end_location">New Haven</field>
+            <field name="departure_time" eval="2026-07-10 07:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-10 09:06:00"/>
+            <field name="distance" eval="139.4"/>
+            <field name="status">cancelled</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_31" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00031</field>
+            <field name="name">Trip TRIP/2026/07/00031: Trenton Express</field>
+            <field name="vehicle_id" ref="vehicle_11"/>
+            <field name="driver_id" ref="driver_1"/>
+            <field name="route_id" ref="route_7"/>
+            <field name="start_location">Trenton</field>
+            <field name="end_location">Stamford</field>
+            <field name="departure_time" eval="2026-07-09 12:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-09 14:00:00"/>
+            <field name="actual_arrival_time" eval="2026-07-09 13:48:00"/>
+            <field name="distance" eval="118.3"/>
+            <field name="distance_completed" eval="118.3"/>
+            <field name="current_location">Stamford</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_32" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00032</field>
+            <field name="name">Trip TRIP/2026/07/00032: Providence Express</field>
+            <field name="vehicle_id" ref="vehicle_12"/>
+            <field name="driver_id" ref="driver_2"/>
+            <field name="route_id" ref="route_8"/>
+            <field name="start_location">Providence</field>
+            <field name="end_location">Jersey City</field>
+            <field name="departure_time" eval="2026-07-08 11:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-08 13:36:00"/>
+            <field name="actual_arrival_time" eval="2026-07-08 13:24:00"/>
+            <field name="distance" eval="155.1"/>
+            <field name="distance_completed" eval="155.1"/>
+            <field name="current_location">Jersey City</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_33" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00033</field>
+            <field name="name">Trip TRIP/2026/07/00033: Hartford Express</field>
+            <field name="vehicle_id" ref="vehicle_13"/>
+            <field name="driver_id" ref="driver_3"/>
+            <field name="route_id" ref="route_9"/>
+            <field name="start_location">Hartford</field>
+            <field name="end_location">New York</field>
+            <field name="departure_time" eval="2026-07-11 10:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-11 12:30:00"/>
+            <field name="actual_arrival_time" eval="2026-07-11 12:18:00"/>
+            <field name="distance" eval="147.8"/>
+            <field name="distance_completed" eval="147.8"/>
+            <field name="current_location">New York</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_34" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00034</field>
+            <field name="name">Trip TRIP/2026/07/00034: New Haven Express</field>
+            <field name="vehicle_id" ref="vehicle_14"/>
+            <field name="driver_id" ref="driver_4"/>
+            <field name="route_id" ref="route_10"/>
+            <field name="start_location">New Haven</field>
+            <field name="end_location">Boston</field>
+            <field name="departure_time" eval="2026-07-12 11:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-12 11:54:00"/>
+            <field name="distance" eval="56.2"/>
+            <field name="distance_completed" eval="26.3"/>
+            <field name="current_location">En Route</field>
+            <field name="status">in_progress</field>
+            <field name="tracking_status">simulated</field>
+            <field name="current_latitude" eval="40.7464"/>
+            <field name="current_longitude" eval="-73.74589"/>
+            <field name="speed" eval="63.5"/>
+            <field name="last_updated_time" eval="2026-07-12 12:00:00"/>
+        </record>
+        <record id="trip_35" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00035</field>
+            <field name="name">Trip TRIP/2026/07/00035: Stamford Express</field>
+            <field name="vehicle_id" ref="vehicle_15"/>
+            <field name="driver_id" ref="driver_5"/>
+            <field name="route_id" ref="route_11"/>
+            <field name="start_location">Stamford</field>
+            <field name="end_location">Philadelphia</field>
+            <field name="departure_time" eval="2026-07-13 16:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-13 16:48:00"/>
+            <field name="distance" eval="50.8"/>
+            <field name="status">scheduled</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_36" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00036</field>
+            <field name="name">Trip TRIP/2026/07/00036: Jersey City Express</field>
+            <field name="vehicle_id" ref="vehicle_16"/>
+            <field name="driver_id" ref="driver_6"/>
+            <field name="route_id" ref="route_12"/>
+            <field name="start_location">Jersey City</field>
+            <field name="end_location">Washington</field>
+            <field name="departure_time" eval="2026-07-10 07:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-10 11:18:00"/>
+            <field name="distance" eval="279.7"/>
+            <field name="status">cancelled</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_37" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00037</field>
+            <field name="name">Trip TRIP/2026/07/00037: New York Express</field>
+            <field name="vehicle_id" ref="vehicle_17"/>
+            <field name="driver_id" ref="driver_7"/>
+            <field name="route_id" ref="route_1"/>
+            <field name="start_location">New York</field>
+            <field name="end_location">Baltimore</field>
+            <field name="departure_time" eval="2026-07-11 12:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-11 13:24:00"/>
+            <field name="actual_arrival_time" eval="2026-07-11 13:12:00"/>
+            <field name="distance" eval="78.9"/>
+            <field name="distance_completed" eval="78.9"/>
+            <field name="current_location">Baltimore</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_38" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00038</field>
+            <field name="name">Trip TRIP/2026/07/00038: Boston Express</field>
+            <field name="vehicle_id" ref="vehicle_18"/>
+            <field name="driver_id" ref="driver_8"/>
+            <field name="route_id" ref="route_2"/>
+            <field name="start_location">Boston</field>
+            <field name="end_location">Newark</field>
+            <field name="departure_time" eval="2026-07-10 11:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-10 12:18:00"/>
+            <field name="actual_arrival_time" eval="2026-07-10 12:06:00"/>
+            <field name="distance" eval="71.1"/>
+            <field name="distance_completed" eval="71.1"/>
+            <field name="current_location">Newark</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_39" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00039</field>
+            <field name="name">Trip TRIP/2026/07/00039: Philadelphia Express</field>
+            <field name="vehicle_id" ref="vehicle_19"/>
+            <field name="driver_id" ref="driver_9"/>
+            <field name="route_id" ref="route_3"/>
+            <field name="start_location">Philadelphia</field>
+            <field name="end_location">Trenton</field>
+            <field name="departure_time" eval="2026-07-09 10:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-09 13:42:00"/>
+            <field name="actual_arrival_time" eval="2026-07-09 13:30:00"/>
+            <field name="distance" eval="229.9"/>
+            <field name="distance_completed" eval="229.9"/>
+            <field name="current_location">Trenton</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_40" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00040</field>
+            <field name="name">Trip TRIP/2026/07/00040: Washington Express</field>
+            <field name="vehicle_id" ref="vehicle_20"/>
+            <field name="driver_id" ref="driver_10"/>
+            <field name="route_id" ref="route_4"/>
+            <field name="start_location">Washington</field>
+            <field name="end_location">Providence</field>
+            <field name="departure_time" eval="2026-07-12 11:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-12 12:18:00"/>
+            <field name="distance" eval="84.0"/>
+            <field name="distance_completed" eval="38.6"/>
+            <field name="current_location">En Route</field>
+            <field name="status">in_progress</field>
+            <field name="tracking_status">simulated</field>
+            <field name="current_latitude" eval="40.87184"/>
+            <field name="current_longitude" eval="-74.372"/>
+            <field name="speed" eval="74.9"/>
+            <field name="last_updated_time" eval="2026-07-12 12:00:00"/>
+        </record>
+        <record id="trip_41" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00041</field>
+            <field name="name">Trip TRIP/2026/07/00041: Baltimore Express</field>
+            <field name="vehicle_id" ref="vehicle_1"/>
+            <field name="driver_id" ref="driver_11"/>
+            <field name="route_id" ref="route_5"/>
+            <field name="start_location">Baltimore</field>
+            <field name="end_location">Hartford</field>
+            <field name="departure_time" eval="2026-07-13 16:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-13 20:18:00"/>
+            <field name="distance" eval="278.9"/>
+            <field name="status">scheduled</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_42" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00042</field>
+            <field name="name">Trip TRIP/2026/07/00042: Newark Express</field>
+            <field name="vehicle_id" ref="vehicle_2"/>
+            <field name="driver_id" ref="driver_12"/>
+            <field name="route_id" ref="route_6"/>
+            <field name="start_location">Newark</field>
+            <field name="end_location">New Haven</field>
+            <field name="departure_time" eval="2026-07-10 07:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-10 09:06:00"/>
+            <field name="distance" eval="139.4"/>
+            <field name="status">cancelled</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_43" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00043</field>
+            <field name="name">Trip TRIP/2026/07/00043: Trenton Express</field>
+            <field name="vehicle_id" ref="vehicle_3"/>
+            <field name="driver_id" ref="driver_13"/>
+            <field name="route_id" ref="route_7"/>
+            <field name="start_location">Trenton</field>
+            <field name="end_location">Stamford</field>
+            <field name="departure_time" eval="2026-07-09 12:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-09 14:00:00"/>
+            <field name="actual_arrival_time" eval="2026-07-09 13:48:00"/>
+            <field name="distance" eval="118.3"/>
+            <field name="distance_completed" eval="118.3"/>
+            <field name="current_location">Stamford</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_44" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00044</field>
+            <field name="name">Trip TRIP/2026/07/00044: Providence Express</field>
+            <field name="vehicle_id" ref="vehicle_4"/>
+            <field name="driver_id" ref="driver_14"/>
+            <field name="route_id" ref="route_8"/>
+            <field name="start_location">Providence</field>
+            <field name="end_location">Jersey City</field>
+            <field name="departure_time" eval="2026-07-08 11:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-08 13:36:00"/>
+            <field name="actual_arrival_time" eval="2026-07-08 13:24:00"/>
+            <field name="distance" eval="155.1"/>
+            <field name="distance_completed" eval="155.1"/>
+            <field name="current_location">Jersey City</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_45" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00045</field>
+            <field name="name">Trip TRIP/2026/07/00045: Hartford Express</field>
+            <field name="vehicle_id" ref="vehicle_5"/>
+            <field name="driver_id" ref="driver_15"/>
+            <field name="route_id" ref="route_9"/>
+            <field name="start_location">Hartford</field>
+            <field name="end_location">New York</field>
+            <field name="departure_time" eval="2026-07-11 10:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-11 12:30:00"/>
+            <field name="actual_arrival_time" eval="2026-07-11 12:18:00"/>
+            <field name="distance" eval="147.8"/>
+            <field name="distance_completed" eval="147.8"/>
+            <field name="current_location">New York</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_46" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00046</field>
+            <field name="name">Trip TRIP/2026/07/00046: New Haven Express</field>
+            <field name="vehicle_id" ref="vehicle_6"/>
+            <field name="driver_id" ref="driver_1"/>
+            <field name="route_id" ref="route_10"/>
+            <field name="start_location">New Haven</field>
+            <field name="end_location">Boston</field>
+            <field name="departure_time" eval="2026-07-12 11:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-12 11:54:00"/>
+            <field name="distance" eval="56.2"/>
+            <field name="distance_completed" eval="31.1"/>
+            <field name="current_location">En Route</field>
+            <field name="status">in_progress</field>
+            <field name="tracking_status">simulated</field>
+            <field name="current_latitude" eval="40.32284"/>
+            <field name="current_longitude" eval="-73.71883"/>
+            <field name="speed" eval="69.1"/>
+            <field name="last_updated_time" eval="2026-07-12 12:00:00"/>
+        </record>
+        <record id="trip_47" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00047</field>
+            <field name="name">Trip TRIP/2026/07/00047: Stamford Express</field>
+            <field name="vehicle_id" ref="vehicle_7"/>
+            <field name="driver_id" ref="driver_2"/>
+            <field name="route_id" ref="route_11"/>
+            <field name="start_location">Stamford</field>
+            <field name="end_location">Philadelphia</field>
+            <field name="departure_time" eval="2026-07-13 16:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-13 16:48:00"/>
+            <field name="distance" eval="50.8"/>
+            <field name="status">scheduled</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_48" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00048</field>
+            <field name="name">Trip TRIP/2026/07/00048: Jersey City Express</field>
+            <field name="vehicle_id" ref="vehicle_8"/>
+            <field name="driver_id" ref="driver_3"/>
+            <field name="route_id" ref="route_12"/>
+            <field name="start_location">Jersey City</field>
+            <field name="end_location">Washington</field>
+            <field name="departure_time" eval="2026-07-10 07:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-10 11:18:00"/>
+            <field name="distance" eval="279.7"/>
+            <field name="status">cancelled</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_49" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00049</field>
+            <field name="name">Trip TRIP/2026/07/00049: New York Express</field>
+            <field name="vehicle_id" ref="vehicle_9"/>
+            <field name="driver_id" ref="driver_4"/>
+            <field name="route_id" ref="route_1"/>
+            <field name="start_location">New York</field>
+            <field name="end_location">Baltimore</field>
+            <field name="departure_time" eval="2026-07-11 12:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-11 13:24:00"/>
+            <field name="actual_arrival_time" eval="2026-07-11 13:12:00"/>
+            <field name="distance" eval="78.9"/>
+            <field name="distance_completed" eval="78.9"/>
+            <field name="current_location">Baltimore</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>
+        <record id="trip_50" model="transport.trip">
+            <field name="trip_id">TRIP/2026/07/00050</field>
+            <field name="name">Trip TRIP/2026/07/00050: Boston Express</field>
+            <field name="vehicle_id" ref="vehicle_10"/>
+            <field name="driver_id" ref="driver_5"/>
+            <field name="route_id" ref="route_2"/>
+            <field name="start_location">Boston</field>
+            <field name="end_location">Newark</field>
+            <field name="departure_time" eval="2026-07-10 11:00:00"/>
+            <field name="expected_arrival_time" eval="2026-07-10 12:18:00"/>
+            <field name="actual_arrival_time" eval="2026-07-10 12:06:00"/>
+            <field name="distance" eval="71.1"/>
+            <field name="distance_completed" eval="71.1"/>
+            <field name="current_location">Newark</field>
+            <field name="status">completed</field>
+            <field name="tracking_status">inactive</field>
+            <field name="speed" eval="0.0"/>
+        </record>    </data>
+</odoo>

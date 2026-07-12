@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="fleet_vehicle_view_form_transitops_inherit" model="ir.ui.view">
+        <field name="name">fleet.vehicle.form.transitops.inherit</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+        <field name="arch" type="xml">
+            <!-- Add Trips smart button to the vehicle button box -->
+            <div name="button_box" position="inside">
+                <button name="action_view_trips" type="object" class="oe_stat_button" icon="fa-road">
+                    <field name="total_trips" widget="statinfo" string="Trips"/>
+                </button>
+            </div>
+            
+            <!-- Add Vehicle Utilization tab -->
+            <xpath expr="//notebook" position="inside">
+                <page string="TransitOps Utilization" name="transitops_utilization">
+                    <group name="vehicle_utilization" string="Vehicle Utilization Details">
+                        <group>
+                            <field name="total_trips" readonly="1"/>
+                            <field name="total_distance" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="running_hours" widget="float_time" readonly="1"/>
+                            <field name="average_daily_usage" readonly="1"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>
