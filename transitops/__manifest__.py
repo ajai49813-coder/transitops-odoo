@@ -14,6 +14,7 @@ This module enables fleet managers to:
 * Advanced Live Tracking features (Latitude, Longitude, Speed, dynamic ETA, and GPS simulation).
 * Driver performance statistics and Vehicle utilization metrics.
 * PDF report printouts for Trips, Routes, Vehicles distance summary, and Drivers trip history.
+* Premium hackathon-ready UI with custom backend styling, row color coding, Kanban cards animations, and Pivot/Graph/Calendar dashboard views.
     """,
     'author': 'TransitOps Team',
     'category': 'Operations/Transportation',
@@ -32,6 +33,11 @@ This module enables fleet managers to:
         'views/report_templates.xml',
         'views/menu.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'transitops/static/src/css/transitops.css',
+        ],
+    },
     'installable': True,
     'application': True,
     'auto_install': False,
