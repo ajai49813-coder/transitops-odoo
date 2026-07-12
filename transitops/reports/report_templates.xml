@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===== VEHICLE SUMMARY REPORT ===== -->
+    <template id="report_vehicle_summary">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="vehicle">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center mb-4">
+                            <h2>TransitOps</h2>
+                            <h3>Vehicle Summary Report</h3>
+                            <p>Generated: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/></p>
+                        </div>
+                        <table class="table table-bordered">
+                            <tr><th>Field</th><th>Value</th></tr>
+                            <tr><td>Vehicle Name</td><td><t t-esc="vehicle.name"/></td></tr>
+                            <tr><td>License Plate</td><td><t t-esc="vehicle.license_plate"/></td></tr>
+                            <tr><td>Type</td><td><t t-esc="vehicle.vehicle_type"/></td></tr>
+                            <tr><td>Make / Model</td><td><t t-esc="(vehicle.make or '') + ' ' + (vehicle.model or '')"/></td></tr>
+                            <tr><td>Year</td><td><t t-esc="vehicle.year or '-'"/></td></tr>
+                            <tr><td>Fuel Type</td><td><t t-esc="vehicle.fuel_type or '-'"/></td></tr>
+                            <tr><td>Status</td><td><t t-esc="vehicle.status"/></td></tr>
+                            <tr><td>Odometer (km)</td><td><t t-esc="vehicle.odometer"/></td></tr>
+                            <tr><td>Assigned Driver</td><td><t t-esc="vehicle.driver_id.name or '-'"/></td></tr>
+                            <tr><td>Insurance Expiry</td><td><t t-esc="vehicle.insurance_expiry or '-'"/></td></tr>
+                            <tr><td>Registration Expiry</td><td><t t-esc="vehicle.registration_expiry or '-'"/></td></tr>
+                            <tr><td>Total Trips</td><td><t t-esc="vehicle.trip_count"/></td></tr>
+                        </table>
+                        <h4 class="mt-4">Recent Trips</h4>
+                        <table class="table table-sm table-bordered">
+                            <thead><tr><th>Ref</th><th>Origin</th><th>Destination</th><th>Date</th><th>Status</th></tr></thead>
+                            <tbody>
+                                <t t-foreach="vehicle.trip_ids[:10]" t-as="trip">
+                                    <tr>
+                                        <td><t t-esc="trip.name"/></td>
+                                        <td><t t-esc="trip.origin"/></td>
+                                        <td><t t-esc="trip.destination"/></td>
+                                        <td><t t-esc="trip.scheduled_date"/></td>
+                                        <td><t t-esc="trip.status"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ===== TRIP SUMMARY REPORT ===== -->
+    <template id="report_trip_summary">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="trip">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center mb-4">
+                            <h2>TransitOps</h2>
+                            <h3>Trip Summary Report</h3>
+                            <p>Generated: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/></p>
+                        </div>
+                        <table class="table table-bordered">
+                            <tr><th>Field</th><th>Value</th></tr>
+                            <tr><td>Trip Reference</td><td><t t-esc="trip.name"/></td></tr>
+                            <tr><td>Vehicle</td><td><t t-esc="trip.vehicle_id.name"/></td></tr>
+                            <tr><td>Driver</td><td><t t-esc="trip.driver_id.name"/></td></tr>
+                            <tr><td>Origin</td><td><t t-esc="trip.origin"/></td></tr>
+                            <tr><td>Destination</td><td><t t-esc="trip.destination"/></td></tr>
+                            <tr><td>Scheduled Date</td><td><t t-esc="trip.scheduled_date"/></td></tr>
+                            <tr><td>Start Date</td><td><t t-esc="trip.start_date or '-'"/></td></tr>
+                            <tr><td>End Date</td><td><t t-esc="trip.end_date or '-'"/></td></tr>
+                            <tr><td>Status</td><td><t t-esc="trip.status"/></td></tr>
+                            <tr><td>Distance (km)</td><td><t t-esc="trip.actual_distance"/></td></tr>
+                            <tr><td>Passengers</td><td><t t-esc="trip.passengers or 0"/></td></tr>
+                            <tr><td>Cargo Weight (kg)</td><td><t t-esc="trip.cargo_weight or 0"/></td></tr>
+                        </table>
+                        <t t-if="trip.fuel_ids">
+                            <h4 class="mt-4">Fuel Records</h4>
+                            <table class="table table-sm table-bordered">
+                                <thead><tr><th>Date</th><th>Qty (L)</th><th>Cost/L</th><th>Total Cost</th><th>Station</th></tr></thead>
+                                <tbody>
+                                    <t t-foreach="trip.fuel_ids" t-as="f">
+                                        <tr>
+                                            <td><t t-esc="f.date"/></td>
+                                            <td><t t-esc="f.quantity_liters"/></td>
+                                            <td><t t-esc="f.cost_per_liter"/></td>
+                                            <td><t t-esc="f.total_cost"/></td>
+                                            <td><t t-esc="f.fuel_station or '-'"/></td>
+                                        </tr>
+                                    </t>
+                                    <tr class="font-weight-bold">
+                                        <td colspan="3">Total</td>
+                                        <td><t t-esc="sum(trip.fuel_ids.mapped('total_cost'))"/></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ===== FUEL CONSUMPTION REPORT ===== -->
+    <template id="report_fuel_consumption">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="fuel">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center mb-4">
+                            <h2>TransitOps</h2>
+                            <h3>Fuel Consumption Report</h3>
+                            <p>Generated: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/></p>
+                        </div>
+                        <table class="table table-bordered">
+                            <tr><th>Field</th><th>Value</th></tr>
+                            <tr><td>Reference</td><td><t t-esc="fuel.name"/></td></tr>
+                            <tr><td>Date</td><td><t t-esc="fuel.date"/></td></tr>
+                            <tr><td>Vehicle</td><td><t t-esc="fuel.vehicle_id.name"/></td></tr>
+                            <tr><td>Driver</td><td><t t-esc="fuel.driver_id.name or '-'"/></td></tr>
+                            <tr><td>Trip</td><td><t t-esc="fuel.trip_id.name or '-'"/></td></tr>
+                            <tr><td>Fuel Type</td><td><t t-esc="fuel.fuel_type or '-'"/></td></tr>
+                            <tr><td>Quantity (L)</td><td><t t-esc="fuel.quantity_liters"/></td></tr>
+                            <tr><td>Cost per Liter</td><td><t t-esc="fuel.cost_per_liter"/></td></tr>
+                            <tr><td>Total Cost</td><td><t t-esc="fuel.total_cost"/></td></tr>
+                            <tr><td>Odometer Reading</td><td><t t-esc="fuel.odometer_reading or '-'"/></td></tr>
+                            <tr><td>Fuel Station</td><td><t t-esc="fuel.fuel_station or '-'"/></td></tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ===== DRIVER SUMMARY REPORT ===== -->
+    <template id="report_driver_summary">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="driver">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center mb-4">
+                            <h2>TransitOps</h2>
+                            <h3>Driver Summary Report</h3>
+                            <p>Generated: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/></p>
+                        </div>
+                        <table class="table table-bordered">
+                            <tr><th>Field</th><th>Value</th></tr>
+                            <tr><td>Name</td><td><t t-esc="driver.name"/></td></tr>
+                            <tr><td>Employee ID</td><td><t t-esc="driver.employee_id or '-'"/></td></tr>
+                            <tr><td>Phone</td><td><t t-esc="driver.phone or '-'"/></td></tr>
+                            <tr><td>Email</td><td><t t-esc="driver.email or '-'"/></td></tr>
+                            <tr><td>License Number</td><td><t t-esc="driver.license_number or '-'"/></td></tr>
+                            <tr><td>License Class</td><td><t t-esc="driver.license_class or '-'"/></td></tr>
+                            <tr><td>License Expiry</td><td><t t-esc="driver.license_expiry or '-'"/></td></tr>
+                            <tr><td>Status</td><td><t t-esc="driver.status"/></td></tr>
+                            <tr><td>Date Hired</td><td><t t-esc="driver.date_hired or '-'"/></td></tr>
+                            <tr><td>Assigned Vehicle</td><td><t t-esc="driver.vehicle_id.name or '-'"/></td></tr>
+                            <tr><td>Total Trips</td><td><t t-esc="driver.trip_count"/></td></tr>
+                        </table>
+                        <h4 class="mt-4">Recent Trips</h4>
+                        <table class="table table-sm table-bordered">
+                            <thead><tr><th>Ref</th><th>Origin</th><th>Destination</th><th>Date</th><th>Status</th></tr></thead>
+                            <tbody>
+                                <t t-foreach="driver.trip_ids[:10]" t-as="trip">
+                                    <tr>
+                                        <td><t t-esc="trip.name"/></td>
+                                        <td><t t-esc="trip.origin"/></td>
+                                        <td><t t-esc="trip.destination"/></td>
+                                        <td><t t-esc="trip.scheduled_date"/></td>
+                                        <td><t t-esc="trip.status"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- ===== MAINTENANCE SUMMARY REPORT ===== -->
+    <template id="report_maintenance_summary">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="maint">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center mb-4">
+                            <h2>TransitOps</h2>
+                            <h3>Maintenance Summary Report</h3>
+                            <p>Generated: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/></p>
+                        </div>
+                        <table class="table table-bordered">
+                            <tr><th>Field</th><th>Value</th></tr>
+                            <tr><td>Reference</td><td><t t-esc="maint.name"/></td></tr>
+                            <tr><td>Vehicle</td><td><t t-esc="maint.vehicle_id.name"/></td></tr>
+                            <tr><td>Type</td><td><t t-esc="maint.maintenance_type"/></td></tr>
+                            <tr><td>Status</td><td><t t-esc="maint.status"/></td></tr>
+                            <tr><td>Scheduled Date</td><td><t t-esc="maint.scheduled_date"/></td></tr>
+                            <tr><td>Completed Date</td><td><t t-esc="maint.completed_date or '-'"/></td></tr>
+                            <tr><td>Cost</td><td><t t-esc="maint.cost or 0"/></td></tr>
+                            <tr><td>Odometer at Service</td><td><t t-esc="maint.odometer_at_service or '-'"/></td></tr>
+                            <tr><td>Next Service Date</td><td><t t-esc="maint.next_service_date or '-'"/></td></tr>
+                            <tr><td>Technician</td><td><t t-esc="maint.technician or '-'"/></td></tr>
+                        </table>
+                        <t t-if="maint.description">
+                            <h4 class="mt-3">Description</h4>
+                            <p><t t-esc="maint.description"/></p>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

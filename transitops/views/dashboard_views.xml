@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Dashboard Client Action -->
+    <record id="action_transitops_dashboard" model="ir.actions.client">
+        <field name="name">TransitOps Dashboard</field>
+        <field name="tag">transitops_dashboard</field>
+    </record>
+
+    <!-- ==================== MENUS ==================== -->
+
+    <!-- Root Menu -->
+    <menuitem id="menu_transitops_root"
+              name="TransitOps"
+              sequence="10"
+              web_icon="transitops,static/description/icon.svg"/>
+
+    <!-- Dashboard -->
+    <menuitem id="menu_transitops_dashboard"
+              name="Dashboard"
+              parent="menu_transitops_root"
+              action="action_transitops_dashboard"
+              sequence="1"/>
+
+    <!-- Fleet -->
+    <menuitem id="menu_transitops_fleet"
+              name="Fleet"
+              parent="menu_transitops_root"
+              sequence="2"/>
+
+    <menuitem id="menu_transitops_vehicles"
+              name="Vehicles"
+              parent="menu_transitops_fleet"
+              action="action_transit_vehicle"
+              sequence="1"/>
+
+    <menuitem id="menu_transitops_drivers"
+              name="Drivers"
+              parent="menu_transitops_fleet"
+              action="action_transit_driver"
+              sequence="2"/>
+
+    <!-- Operations -->
+    <menuitem id="menu_transitops_operations"
+              name="Operations"
+              parent="menu_transitops_root"
+              sequence="3"/>
+
+    <menuitem id="menu_transitops_trips"
+              name="Trips"
+              parent="menu_transitops_operations"
+              action="action_transit_trip"
+              sequence="1"/>
+
+    <menuitem id="menu_transitops_fuel"
+              name="Fuel Records"
+              parent="menu_transitops_operations"
+              action="action_transit_fuel"
+              sequence="2"/>
+
+    <menuitem id="menu_transitops_maintenance"
+              name="Maintenance"
+              parent="menu_transitops_operations"
+              action="action_transit_maintenance"
+              sequence="3"/>
+
+    <!-- Alerts -->
+    <menuitem id="menu_transitops_alerts"
+              name="Alerts"
+              parent="menu_transitops_root"
+              action="action_transit_notification"
+              sequence="4"/>
+
+    <!-- Reports -->
+    <menuitem id="menu_transitops_reports"
+              name="Reports"
+              parent="menu_transitops_root"
+              sequence="5"/>
+</odoo>
