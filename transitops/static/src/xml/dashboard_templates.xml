@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+    <t t-name="transitops.Dashboard" owl="1">
+        <div class="o_transitops_dashboard">
+            <!-- Loading State -->
+            <t t-if="state.loading">
+                <div class="o_dashboard_loading">
+                    <i class="fa fa-spinner fa-spin fa-3x"/>
+                    <p>Loading TransitOps Dashboard...</p>
+                </div>
+            </t>
+
+            <!-- Error State -->
+            <t t-elif="state.error">
+                <div class="alert alert-danger m-4">
+                    <i class="fa fa-exclamation-triangle"/> <t t-esc="state.error"/>
+                </div>
+            </t>
+
+            <!-- Dashboard Content -->
+            <t t-else="">
+                <!-- Header -->
+                <div class="o_dashboard_header">
+                    <h1><i class="fa fa-tachometer"/> TransitOps Dashboard</h1>
+                    <span class="o_dashboard_subtitle">Fleet Operations Overview</span>
+                </div>
+
+                <!-- KPI Cards -->
+                <div class="o_kpi_grid">
+                    <div class="o_kpi_card o_kpi_blue" t-on-click="() => openModel('transit.vehicle')">
+                        <div class="o_kpi_icon"><i class="fa fa-truck"/></div>
+                        <div class="o_kpi_body">
+                            <div class="o_kpi_value"><t t-esc="state.kpis.total_vehicles || 0"/></div>
+                            <div class="o_kpi_label">Total Vehicles</div>
+                        </div>
+                    </div>
+                    <div class="o_kpi_card o_kpi_green" t-on-click="() => openModel('transit.vehicle')">
+                        <div class="o_kpi_icon"><i class="fa fa-check-circle"/></div>
+                        <div class="o_kpi_body">
+                            <div class="o_kpi_value"><t t-esc="state.kpis.active_vehicles || 0"/></div>
+                            <div class="o_kpi_label">Active Vehicles</div>
+                        </div>
+                    </div>
+                    <div class="o_kpi_card o_kpi_purple" t-on-click="() => openModel('transit.driver')">
+                        <div class="o_kpi_icon"><i class="fa fa-id-card"/></div>
+                        <div class="o_kpi_body">
+                            <div class="o_kpi_value"><t t-esc="state.kpis.total_drivers || 0"/></div>
+                            <div class="o_kpi_label">Total Drivers</div>
+                        </div>
+                    </div>
+                    <div class="o_kpi_card o_kpi_teal" t-on-click="() => openModel('transit.trip')">
+                        <div class="o_kpi_icon"><i class="fa fa-map-marker"/></div>
+                        <div class="o_kpi_body">
+                            <div class="o_kpi_value"><t t-esc="state.kpis.total_trips || 0"/></div>
+                            <div class="o_kpi_label">Total Trips</div>
+                        </div>
+                    </div>
+                    <div class="o_kpi_card o_kpi_green" t-on-click="() => openModel('transit.trip')">
+                        <div class="o_kpi_icon"><i class="fa fa-flag-checkered"/></div>
+                        <div class="o_kpi_body">
+                            <div class="o_kpi_value"><t t-esc="state.kpis.completed_trips || 0"/></div>
+                            <div class="o_kpi_label">Completed Trips</div>
+                        </div>
+                    </div>
+                    <div class="o_kpi_card o_kpi_orange" t-on-click="() => openModel('transit.trip')">
+                        <div class="o_kpi_icon"><i class="fa fa-road"/></div>
+                        <div class="o_kpi_body">
+                            <div class="o_kpi_value"><t t-esc="state.kpis.ongoing_trips || 0"/></div>
+                            <div class="o_kpi_label">Ongoing Trips</div>
+                        </div>
+                    </div>
+                    <div class="o_kpi_card o_kpi_blue" t-on-click="() => openModel('transit.fuel')">
+                        <div class="o_kpi_icon"><i class="fa fa-tint"/></div>
+                        <div class="o_kpi_body">
+                            <div class="o_kpi_value"><t t-esc="state.kpis.total_fuel_consumption || 0"/> L</div>
+                            <div class="o_kpi_label">Total Fuel Consumed</div>
+                        </div>
+                    </div>
+                    <div class="o_kpi_card o_kpi_red" t-on-click="() => openModel('transit.fuel')">
+                        <div class="o_kpi_icon"><i class="fa fa-money"/></div>
+                        <div class="o_kpi_body">
+                            <div class="o_kpi_value">$<t t-esc="state.kpis.total_fuel_cost || 0"/></div>
+                            <div class="o_kpi_label">Total Fuel Cost</div>
+                        </div>
+                    </div>
+                    <div class="o_kpi_card o_kpi_orange" t-on-click="() => openModel('transit.maintenance')">
+                        <div class="o_kpi_icon"><i class="fa fa-wrench"/></div>
+                        <div class="o_kpi_body">
+                            <div class="o_kpi_value"><t t-esc="state.kpis.pending_maintenance || 0"/></div>
+                            <div class="o_kpi_label">Pending Maintenance</div>
+                        </div>
+                    </div>
+                    <div class="o_kpi_card o_kpi_red" t-on-click="openAlerts">
+                        <div class="o_kpi_icon"><i class="fa fa-bell"/></div>
+                        <div class="o_kpi_body">
+                            <div class="o_kpi_value"><t t-esc="state.kpis.active_alerts || 0"/></div>
+                            <div class="o_kpi_label">Active Alerts</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row 1 -->
+                <div class="o_chart_grid">
+                    <div class="o_chart_card">
+                        <canvas id="fuelConsumptionChart"/>
+                    </div>
+                    <div class="o_chart_card">
+                        <canvas id="fuelCostChart"/>
+                    </div>
+                </div>
+
+                <!-- Charts Row 2 -->
+                <div class="o_chart_grid">
+                    <div class="o_chart_card">
+                        <canvas id="tripStatusChart"/>
+                    </div>
+                    <div class="o_chart_card">
+                        <canvas id="vehicleUsageChart"/>
+                    </div>
+                </div>
+
+                <!-- Charts Row 3 -->
+                <div class="o_chart_grid">
+                    <div class="o_chart_card">
+                        <canvas id="fuelEfficiencyChart"/>
+                    </div>
+                    <div class="o_chart_card">
+                        <canvas id="monthlyTripChart"/>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

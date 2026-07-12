@@ -12,7 +12,6 @@ services:
       - HOST=db
       - USER=odoo
       - PASSWORD=odoo
-    # Run Odoo, including both standard and custom addons paths, and enable dev-reload
     command: odoo --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons --dev=all
 
   db:

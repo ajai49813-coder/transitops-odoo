@@ -1,144 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Dashboard Form View -->
-    <record id="view_transport_dashboard_form" model="ir.ui.view">
-        <field name="name">transport.dashboard.form</field>
-        <field name="model">transport.dashboard</field>
-        <field name="arch" type="xml">
-            <form string="TransitOps Dashboard" create="false" edit="false" delete="false">
-                <sheet class="transitops_dashboard_container">
-                    <!-- Dashboard Title Header -->
-                    <div class="row align-items-center mb-4 pb-3 border-bottom">
-                        <div class="col-8">
-                            <h1 class="text-dark fw-bold mb-0">TransitOps Live Operations Dashboard</h1>
-                            <p class="text-muted mb-0">Real-time telemetry, fleet tracking, and utilization statistics.</p>
-                        </div>
-                    </div>
-
-                    <!-- KPI Cards Row -->
-                    <div class="transitops_dashboard_grid">
-                        <!-- Active Trips Card -->
-                        <div class="transitops_kpi_card kpi_card_active">
-                            <div class="d-flex justify-content-between w-100">
-                                <span class="kpi_card_label">Active Trips</span>
-                                <span class="fa fa-refresh fa-spin kpi_card_icon text-primary"/>
-                            </div>
-                            <div class="kpi_card_value">
-                                <field name="active_trips"/>
-                            </div>
-                        </div>
-
-                        <!-- Completed Trips Card -->
-                        <div class="transitops_kpi_card kpi_card_completed">
-                            <div class="d-flex justify-content-between w-100">
-                                <span class="kpi_card_label">Completed Trips</span>
-                                <span class="fa fa-check-circle kpi_card_icon text-success"/>
-                            </div>
-                            <div class="kpi_card_value">
-                                <field name="completed_trips"/>
-                            </div>
-                        </div>
-
-                        <!-- Distance Travelled Card -->
-                        <div class="transitops_kpi_card kpi_card_distance">
-                            <div class="d-flex justify-content-between w-100">
-                                <span class="kpi_card_label">Distance Travelled</span>
-                                <span class="fa fa-tachometer kpi_card_icon" style="color: #a855f7;"/>
-                            </div>
-                            <div class="kpi_card_value">
-                                <field name="total_distance_covered"/> <span style="font-size: 16px; font-weight: normal; color: #64748b;">km</span>
-                            </div>
-                        </div>
-
-                        <!-- Available Drivers Card -->
-                        <div class="transitops_kpi_card kpi_card_drivers">
-                            <div class="d-flex justify-content-between w-100">
-                                <span class="kpi_card_label">Drivers Available</span>
-                                <span class="fa fa-users kpi_card_icon text-warning"/>
-                            </div>
-                            <div class="kpi_card_value">
-                                <field name="drivers_available"/>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Layout: Active Trips vs Utilizations -->
-                    <div class="row">
-                        <!-- Left: Active Trips Monitoring -->
-                        <div class="col-lg-8 pr-md-3">
-                            <div class="card shadow-sm border-0 mb-4">
-                                <div class="card-header bg-white py-3">
-                                    <h5 class="card-title text-dark fw-bold mb-0">
-                                        <span class="fa fa-dot-circle-o text-danger mr-2"/>
-                                        Live Active Trips Monitoring
-                                    </h5>
-                                </div>
-                                <div class="card-body p-0">
-                                    <field name="active_trip_ids" readonly="1">
-                                        <tree string="Active Trips" create="false" edit="false" delete="false">
-                                            <field name="trip_id" decoration-bf="1"/>
-                                            <field name="route_id"/>
-                                            <field name="vehicle_id"/>
-                                            <field name="driver_id"/>
-                                            <field name="speed" string="Speed (km/h)"/>
-                                            <field name="progress" widget="progressbar" string="Progress"/>
-                                            <field name="eta" string="ETA"/>
-                                        </tree>
-                                    </field>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Right: System Utilization Rates -->
-                        <div class="col-lg-4 pl-md-3">
-                            <div class="card shadow-sm border-0 mb-4 h-100">
-                                <div class="card-header bg-white py-3">
-                                    <h5 class="card-title text-dark fw-bold mb-0">
-                                        <span class="fa fa-pie-chart text-primary mr-2"/>
-                                        System Utilization Metrics
-                                    </h5>
-                                </div>
-                                <div class="card-body">
-                                    <!-- Driver Utilization -->
-                                    <div class="utilization_metric_row">
-                                        <div class="utilization_metric_label d-flex justify-content-between">
-                                            <span>Driver Utilization Rate</span>
-                                            <span class="text-primary"><field name="driver_utilization_ratio"/>%</span>
-                                        </div>
-                                        <field name="driver_utilization_ratio" widget="progressbar" options="{'current_value_label': False}"/>
-                                    </div>
-                                    <!-- Vehicle Utilization -->
-                                    <div class="utilization_metric_row">
-                                        <div class="utilization_metric_label d-flex justify-content-between">
-                                            <span>Vehicle Active Rate</span>
-                                            <span class="text-success"><field name="vehicle_utilization_ratio"/>%</span>
-                                        </div>
-                                        <field name="vehicle_utilization_ratio" widget="progressbar" options="{'current_value_label': False}"/>
-                                    </div>
-                                    <!-- Cancelled Rate -->
-                                    <div class="utilization_metric_row">
-                                        <div class="utilization_metric_label d-flex justify-content-between">
-                                            <span>Cancelled Trip Ratio</span>
-                                            <span class="text-danger"><field name="cancelled_trip_ratio"/>%</span>
-                                        </div>
-                                        <field name="cancelled_trip_ratio" widget="progressbar" options="{'current_value_label': False}"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </sheet>
-            </form>
-        </field>
-    </record>
-
-    <!-- Dashboard Window Action (Calls python singleton helper) -->
-    <record id="action_transport_dashboard" model="ir.actions.server">
+    <!-- Dashboard Client Action -->
+    <record id="action_transitops_dashboard" model="ir.actions.client">
         <field name="name">TransitOps Dashboard</field>
-        <field name="model_id" ref="model_transport_dashboard"/>
-        <field name="state">code</field>
-        <field name="code">
-            action = model.action_open_dashboard()
-        </field>
+        <field name="tag">transitops_dashboard</field>
     </record>
+
+    <!-- ==================== MENUS ==================== -->
+
+    <!-- Root Menu -->
+    <menuitem id="menu_transitops_root"
+              name="TransitOps"
+              sequence="10"
+              web_icon="transitops,static/description/icon.svg"/>
+
+    <!-- Dashboard -->
+    <menuitem id="menu_transitops_dashboard"
+              name="Dashboard"
+              parent="menu_transitops_root"
+              action="action_transitops_dashboard"
+              sequence="1"/>
+
+    <!-- Fleet -->
+    <menuitem id="menu_transitops_fleet"
+              name="Fleet"
+              parent="menu_transitops_root"
+              sequence="2"/>
+
+    <menuitem id="menu_transitops_vehicles"
+              name="Vehicles"
+              parent="menu_transitops_fleet"
+              action="action_transit_vehicle"
+              sequence="1"/>
+
+    <menuitem id="menu_transitops_drivers"
+              name="Drivers"
+              parent="menu_transitops_fleet"
+              action="action_transit_driver"
+              sequence="2"/>
+
+    <!-- Operations -->
+    <menuitem id="menu_transitops_operations"
+              name="Operations"
+              parent="menu_transitops_root"
+              sequence="3"/>
+
+    <menuitem id="menu_transitops_trips"
+              name="Trips"
+              parent="menu_transitops_operations"
+              action="action_transit_trip"
+              sequence="1"/>
+
+    <menuitem id="menu_transitops_fuel"
+              name="Fuel Records"
+              parent="menu_transitops_operations"
+              action="action_transit_fuel"
+              sequence="2"/>
+
+    <menuitem id="menu_transitops_maintenance"
+              name="Maintenance"
+              parent="menu_transitops_operations"
+              action="action_transit_maintenance"
+              sequence="3"/>
+
+    <!-- Alerts -->
+    <menuitem id="menu_transitops_alerts"
+              name="Alerts"
+              parent="menu_transitops_root"
+              action="action_transit_notification"
+              sequence="4"/>
+
+    <!-- Reports -->
+    <menuitem id="menu_transitops_reports"
+              name="Reports"
+              parent="menu_transitops_root"
+              sequence="5"/>
 </odoo>

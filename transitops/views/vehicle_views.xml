@@ -1,32 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <record id="fleet_vehicle_view_form_transitops_inherit" model="ir.ui.view">
-        <field name="name">fleet.vehicle.form.transitops.inherit</field>
-        <field name="model">fleet.vehicle</field>
-        <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+
+    <!-- Vehicle Form View -->
+    <record id="view_transit_vehicle_form" model="ir.ui.view">
+        <field name="name">transit.vehicle.form</field>
+        <field name="model">transit.vehicle</field>
         <field name="arch" type="xml">
-            <!-- Add Trips smart button to the vehicle button box -->
-            <div name="button_box" position="inside">
-                <button name="action_view_trips" type="object" class="oe_stat_button" icon="fa-road">
-                    <field name="total_trips" widget="statinfo" string="Trips"/>
-                </button>
-            </div>
-            
-            <!-- Add Vehicle Utilization tab -->
-            <xpath expr="//notebook" position="inside">
-                <page string="TransitOps Utilization" name="transitops_utilization">
-                    <group name="vehicle_utilization" string="Vehicle Utilization Details">
+            <form>
+                <header>
+                    <field name="status"
+                           widget="statusbar"
+                           statusbar_visible="active,maintenance,inactive,retired"/>
+                </header>
+
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Vehicle Name"/>
+                        </h1>
+                        <h2>
+                            <field name="license_plate" placeholder="License Plate"/>
+                        </h2>
+                    </div>
+
+                    <group>
                         <group>
-                            <field name="total_trips" readonly="1"/>
-                            <field name="total_distance" readonly="1"/>
+                            <field name="vehicle_type"/>
+                            <field name="make"/>
+                            <field name="model"/>
+                            <field name="year"/>
+                            <field name="color"/>
+                            <field name="capacity"/>
                         </group>
+
                         <group>
-                            <field name="running_hours" widget="float_time" readonly="1"/>
-                            <field name="average_daily_usage" readonly="1"/>
+                            <field name="fuel_type"/>
+                            <field name="odometer"/>
+                            <field name="driver_id"/>
+                            <field name="insurance_expiry"/>
+                            <field name="registration_expiry"/>
                         </group>
                     </group>
-                </page>
-            </xpath>
+
+                    <notebook>
+                        <page string="Trips" name="trips">
+                            <field name="trip_ids" readonly="1"/>
+                        </page>
+
+                        <page string="Fuel Records" name="fuel">
+                            <field name="fuel_ids" readonly="1"/>
+                        </page>
+
+                        <page string="Maintenance" name="maintenance">
+                            <field name="maintenance_ids" readonly="1"/>
+                        </page>
+
+                        <page string="Notes">
+                            <field name="notes"/>
+                        </page>
+                    </notebook>
+
+                </sheet>
+
+                <chatter/>
+            </form>
         </field>
     </record>
+      <!-- Vehicle List View -->
+    <record id="view_transit_vehicle_list" model="ir.ui.view">
+        <field name="name">transit.vehicle.list</field>
+        <field name="model">transit.vehicle</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="license_plate"/>
+                <field name="vehicle_type"/>
+                <field name="make"/>
+                <field name="model"/>
+                <field name="fuel_type"/>
+                <field name="odometer"/>
+                <field name="driver_id"/>
+                <field name="status"
+                       widget="badge"
+                       decoration-success="status == 'active'"
+                       decoration-warning="status == 'maintenance'"
+                       decoration-danger="status == 'retired'"
+                       decoration-muted="status == 'inactive'"/>
+                <field name="insurance_expiry"/>
+            </tree>
+        </field>
+    </record>
+      <!-- Vehicle List View -->
+    <record id="view_transit_vehicle_list" model="ir.ui.view">
+        <field name="name">transit.vehicle.list</field>
+        <field name="model">transit.vehicle</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="license_plate"/>
+                <field name="vehicle_type"/>
+                <field name="make"/>
+                <field name="model"/>
+                <field name="fuel_type"/>
+                <field name="odometer"/>
+                <field name="driver_id"/>
+                <field name="status"
+                       widget="badge"
+                       decoration-success="status == 'active'"
+                       decoration-warning="status == 'maintenance'"
+                       decoration-danger="status == 'retired'"
+                       decoration-muted="status == 'inactive'"/>
+                <field name="insurance_expiry"/>
+            </tree>
+        </field>
+    </record>
+      <!-- Vehicle Action -->
+    <record id="action_transit_vehicle" model="ir.actions.act_window">
+        <field name="name">Vehicles</field>
+        <field name="res_model">transit.vehicle</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_transit_vehicle_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add your first vehicle!
+            </p>
+        </field>
+    </record>
+
 </odoo>

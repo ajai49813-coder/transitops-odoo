@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Sequence for trips -->
+    <record id="seq_transit_trip" model="ir.sequence">
+        <field name="name">Transit Trip</field>
+        <field name="code">transit.trip</field>
+        <field name="prefix">TRIP/%(year)s/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <!-- Sequence for fuel records -->
+    <record id="seq_transit_fuel" model="ir.sequence">
+        <field name="name">Transit Fuel</field>
+        <field name="code">transit.fuel</field>
+        <field name="prefix">FUEL/%(year)s/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <!-- Sequence for maintenance records -->
+    <record id="seq_transit_maintenance" model="ir.sequence">
+        <field name="name">Transit Maintenance</field>
+        <field name="code">transit.maintenance</field>
+        <field name="prefix">MAINT/%(year)s/</field>
+        <field name="padding">4</field>
+    </record>
+
+    <!-- Cron: Generate alerts daily -->
+    <record id="cron_transit_generate_alerts" model="ir.cron">
+        <field name="name">TransitOps: Generate Expiry &amp; Maintenance Alerts</field>
+        <field name="model_id" ref="model_transit_dashboard"/>
+        <field name="state">code</field>
+        <field name="code">model.generate_alerts()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+    </record>
+</odoo>
