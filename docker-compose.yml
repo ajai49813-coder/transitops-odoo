@@ -28,7 +28,7 @@ services:
       PASSWORD: odoo
     volumes:
       # Mount your custom module into Odoo's extra addons folder
-      - ./transitops_fleet:/mnt/extra-addons/transitops_fleet
+      - ./transitops_fleet:/mnt/extra-addons
       - odoo_data:/var/lib/odoo
     ports:
       - "8069:8069"
