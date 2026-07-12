@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         DEMO VEHICLES
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="demo_vehicle_bus_01" model="transit.vehicle">
+        <field name="name">City Bus 01</field>
+        <field name="vehicle_number">TRN-001</field>
+        <field name="registration_number">TN01AB1234</field>
+        <field name="vehicle_type">bus</field>
+        <field name="brand">Tata</field>
+        <field name="model">Starbus Ultra</field>
+        <field name="manufacturing_year">2020</field>
+        <field name="capacity">52</field>
+        <field name="fuel_type">diesel</field>
+        <field name="odometer">45230.5</field>
+        <field name="status">available</field>
+        <field name="insurance_number">INS-2024-001</field>
+        <field name="insurance_expiry" eval="(DateTime.now() + timedelta(days=45)).strftime('%Y-%m-%d')"/>
+        <field name="pollution_cert_number">PUC-2024-001</field>
+        <field name="pollution_cert_expiry" eval="(DateTime.now() + timedelta(days=120)).strftime('%Y-%m-%d')"/>
+        <field name="notes">Primary city route bus. Well maintained.</field>
+    </record>
+
+    <record id="demo_vehicle_bus_02" model="transit.vehicle">
+        <field name="name">Express Bus 02</field>
+        <field name="vehicle_number">TRN-002</field>
+        <field name="registration_number">TN01AB5678</field>
+        <field name="vehicle_type">bus</field>
+        <field name="brand">Ashok Leyland</field>
+        <field name="model">Viking</field>
+        <field name="manufacturing_year">2019</field>
+        <field name="capacity">48</field>
+        <field name="fuel_type">diesel</field>
+        <field name="odometer">78450.0</field>
+        <field name="status">on_trip</field>
+        <field name="insurance_number">INS-2024-002</field>
+        <field name="insurance_expiry" eval="(DateTime.now() + timedelta(days=15)).strftime('%Y-%m-%d')"/>
+        <field name="pollution_cert_number">PUC-2024-002</field>
+        <field name="pollution_cert_expiry" eval="(DateTime.now() + timedelta(days=60)).strftime('%Y-%m-%d')"/>
+        <field name="notes">Express highway route. Insurance expiring soon!</field>
+    </record>
+
+    <record id="demo_vehicle_van_01" model="transit.vehicle">
+        <field name="name">Staff Van 01</field>
+        <field name="vehicle_number">TRN-003</field>
+        <field name="registration_number">TN02CD9012</field>
+        <field name="vehicle_type">van</field>
+        <field name="brand">Force</field>
+        <field name="model">Traveller</field>
+        <field name="manufacturing_year">2021</field>
+        <field name="capacity">12</field>
+        <field name="fuel_type">petrol</field>
+        <field name="odometer">22100.0</field>
+        <field name="status">maintenance</field>
+        <field name="insurance_number">INS-2024-003</field>
+        <field name="insurance_expiry" eval="(DateTime.now() + timedelta(days=200)).strftime('%Y-%m-%d')"/>
+        <field name="pollution_cert_number">PUC-2024-003</field>
+        <field name="pollution_cert_expiry" eval="(DateTime.now() + timedelta(days=90)).strftime('%Y-%m-%d')"/>
+        <field name="notes">Staff shuttle van. Currently in garage for brake service.</field>
+    </record>
+
+    <record id="demo_vehicle_electric_01" model="transit.vehicle">
+        <field name="name">EV Bus 01</field>
+        <field name="vehicle_number">TRN-004</field>
+        <field name="registration_number">TN03EF3456</field>
+        <field name="vehicle_type">bus</field>
+        <field name="brand">Olectra</field>
+        <field name="model">C9</field>
+        <field name="manufacturing_year">2023</field>
+        <field name="capacity">40</field>
+        <field name="fuel_type">electric</field>
+        <field name="odometer">8900.0</field>
+        <field name="status">available</field>
+        <field name="insurance_number">INS-2024-004</field>
+        <field name="insurance_expiry" eval="(DateTime.now() + timedelta(days=365)).strftime('%Y-%m-%d')"/>
+        <field name="pollution_cert_number">PUC-2024-004</field>
+        <field name="pollution_cert_expiry" eval="(DateTime.now() + timedelta(days=365)).strftime('%Y-%m-%d')"/>
+        <field name="notes">New electric bus. Zero emission city route.</field>
+    </record>
+
+    <record id="demo_vehicle_truck_01" model="transit.vehicle">
+        <field name="name">Cargo Truck 01</field>
+        <field name="vehicle_number">TRN-005</field>
+        <field name="registration_number">TN04GH7890</field>
+        <field name="vehicle_type">truck</field>
+        <field name="brand">Mahindra</field>
+        <field name="model">Blazo X 28</field>
+        <field name="manufacturing_year">2018</field>
+        <field name="capacity">10</field>
+        <field name="fuel_type">diesel</field>
+        <field name="odometer">125600.0</field>
+        <field name="status">out_of_service</field>
+        <field name="insurance_number">INS-2024-005</field>
+        <field name="insurance_expiry" eval="(DateTime.now() - timedelta(days=5)).strftime('%Y-%m-%d')"/>
+        <field name="pollution_cert_number">PUC-2024-005</field>
+        <field name="pollution_cert_expiry" eval="(DateTime.now() - timedelta(days=10)).strftime('%Y-%m-%d')"/>
+        <field name="notes">High mileage truck. Insurance expired. Awaiting renewal.</field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         DEMO MAINTENANCE RECORDS
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="demo_maint_01" model="transit.maintenance">
+        <field name="vehicle_id" ref="demo_vehicle_bus_01"/>
+        <field name="service_type">oil_change</field>
+        <field name="service_date" eval="(DateTime.now() - timedelta(days=30)).strftime('%Y-%m-%d')"/>
+        <field name="next_service_date" eval="(DateTime.now() + timedelta(days=60)).strftime('%Y-%m-%d')"/>
+        <field name="garage_name">City Auto Works</field>
+        <field name="mechanic_name">Rajan Kumar</field>
+        <field name="cost">2500.00</field>
+        <field name="status">completed</field>
+        <field name="description">Full oil change with filter replacement. Engine checked.</field>
+    </record>
+
+    <record id="demo_maint_02" model="transit.maintenance">
+        <field name="vehicle_id" ref="demo_vehicle_van_01"/>
+        <field name="service_type">brake_service</field>
+        <field name="service_date" eval="DateTime.now().strftime('%Y-%m-%d')"/>
+        <field name="next_service_date" eval="(DateTime.now() + timedelta(days=180)).strftime('%Y-%m-%d')"/>
+        <field name="garage_name">Metro Garage</field>
+        <field name="mechanic_name">Suresh Babu</field>
+        <field name="cost">8500.00</field>
+        <field name="status">in_progress</field>
+        <field name="description">Front and rear brake pad replacement. Brake fluid flush.</field>
+    </record>
+
+    <record id="demo_maint_03" model="transit.maintenance">
+        <field name="vehicle_id" ref="demo_vehicle_bus_02"/>
+        <field name="service_type">tire_rotation</field>
+        <field name="service_date" eval="(DateTime.now() + timedelta(days=7)).strftime('%Y-%m-%d')"/>
+        <field name="next_service_date" eval="(DateTime.now() + timedelta(days=90)).strftime('%Y-%m-%d')"/>
+        <field name="garage_name">City Auto Works</field>
+        <field name="mechanic_name">Rajan Kumar</field>
+        <field name="cost">3200.00</field>
+        <field name="status">scheduled</field>
+        <field name="description">Scheduled tire rotation and alignment check.</field>
+    </record>
+
+    <record id="demo_maint_04" model="transit.maintenance">
+        <field name="vehicle_id" ref="demo_vehicle_truck_01"/>
+        <field name="service_type">engine_overhaul</field>
+        <field name="service_date" eval="(DateTime.now() - timedelta(days=60)).strftime('%Y-%m-%d')"/>
+        <field name="next_service_date" eval="(DateTime.now() + timedelta(days=120)).strftime('%Y-%m-%d')"/>
+        <field name="garage_name">Heavy Vehicle Service Center</field>
+        <field name="mechanic_name">Vijay Anand</field>
+        <field name="cost">45000.00</field>
+        <field name="status">completed</field>
+        <field name="description">Complete engine overhaul. Replaced pistons and gaskets.</field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         DEMO FUEL RECORDS
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="demo_fuel_01" model="transit.fuel">
+        <field name="vehicle_id" ref="demo_vehicle_bus_01"/>
+        <field name="fuel_station">HP Petrol Bunk – Anna Nagar</field>
+        <field name="fuel_date" eval="(DateTime.now() - timedelta(days=10)).strftime('%Y-%m-%d')"/>
+        <field name="quantity">80.0</field>
+        <field name="cost_per_litre">92.50</field>
+        <field name="odometer_reading">45000.0</field>
+        <field name="payment_method">company_account</field>
+        <field name="notes">Regular refuel before morning route.</field>
+    </record>
+
+    <record id="demo_fuel_02" model="transit.fuel">
+        <field name="vehicle_id" ref="demo_vehicle_bus_01"/>
+        <field name="fuel_station">Indian Oil – T Nagar</field>
+        <field name="fuel_date" eval="(DateTime.now() - timedelta(days=2)).strftime('%Y-%m-%d')"/>
+        <field name="quantity">75.0</field>
+        <field name="cost_per_litre">92.50</field>
+        <field name="odometer_reading">45230.5</field>
+        <field name="payment_method">company_account</field>
+        <field name="notes">End of week refuel.</field>
+    </record>
+
+    <record id="demo_fuel_03" model="transit.fuel">
+        <field name="vehicle_id" ref="demo_vehicle_bus_02"/>
+        <field name="fuel_station">BPCL – Guindy</field>
+        <field name="fuel_date" eval="(DateTime.now() - timedelta(days=5)).strftime('%Y-%m-%d')"/>
+        <field name="quantity">100.0</field>
+        <field name="cost_per_litre">91.80</field>
+        <field name="odometer_reading">78200.0</field>
+        <field name="payment_method">card</field>
+        <field name="notes">Highway express route refuel.</field>
+    </record>
+
+    <record id="demo_fuel_04" model="transit.fuel">
+        <field name="vehicle_id" ref="demo_vehicle_bus_02"/>
+        <field name="fuel_station">HP Petrol Bunk – OMR</field>
+        <field name="fuel_date" eval="(DateTime.now() - timedelta(days=1)).strftime('%Y-%m-%d')"/>
+        <field name="quantity">95.0</field>
+        <field name="cost_per_litre">91.80</field>
+        <field name="odometer_reading">78450.0</field>
+        <field name="payment_method">company_account</field>
+        <field name="notes">Pre-trip full tank.</field>
+    </record>
+
+    <record id="demo_fuel_05" model="transit.fuel">
+        <field name="vehicle_id" ref="demo_vehicle_van_01"/>
+        <field name="fuel_station">Shell – Velachery</field>
+        <field name="fuel_date" eval="(DateTime.now() - timedelta(days=7)).strftime('%Y-%m-%d')"/>
+        <field name="quantity">40.0</field>
+        <field name="cost_per_litre">104.50</field>
+        <field name="odometer_reading">22100.0</field>
+        <field name="payment_method">upi</field>
+        <field name="notes">Staff van refuel.</field>
+    </record>
+
+</odoo>

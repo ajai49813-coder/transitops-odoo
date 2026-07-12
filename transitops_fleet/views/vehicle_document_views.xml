@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         VEHICLE DOCUMENT LIST VIEW
+         Displays upload metadata and color-coded validity statuses.
+    ═══════════════════════════════════════════════════════════════ -->
+    <record id="view_transit_vehicle_document_list" model="ir.ui.view">
+        <field name="name">transit.vehicle.document.list</field>
+        <field name="model">transit.vehicle.document</field>
+        <field name="arch" type="xml">
+            <list string="Vehicle Documents"
+                  decoration-danger="is_expired == True"
+                  decoration-warning="days_to_expiry &lt;= 30 and is_expired == False">
+                <field name="name"/>
+                <field name="vehicle_id"/>
+                <field name="document_type"/>
+                <field name="document_number"/>
+                <field name="document_date"/>
+                <field name="expiry_date"/>
+                <field name="days_to_expiry"/>
+                <field name="is_expired" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         VEHICLE DOCUMENT FORM VIEW
+         Features binary file upload, download button, alert banners
+         and validity/compliance tracking fields.
+    ═══════════════════════════════════════════════════════════════ -->
+    <record id="view_transit_vehicle_document_form" model="ir.ui.view">
+        <field name="name">transit.vehicle.document.form</field>
+        <field name="model">transit.vehicle.document</field>
+        <field name="arch" type="xml">
+            <form string="Vehicle Document">
+                <header>
+                    <button name="action_download" string="Download File"
+                            type="object" class="btn-primary"
+                            invisible="not file"/>
+                </header>
+                <sheet>
+                    <!-- Warning Alerts -->
+                    <div class="alert alert-danger" role="alert"
+                         invisible="not is_expired">
+                        <strong>⚠ Document Expired!</strong> This document has expired. Please upload a renewed file.
+                    </div>
+                    <div class="alert alert-warning" role="alert"
+                         invisible="is_expired or days_to_expiry &gt; 30 or not expiry_date">
+                        <strong>⚠ Expiring Soon!</strong> This document will expire in
+                        <field name="days_to_expiry" readonly="1"/> days.
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="e.g. Insurance Policy 2026-27"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Basic Information">
+                            <field name="vehicle_id"/>
+                            <field name="document_type"/>
+                            <field name="document_number"/>
+                        </group>
+                        <group string="Validity &amp; Expiry">
+                            <field name="document_date"/>
+                            <field name="expiry_date"/>
+                            <field name="days_to_expiry" readonly="1"/>
+                            <field name="is_expired" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="File Attachment">
+                        <group>
+                            <!-- file_name is used to store and pass the original filename to the Binary widget -->
+                            <field name="file" filename="file_name"/>
+                            <field name="file_name" invisible="1"/>
+                            <field name="file_size" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <group string="Description / Notes">
+                        <field name="notes" nolabel="1" colspan="2" placeholder="Add additional terms, payment records or compliance notes..."/>
+                    </group>
+                </sheet>
+                <!-- Chatter for Activity & History logs -->
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         VEHICLE DOCUMENT SEARCH VIEW
+         Filters by active status, expiry state and groups by vehicle/type.
+    ═══════════════════════════════════════════════════════════════ -->
+    <record id="view_transit_vehicle_document_search" model="ir.ui.view">
+        <field name="name">transit.vehicle.document.search</field>
+        <field name="model">transit.vehicle.document</field>
+        <field name="arch" type="xml">
+            <search string="Search Documents">
+                <field name="name" string="Document"/>
+                <field name="vehicle_id"/>
+                <field name="document_number"/>
+
+                <filter name="filter_expired" string="Expired"
+                        domain="[('is_expired', '=', True)]"/>
+                <filter name="filter_expiring_soon" string="Expiring Soon (30 Days)"
+                        domain="[('days_to_expiry', '&lt;=', 30), ('is_expired', '=', False), ('expiry_date', '!=', False)]"/>
+
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter name="group_vehicle" string="Vehicle"
+                            context="{'group_by': 'vehicle_id'}"/>
+                    <filter name="group_type" string="Document Type"
+                            context="{'group_by': 'document_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+</odoo>

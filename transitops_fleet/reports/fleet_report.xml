@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_fleet_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="text-center mb-4">
+                        <h2>Fleet Overview Report</h2>
+                        <p class="text-muted">Generated on <span t-esc="context_today().strftime('%B %d, %Y')"/></p>
+                    </div>
+
+                    <!-- Statistics Summary -->
+                    <div class="row mb-4">
+                        <div class="col-4">
+                            <div class="card text-center border-primary p-3">
+                                <h6>Total Vehicles</h6>
+                                <h3 class="text-primary"><span t-esc="len(docs)"/></h3>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card text-center border-success p-3">
+                                <h6>Total Maintenance Cost</h6>
+                                <h3 class="text-success">$<span t-esc="sum(docs.mapped('total_maintenance_cost'))" t-options="{'widget': 'float', 'precision': 2}"/></h3>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="card text-center border-info p-3">
+                                <h6>Total Fuel Cost</h6>
+                                <h3 class="text-info">$<span t-esc="sum(docs.mapped('total_fuel_cost'))" t-options="{'widget': 'float', 'precision': 2}"/></h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Vehicles List Table -->
+                    <table class="table table-bordered table-striped mt-4">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th>Vehicle Name</th>
+                                <th>Registration No.</th>
+                                <th>Type</th>
+                                <th>Driver</th>
+                                <th class="text-right">Odometer (km)</th>
+                                <th>Status</th>
+                                <th class="text-right">Maint. Cost</th>
+                                <th class="text-right">Fuel Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs" t-as="vehicle">
+                                <tr>
+                                    <td><span t-field="vehicle.name"/></td>
+                                    <td><span t-field="vehicle.registration_number"/></td>
+                                    <td><span t-field="vehicle.vehicle_type"/></td>
+                                    <td><span t-field="vehicle.driver_id.name"/></td>
+                                    <td class="text-right"><span t-field="vehicle.odometer" t-options="{'widget': 'float', 'precision': 0}"/></td>
+                                    <td>
+                                        <span class="badge" t-attf-class="badge #{
+                                            vehicle.status == 'available' and 'bg-success' or
+                                            vehicle.status == 'assigned' and 'bg-info' or
+                                            vehicle.status == 'on_trip' and 'bg-primary' or
+                                            vehicle.status == 'maintenance' and 'bg-warning' or 'bg-danger'
+                                        }"><span t-field="vehicle.status"/></span>
+                                    </td>
+                                    <td class="text-right">$<span t-field="vehicle.total_maintenance_cost" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                                    <td class="text-right">$<span t-field="vehicle.total_fuel_cost" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

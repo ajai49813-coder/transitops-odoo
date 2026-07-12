@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         MAINTENANCE LIST VIEW
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="view_maintenance_list" model="ir.ui.view">
+        <field name="name">transit.maintenance.list</field>
+        <field name="model">transit.maintenance</field>
+        <field name="arch" type="xml">
+            <list string="Maintenance Records"
+                  decoration-danger="is_overdue == True"
+                  decoration-muted="status == 'cancelled'">
+                <field name="reference"/>
+                <field name="vehicle_id"/>
+                <field name="service_type"/>
+                <field name="service_date"/>
+                <field name="garage_name"/>
+                <field name="mechanic_name"/>
+                <field name="cost" sum="Total Cost"/>
+                <field name="next_service_date"/>
+                <field name="status" widget="badge"
+                       decoration-info="status == 'scheduled'"
+                       decoration-warning="status == 'in_progress'"
+                       decoration-success="status == 'completed'"
+                       decoration-danger="status == 'cancelled'"/>
+                <field name="is_overdue" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         MAINTENANCE FORM VIEW
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="view_maintenance_form" model="ir.ui.view">
+        <field name="name">transit.maintenance.form</field>
+        <field name="model">transit.maintenance</field>
+        <field name="arch" type="xml">
+            <form string="Maintenance Record">
+                <header>
+                    <!-- Workflow buttons -->
+                    <button name="action_start" string="Start Work"
+                            type="object" class="btn-warning"
+                            invisible="status != 'scheduled'"/>
+                    <button name="action_complete" string="Mark Completed"
+                            type="object" class="btn-success"
+                            invisible="status != 'in_progress'"/>
+                    <button name="action_cancel" string="Cancel"
+                            type="object" class="btn-danger"
+                            invisible="status in ['completed', 'cancelled']"/>
+                    <field name="status" widget="statusbar"
+                           statusbar_visible="scheduled,in_progress,completed"/>
+                </header>
+
+                <sheet>
+                    <!-- Overdue Alert -->
+                    <div class="alert alert-danger" role="alert"
+                         invisible="not is_overdue">
+                        <strong>⚠ Overdue!</strong>
+                        This maintenance was due on
+                        <field name="next_service_date" readonly="1"/>.
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="reference" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Service Details">
+                            <field name="vehicle_id"/>
+                            <field name="service_type"/>
+                            <field name="service_date"/>
+                            <field name="next_service_date"/>
+                        </group>
+                        <group string="Workshop Details">
+                            <field name="garage_name"/>
+                            <field name="mechanic_name"/>
+                            <field name="cost"/>
+                        </group>
+                    </group>
+
+                    <group string="Description">
+                        <field name="description" nolabel="1" colspan="2"/>
+                    </group>
+                </sheet>
+
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         MAINTENANCE CALENDAR VIEW
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="view_maintenance_calendar" model="ir.ui.view">
+        <field name="name">transit.maintenance.calendar</field>
+        <field name="model">transit.maintenance</field>
+        <field name="arch" type="xml">
+            <calendar string="Maintenance Schedule"
+                      date_start="service_date"
+                      date_stop="next_service_date"
+                      color="vehicle_id"
+                      mode="month"
+                      quick_create="False">
+                <field name="vehicle_id"/>
+                <field name="service_type"/>
+                <field name="status"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         MAINTENANCE SEARCH VIEW
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="view_maintenance_search" model="ir.ui.view">
+        <field name="name">transit.maintenance.search</field>
+        <field name="model">transit.maintenance</field>
+        <field name="arch" type="xml">
+            <search string="Search Maintenance">
+                <field name="reference"/>
+                <field name="vehicle_id"/>
+                <field name="garage_name"/>
+                <field name="mechanic_name"/>
+
+                <filter name="filter_scheduled" string="Scheduled"
+                        domain="[('status', '=', 'scheduled')]"/>
+                <filter name="filter_in_progress" string="In Progress"
+                        domain="[('status', '=', 'in_progress')]"/>
+                <filter name="filter_completed" string="Completed"
+                        domain="[('status', '=', 'completed')]"/>
+                <filter name="filter_overdue" string="Overdue"
+                        domain="[('is_overdue', '=', True)]"/>
+                <separator/>
+                <filter name="filter_this_month" string="This Month"
+                        domain="[('service_date', '&gt;=', (context_today()).strftime('%Y-%m-01'))]"/>
+
+                <group expand="0" string="Group By">
+                    <filter name="group_vehicle" string="Vehicle"
+                            context="{'group_by': 'vehicle_id'}"/>
+                    <filter name="group_status" string="Status"
+                            context="{'group_by': 'status'}"/>
+                    <filter name="group_service_type" string="Service Type"
+                            context="{'group_by': 'service_type'}"/>
+                    <filter name="group_month" string="Month"
+                            context="{'group_by': 'service_date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Fleet Overview PDF Report Action -->
+    <record id="action_report_fleet" model="ir.actions.report">
+        <field name="name">Fleet Report</field>
+        <field name="model">transit.vehicle</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transitops_fleet.report_fleet_template</field>
+        <field name="report_file">transitops_fleet.report_fleet_template</field>
+        <field name="binding_model_id" ref="model_transit_vehicle"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Vehicle Detailed PDF Report Action -->
+    <record id="action_report_vehicle" model="ir.actions.report">
+        <field name="name">Vehicle Detailed Report</field>
+        <field name="model">transit.vehicle</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transitops_fleet.report_vehicle_template</field>
+        <field name="report_file">transitops_fleet.report_vehicle_template</field>
+        <field name="binding_model_id" ref="model_transit_vehicle"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Fuel Logs PDF Report Action -->
+    <record id="action_report_fuel_list" model="ir.actions.report">
+        <field name="name">Fuel Report</field>
+        <field name="model">transit.fuel</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transitops_fleet.report_fuel_template</field>
+        <field name="report_file">transitops_fleet.report_fuel_template</field>
+        <field name="binding_model_id" ref="model_transit_fuel"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Maintenance PDF Report Action -->
+    <record id="action_report_maintenance_list" model="ir.actions.report">
+        <field name="name">Maintenance Report</field>
+        <field name="model">transit.maintenance</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transitops_fleet.report_maintenance_template</field>
+        <field name="report_file">transitops_fleet.report_maintenance_template</field>
+        <field name="binding_model_id" ref="model_transit_maintenance"/>
+        <field name="binding_type">report</field>
+    </record>
+
+</odoo>

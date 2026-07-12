@@ -1,28 +1,43 @@
+version: '3.8'
+
 services:
-  web:
-    image: odoo:18.0
-    depends_on:
-      - db
-    ports:
-      - "8069:8069"
-    volumes:
-      - odoo-web-data:/var/lib/odoo
-      - ./transitops:/mnt/extra-addons
-    environment:
-      - HOST=db
-      - USER=odoo
-      - PASSWORD=odoo
-    command: odoo --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons --dev=all
 
   db:
     image: postgres:15
+    container_name: transitops_db
     environment:
-      - POSTGRES_DB=postgres
-      - POSTGRES_PASSWORD=odoo
-      - POSTGRES_USER=odoo
+      POSTGRES_DB: postgres
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
     volumes:
-      - odoo-db-data:/var/lib/postgresql/data
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  odoo:
+    image: odoo:18.0
+    container_name: transitops_odoo
+    depends_on:
+      - db
+    environment:
+      HOST: db
+      USER: odoo
+      PASSWORD: odoo
+    volumes:
+      - .:/mnt/extra-addons
+      - odoo_data:/var/lib/odoo
+    ports:
+      - "8069:8069"
+    command: >
+      odoo
+      --db_host=db
+      --db_user=odoo
+      --db_password=odoo
+      --addons-path=/mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons
+      --dev=all
+    restart: unless-stopped
 
 volumes:
-  odoo-web-data:
-  odoo-db-data:
+  db_data:
+  odoo_data:
