@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ═══════════════════════════════════════════════════════════════
+    <!-- ══════════════════════════════════════════════════════════
          VEHICLE ACTIONS
-    ═══════════════════════════════════════════════════════════════ -->
-
+    ══════════════════════════════════════════════════════════ -->
     <record id="action_transit_vehicle" model="ir.actions.act_window">
         <field name="name">Vehicles</field>
         <field name="res_model">transit.vehicle</field>
@@ -29,10 +28,9 @@
         <field name="domain">[('status', '=', 'maintenance')]</field>
     </record>
 
-    <!-- ═══════════════════════════════════════════════════════════════
+    <!-- ══════════════════════════════════════════════════════════
          MAINTENANCE ACTIONS
-    ═══════════════════════════════════════════════════════════════ -->
-
+    ══════════════════════════════════════════════════════════ -->
     <record id="action_transit_maintenance" model="ir.actions.act_window">
         <field name="name">Maintenance Records</field>
         <field name="res_model">transit.maintenance</field>
@@ -49,10 +47,9 @@
         <field name="domain">[('status', 'in', ['scheduled', 'in_progress'])]</field>
     </record>
 
-    <!-- ═══════════════════════════════════════════════════════════════
+    <!-- ══════════════════════════════════════════════════════════
          FUEL ACTIONS
-    ═══════════════════════════════════════════════════════════════ -->
-
+    ══════════════════════════════════════════════════════════ -->
     <record id="action_transit_fuel" model="ir.actions.act_window">
         <field name="name">Fuel Logs</field>
         <field name="res_model">transit.fuel</field>
@@ -62,10 +59,9 @@
         </field>
     </record>
 
-    <!-- ═══════════════════════════════════════════════════════════════
+    <!-- ══════════════════════════════════════════════════════════
          DOCUMENT ACTIONS
-    ═══════════════════════════════════════════════════════════════ -->
-
+    ══════════════════════════════════════════════════════════ -->
     <record id="action_transit_document" model="ir.actions.act_window">
         <field name="name">Vehicle Documents</field>
         <field name="res_model">transit.vehicle.document</field>
@@ -82,10 +78,11 @@
         <field name="domain">[('days_to_expiry', '&lt;=', 30), ('expiry_date', '!=', False)]</field>
     </record>
 
-    <!-- ═══════════════════════════════════════════════════════════════
+    <!-- ══════════════════════════════════════════════════════════
          DASHBOARD ACTION
-    ═══════════════════════════════════════════════════════════════ -->
-
+         view_id references view_fleet_dashboard defined in
+         dashboard_views.xml which loads before this file.
+    ══════════════════════════════════════════════════════════ -->
     <record id="action_fleet_dashboard" model="ir.actions.act_window">
         <field name="name">Fleet Dashboard</field>
         <field name="res_model">transit.vehicle</field>
@@ -93,10 +90,11 @@
         <field name="view_id" ref="view_fleet_dashboard"/>
     </record>
 
-    <!-- ═══════════════════════════════════════════════════════════════
+    <!-- ══════════════════════════════════════════════════════════
          ANALYTICS ACTIONS
-    ═══════════════════════════════════════════════════════════════ -->
-
+         view_id refs are safe here because dashboard_views.xml
+         loads before actions.xml in the manifest.
+    ══════════════════════════════════════════════════════════ -->
     <record id="action_vehicle_pie_chart" model="ir.actions.act_window">
         <field name="name">Fleet Status Chart</field>
         <field name="res_model">transit.vehicle</field>

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ═══════════════════════════════════════════════════════════════
-         VEHICLE KANBAN VIEW
-    ═══════════════════════════════════════════════════════════════ -->
-
+    <!-- ══════════════════════════════════════════════════════════
+         KANBAN VIEW
+    ══════════════════════════════════════════════════════════ -->
     <record id="view_vehicle_kanban" model="ir.ui.view">
         <field name="name">transit.vehicle.kanban</field>
         <field name="model">transit.vehicle</field>
@@ -24,7 +23,7 @@
                                  t-att-src="record.vehicle_image.value"
                                  alt="Vehicle" class="o_image_64_cover"/>
                             <img t-else=""
-                                 src="/transitops_fleet/static/src/img/vehicle_default.png"
+                                 src="/web/static/img/placeholder.png"
                                  alt="Vehicle" class="o_image_64_cover"/>
                         </div>
                         <div class="oe_kanban_details">
@@ -32,13 +31,12 @@
                                 <field name="name"/>
                             </strong>
                             <div class="o_kanban_tags_section">
-                                <span class="badge rounded-pill"
-                                      t-attf-class="badge rounded-pill
-                                        #{record.status.raw_value == 'available' ? 'text-bg-success' :
-                                          record.status.raw_value == 'on_trip' ? 'text-bg-primary' :
-                                          record.status.raw_value == 'maintenance' ? 'text-bg-warning' :
-                                          record.status.raw_value == 'out_of_service' ? 'text-bg-danger' :
-                                          'text-bg-secondary'}">
+                                <span t-attf-class="badge rounded-pill
+                                    #{record.status.raw_value == 'available' ? 'text-bg-success' :
+                                      record.status.raw_value == 'on_trip' ? 'text-bg-primary' :
+                                      record.status.raw_value == 'maintenance' ? 'text-bg-warning' :
+                                      record.status.raw_value == 'out_of_service' ? 'text-bg-danger' :
+                                      'text-bg-secondary'}">
                                     <field name="status"/>
                                 </span>
                             </div>
@@ -49,9 +47,7 @@
                                 </li>
                             </ul>
                             <t t-if="record.insurance_alert.raw_value">
-                                <div class="text-danger fw-bold">
-                                    ⚠ Insurance Expiring Soon!
-                                </div>
+                                <div class="text-danger fw-bold">⚠ Insurance Expiring Soon!</div>
                             </t>
                         </div>
                     </t>
@@ -60,15 +56,15 @@
         </field>
     </record>
 
-    <!-- ═══════════════════════════════════════════════════════════════
-         VEHICLE LIST (TREE) VIEW
-    ═══════════════════════════════════════════════════════════════ -->
-
+    <!-- ══════════════════════════════════════════════════════════
+         LIST VIEW
+    ══════════════════════════════════════════════════════════ -->
     <record id="view_vehicle_list" model="ir.ui.view">
         <field name="name">transit.vehicle.list</field>
         <field name="model">transit.vehicle</field>
         <field name="arch" type="xml">
-            <list string="Vehicles" decoration-danger="insurance_alert == True"
+            <list string="Vehicles"
+                  decoration-danger="insurance_alert == True"
                   decoration-muted="status == 'out_of_service'">
                 <field name="vehicle_image" widget="image" options="{'size': [38, 38]}"/>
                 <field name="name"/>
@@ -76,9 +72,11 @@
                 <field name="registration_number"/>
                 <field name="vehicle_type"/>
                 <field name="brand"/>
+                <field name="model"/>
                 <field name="fuel_type"/>
                 <field name="driver_id"/>
                 <field name="odometer" string="Odometer (km)"/>
+                <field name="vehicle_age" string="Age (Yrs)"/>
                 <field name="status" widget="badge"
                        decoration-success="status == 'available'"
                        decoration-info="status == 'assigned'"
@@ -91,16 +89,14 @@
         </field>
     </record>
 
-    <!-- ═══════════════════════════════════════════════════════════════
-         VEHICLE FORM VIEW
-    ═══════════════════════════════════════════════════════════════ -->
-
+    <!-- ══════════════════════════════════════════════════════════
+         FORM VIEW
+    ══════════════════════════════════════════════════════════ -->
     <record id="view_vehicle_form" model="ir.ui.view">
         <field name="name">transit.vehicle.form</field>
         <field name="model">transit.vehicle</field>
         <field name="arch" type="xml">
             <form string="Vehicle">
-                <!-- Status Bar -->
                 <header>
                     <button name="action_set_available" string="Set Available"
                             type="object" class="btn-success"
@@ -120,132 +116,156 @@
                     <div class="oe_button_box" name="button_box">
                         <button name="action_view_maintenance" type="object"
                                 class="oe_stat_button" icon="fa-wrench">
-                            <field name="maintenance_count" widget="statinfo"
-                                   string="Maintenance"/>
+                            <field name="maintenance_count" widget="statinfo" string="Maintenance"/>
                         </button>
                         <button name="action_view_fuel" type="object"
                                 class="oe_stat_button" icon="fa-tint">
-                            <field name="fuel_count" widget="statinfo"
-                                   string="Fuel Logs"/>
+                            <field name="fuel_count" widget="statinfo" string="Fuel Logs"/>
                         </button>
                         <button name="action_view_documents" type="object"
                                 class="oe_stat_button" icon="fa-file-text-o">
-                            <field name="document_count" widget="statinfo"
-                                   string="Documents"/>
+                            <field name="document_count" widget="statinfo" string="Documents"/>
                         </button>
                     </div>
 
-                    <!-- Vehicle Image -->
-                    <field name="vehicle_image" widget="image"
-                           class="oe_avatar" options="{'preview_image': 'vehicle_image'}"/>
+                    <field name="vehicle_image" widget="image" class="oe_avatar"
+                           options="{'preview_image': 'vehicle_image'}"/>
 
                     <div class="oe_title">
-                        <h1>
-                            <field name="name" placeholder="Vehicle Name"/>
-                        </h1>
-                        <h2>
-                            <field name="vehicle_number" placeholder="Fleet Number"/>
-                        </h2>
+                        <h1><field name="name" placeholder="Vehicle Name"/></h1>
+                        <h2><field name="vehicle_number" placeholder="Fleet Number"/></h2>
                     </div>
 
-                    <!-- Insurance Alert Banner -->
-                    <div class="alert alert-warning" role="alert"
+                    <!-- Alerts -->
+                    <div class="alert alert-warning mb-2" role="alert"
                          invisible="not insurance_alert">
                         <strong>⚠ Insurance Expiring Soon!</strong>
-                        Insurance expires on <field name="insurance_expiry" readonly="1"/>.
-                        Please renew immediately.
+                        Expires on <field name="insurance_expiry" readonly="1"/>
+                        (<field name="insurance_days_left" readonly="1"/> days left).
+                    </div>
+                    <div class="alert alert-warning mb-2" role="alert"
+                         invisible="not pollution_alert">
+                        <strong>⚠ Pollution Certificate Expiring Soon!</strong>
+                        Expires on <field name="pollution_cert_expiry" readonly="1"/>
+                        (<field name="pollution_days_left" readonly="1"/> days left).
                     </div>
 
                     <group>
-                        <!-- Left Column: Vehicle Details -->
-                        <group string="Vehicle Details">
+                        <group string="Vehicle Identity">
                             <field name="registration_number"/>
+                            <field name="chassis_number"/>
+                            <field name="engine_number"/>
                             <field name="vehicle_type"/>
                             <field name="brand"/>
                             <field name="model"/>
+                            <field name="color"/>
+                        </group>
+                        <group string="Specifications">
                             <field name="manufacturing_year"/>
+                            <field name="vehicle_age" readonly="1"/>
+                            <field name="purchase_date"/>
                             <field name="capacity"/>
                             <field name="fuel_type"/>
                             <field name="odometer"/>
                         </group>
+                    </group>
 
-                        <!-- Right Column: Assignment -->
+                    <group>
                         <group string="Assignment">
                             <field name="driver_id"/>
                             <field name="current_trip_id"/>
+                        </group>
+                        <group string="Cost Summary">
                             <field name="total_maintenance_cost" readonly="1"/>
                             <field name="total_fuel_cost" readonly="1"/>
                         </group>
                     </group>
 
-                    <!-- Documents / Compliance -->
-                    <group string="Compliance Documents">
-                        <group>
-                            <field name="insurance_number"/>
-                            <field name="insurance_expiry"/>
-                            <field name="insurance_days_left" readonly="1"/>
-                        </group>
-                        <group>
-                            <field name="pollution_cert_number"/>
-                            <field name="pollution_cert_expiry"/>
-                            <field name="pollution_days_left" readonly="1"/>
-                        </group>
-                    </group>
-
-                    <!-- Notes -->
-                    <group string="Notes">
-                        <field name="notes" nolabel="1" colspan="2"/>
-                    </group>
-
-                    <!-- Related Records Tabs -->
                     <notebook>
+                        <!-- Compliance Tab -->
+                        <page string="Compliance" name="compliance">
+                            <group>
+                                <group string="Insurance">
+                                    <field name="insurance_number"/>
+                                    <field name="insurance_expiry"/>
+                                    <field name="insurance_days_left" readonly="1"/>
+                                </group>
+                                <group string="Pollution Certificate">
+                                    <field name="pollution_cert_number"/>
+                                    <field name="pollution_cert_expiry"/>
+                                    <field name="pollution_days_left" readonly="1"/>
+                                </group>
+                            </group>
+                            <group>
+                                <group string="Registration Certificate (RC)">
+                                    <field name="rc_number"/>
+                                    <field name="rc_expiry"/>
+                                    <field name="rc_days_left" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Maintenance Tab -->
                         <page string="Maintenance History" name="maintenance">
                             <field name="maintenance_ids" readonly="1">
                                 <list>
                                     <field name="reference"/>
                                     <field name="service_type"/>
                                     <field name="service_date"/>
+                                    <field name="next_service_date"/>
                                     <field name="cost"/>
-                                    <field name="status" widget="badge"/>
+                                    <field name="status" widget="badge"
+                                           decoration-info="status == 'scheduled'"
+                                           decoration-warning="status == 'in_progress'"
+                                           decoration-success="status == 'completed'"
+                                           decoration-danger="status == 'cancelled'"/>
                                 </list>
                             </field>
                         </page>
+
+                        <!-- Fuel Tab -->
                         <page string="Fuel History" name="fuel">
                             <field name="fuel_ids" readonly="1">
                                 <list>
                                     <field name="reference"/>
                                     <field name="fuel_date"/>
                                     <field name="quantity"/>
+                                    <field name="cost_per_litre"/>
                                     <field name="total_cost"/>
                                     <field name="mileage"/>
+                                    <field name="odometer_reading"/>
                                 </list>
                             </field>
                         </page>
+
+                        <!-- Documents Tab -->
                         <page string="Documents" name="documents">
-                            <field name="document_ids" readonly="1">
+                            <field name="document_ids">
                                 <list>
                                     <field name="name"/>
                                     <field name="document_type"/>
                                     <field name="document_number"/>
                                     <field name="expiry_date"/>
                                     <field name="days_to_expiry"/>
-                                    <field name="is_expired"/>
+                                    <field name="is_expired" widget="boolean"/>
                                 </list>
                             </field>
                         </page>
+
+                        <!-- Notes Tab -->
+                        <page string="Notes" name="notes">
+                            <field name="notes" nolabel="1"/>
+                        </page>
                     </notebook>
                 </sheet>
-
-                <!-- Chatter -->
                 <chatter/>
             </form>
         </field>
     </record>
 
-    <!-- ═══════════════════════════════════════════════════════════════
-         VEHICLE SEARCH VIEW
-    ═══════════════════════════════════════════════════════════════ -->
-
+    <!-- ══════════════════════════════════════════════════════════
+         SEARCH VIEW
+    ══════════════════════════════════════════════════════════ -->
     <record id="view_vehicle_search" model="ir.ui.view">
         <field name="name">transit.vehicle.search</field>
         <field name="model">transit.vehicle</field>
@@ -254,23 +274,31 @@
                 <field name="name" string="Vehicle"/>
                 <field name="vehicle_number"/>
                 <field name="registration_number"/>
+                <field name="chassis_number"/>
                 <field name="driver_id"/>
                 <field name="brand"/>
 
-                <!-- Filters -->
                 <filter name="filter_available" string="Available"
                         domain="[('status', '=', 'available')]"/>
+                <filter name="filter_assigned" string="Assigned"
+                        domain="[('status', '=', 'assigned')]"/>
                 <filter name="filter_on_trip" string="On Trip"
                         domain="[('status', '=', 'on_trip')]"/>
                 <filter name="filter_maintenance" string="Under Maintenance"
                         domain="[('status', '=', 'maintenance')]"/>
-                <filter name="filter_insurance_alert" string="Insurance Expiring"
+                <filter name="filter_oos" string="Out of Service"
+                        domain="[('status', '=', 'out_of_service')]"/>
+                <separator/>
+                <filter name="filter_insurance_alert" string="Insurance Expiring (30d)"
                         domain="[('insurance_alert', '=', True)]"/>
+                <filter name="filter_pollution_alert" string="PUC Expiring (30d)"
+                        domain="[('pollution_alert', '=', True)]"/>
                 <separator/>
                 <filter name="filter_electric" string="Electric"
                         domain="[('fuel_type', '=', 'electric')]"/>
+                <filter name="filter_diesel" string="Diesel"
+                        domain="[('fuel_type', '=', 'diesel')]"/>
 
-                <!-- Group By -->
                 <group expand="0" string="Group By">
                     <filter name="group_status" string="Status"
                             context="{'group_by': 'status'}"/>
@@ -280,6 +308,8 @@
                             context="{'group_by': 'fuel_type'}"/>
                     <filter name="group_driver" string="Driver"
                             context="{'group_by': 'driver_id'}"/>
+                    <filter name="group_brand" string="Brand"
+                            context="{'group_by': 'brand'}"/>
                 </group>
             </search>
         </field>

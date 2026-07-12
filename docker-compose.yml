@@ -2,7 +2,6 @@ version: '3.8'
 
 services:
 
-  # ── PostgreSQL Database ──────────────────────────────────────
   db:
     image: postgres:15
     container_name: transitops_db
@@ -16,7 +15,6 @@ services:
       - "5432:5432"
     restart: unless-stopped
 
-  # ── Odoo 18 Application ──────────────────────────────────────
   odoo:
     image: odoo:18.0
     container_name: transitops_odoo
@@ -27,8 +25,9 @@ services:
       USER: odoo
       PASSWORD: odoo
     volumes:
-      # Mount your custom module into Odoo's extra addons folder
-      - ./transitops_fleet:/mnt/extra-addons
+      # Mount the PARENT folder (transitops-odoo) as extra-addons
+      # so Odoo finds /mnt/extra-addons/transitops_fleet/__manifest__.py
+      - .:/mnt/extra-addons
       - odoo_data:/var/lib/odoo
     ports:
       - "8069:8069"

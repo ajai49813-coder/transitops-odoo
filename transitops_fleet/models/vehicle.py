@@ -103,27 +103,32 @@ class TransitVehicle(models.Model):
         store=True,
         help='Calculated from manufacturing year',
     )
+    # Non-stored: days remaining (recomputed on read)
     insurance_days_left = fields.Integer(
         string='Insurance Days Left',
         compute='_compute_expiry_days',
+        store=False,
     )
     pollution_days_left = fields.Integer(
         string='Pollution Cert Days Left',
         compute='_compute_expiry_days',
+        store=False,
     )
     rc_days_left = fields.Integer(
         string='RC Days Left',
         compute='_compute_expiry_days',
+        store=False,
     )
+    # Stored alerts use a separate compute method so store/compute_sudo is consistent
     insurance_alert = fields.Boolean(
         string='Insurance Expiry Alert',
-        compute='_compute_expiry_days',
+        compute='_compute_alerts',
         store=True,
         help='True when insurance expires within 30 days',
     )
     pollution_alert = fields.Boolean(
         string='Pollution Expiry Alert',
-        compute='_compute_expiry_days',
+        compute='_compute_alerts',
         store=True,
     )
 
@@ -179,29 +184,31 @@ class TransitVehicle(models.Model):
 
     @api.depends('insurance_expiry', 'pollution_cert_expiry', 'rc_expiry')
     def _compute_expiry_days(self):
+        """Compute non-stored days-remaining fields."""
         today = date.today()
         for rec in self:
-            # Insurance
-            if rec.insurance_expiry:
-                days = (rec.insurance_expiry - today).days
-                rec.insurance_days_left = days
-                rec.insurance_alert = days <= 30
-            else:
-                rec.insurance_days_left = 0
-                rec.insurance_alert = False
-
-            # Pollution certificate
-            if rec.pollution_cert_expiry:
-                days = (rec.pollution_cert_expiry - today).days
-                rec.pollution_days_left = days
-                rec.pollution_alert = days <= 30
-            else:
-                rec.pollution_days_left = 0
-                rec.pollution_alert = False
-
-            # RC
+            rec.insurance_days_left = (
+                (rec.insurance_expiry - today).days if rec.insurance_expiry else 0
+            )
+            rec.pollution_days_left = (
+                (rec.pollution_cert_expiry - today).days if rec.pollution_cert_expiry else 0
+            )
             rec.rc_days_left = (
                 (rec.rc_expiry - today).days if rec.rc_expiry else 0
+            )
+
+    @api.depends('insurance_expiry', 'pollution_cert_expiry')
+    def _compute_alerts(self):
+        """Compute stored alert booleans separately to avoid store/compute_sudo mismatch."""
+        today = date.today()
+        for rec in self:
+            rec.insurance_alert = (
+                bool(rec.insurance_expiry)
+                and (rec.insurance_expiry - today).days <= 30
+            )
+            rec.pollution_alert = (
+                bool(rec.pollution_cert_expiry)
+                and (rec.pollution_cert_expiry - today).days <= 30
             )
 
     @api.depends('maintenance_ids', 'fuel_ids', 'document_ids')
