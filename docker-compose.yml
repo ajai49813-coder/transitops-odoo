@@ -1,49 +1,28 @@
 services:
+  web:
+    image: odoo:18.0
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    volumes:
+      - odoo-web-data:/var/lib/odoo
+      - ./transitops:/mnt/extra-addons
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo
+    command: odoo --addons-path=/usr/lib/python3/dist-packages/odoo/addons,/mnt/extra-addons --dev=all
 
   db:
     image: postgres:15
-    container_name: transitops_db
-    restart: unless-stopped
     environment:
-      POSTGRES_DB: postgres
-      POSTGRES_USER: odoo
-      POSTGRES_PASSWORD: odoo
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
     volumes:
-      - transitops_db_data:/var/lib/postgresql/data
-    networks:
-      - transitops_net
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U odoo"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  odoo:
-    image: odoo:17
-    container_name: transitops_odoo
-    restart: unless-stopped
-    depends_on:
-      db:
-        condition: service_healthy
-    ports:
-      - "8069:8069"
-    environment:
-      HOST: db
-      PORT: 5432
-      USER: odoo
-      PASSWORD: odoo
-    volumes:
-      - ./transitops:/mnt/extra-addons/transitops
-      - transitops_odoo_data:/var/lib/odoo
-      - ./odoo.conf:/etc/odoo/odoo.conf:ro
-    networks:
-      - transitops_net
-    command: odoo --config=/etc/odoo/odoo.conf
+      - odoo-db-data:/var/lib/postgresql/data
 
 volumes:
-  transitops_db_data:
-  transitops_odoo_data:
-
-networks:
-  transitops_net:
-    driver: bridge
+  odoo-web-data:
+  odoo-db-data:

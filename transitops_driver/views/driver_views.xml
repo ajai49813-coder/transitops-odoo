@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ================================================================
+         LIST VIEW
+    ================================================================ -->
+    <record id="view_transit_driver_list" model="ir.ui.view">
+        <field name="name">transit.driver.list</field>
+        <field name="model">transit.driver</field>
+        <field name="arch" type="xml">
+            <list string="Drivers"
+                  decoration-danger="license_status == 'expired'"
+                  decoration-warning="license_expiry_warning == True"
+                  decoration-muted="active == False">
+                <field name="driver_id"/>
+                <field name="photo" widget="image" optional="show"/>
+                <field name="name"/>
+                <field name="phone"/>
+                <field name="license_number"/>
+                <field name="license_type"/>
+                <field name="license_expiry_date"/>
+                <field name="license_status" widget="badge"
+                       decoration-success="license_status == 'active'"
+                       decoration-danger="license_status == 'expired'"
+                       decoration-warning="license_status == 'suspended'"/>
+                <field name="driver_status" widget="badge"
+                       decoration-success="driver_status == 'available'"
+                       decoration-info="driver_status == 'on_trip'"
+                       decoration-warning="driver_status == 'on_leave' or driver_status == 'off_duty'"
+                       decoration-danger="driver_status == 'suspended'"/>
+                <field name="vehicle_id"/>
+                <field name="license_expiry_warning" invisible="1"/>
+                <field name="active" invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         FORM VIEW
+    ================================================================ -->
+    <record id="view_transit_driver_form" model="ir.ui.view">
+        <field name="name">transit.driver.form</field>
+        <field name="model">transit.driver</field>
+        <field name="arch" type="xml">
+            <form string="Driver">
+
+                <!-- Status bar -->
+                <header>
+                    <field name="driver_status" widget="statusbar"
+                           statusbar_visible="available,on_trip,on_leave,off_duty,suspended"/>
+                </header>
+
+                <sheet>
+                    <!-- License expiry warning banner -->
+                    <div class="alert alert-warning mb-0"
+                         role="alert"
+                         invisible="not license_expiry_warning">
+                        ⚠️ License is expiring within 30 days. Please renew it.
+                    </div>
+                    <div class="alert alert-danger mb-0"
+                         role="alert"
+                         invisible="license_status != 'expired'">
+                        🚫 Driver license has expired. Vehicle assignment is not allowed.
+                    </div>
+
+                    <!-- Top section: photo + key info -->
+                    <div class="oe_title d-flex">
+                        <div class="me-3">
+                            <field name="photo" widget="image"
+                                   class="oe_avatar"
+                                   options="{'preview_image': 'photo'}"/>
+                        </div>
+                        <div class="flex-grow-1">
+                            <h1>
+                                <field name="name" placeholder="Full Name"/>
+                            </h1>
+                            <div class="o_row">
+                                <field name="driver_id" readonly="1"/>
+                            </div>
+                            <div class="o_row">
+                                <field name="license_status" widget="badge"
+                                       decoration-success="license_status == 'active'"
+                                       decoration-danger="license_status == 'expired'"
+                                       decoration-warning="license_status == 'suspended'"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Notebook tabs -->
+                    <notebook>
+
+                        <!-- Tab 1: Personal Information -->
+                        <page string="Personal Information" name="personal_info">
+                            <group>
+                                <group string="Basic Details">
+                                    <field name="gender"/>
+                                    <field name="date_of_birth"/>
+                                    <field name="age" readonly="1"/>
+                                    <field name="blood_group"/>
+                                </group>
+                                <group string="Contact">
+                                    <field name="phone"/>
+                                    <field name="email" widget="email"/>
+                                    <field name="emergency_contact"/>
+                                </group>
+                            </group>
+                            <group string="Address">
+                                <field name="address" nolabel="1" colspan="2"/>
+                            </group>
+                        </page>
+
+                        <!-- Tab 2: License Details -->
+                        <page string="License Details" name="license_details">
+                            <group>
+                                <group string="License Info">
+                                    <field name="license_number"/>
+                                    <field name="license_type"/>
+                                    <field name="license_status" readonly="1" widget="badge"
+                                           decoration-success="license_status == 'active'"
+                                           decoration-danger="license_status == 'expired'"
+                                           decoration-warning="license_status == 'suspended'"/>
+                                </group>
+                                <group string="Validity">
+                                    <field name="license_issue_date"/>
+                                    <field name="license_expiry_date"/>
+                                    <field name="license_expiry_warning" readonly="1" widget="boolean_toggle"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Tab 3: Vehicle Assignment -->
+                        <page string="Vehicle Assignment" name="vehicle_assignment">
+                            <group>
+                                <field name="vehicle_id"
+                                       readonly="driver_status == 'suspended' or license_status == 'expired'"/>
+                                <field name="joining_date"/>
+                            </group>
+                        </page>
+
+                        <!-- Tab 4: Additional Information -->
+                        <page string="Additional Information" name="additional_info">
+                            <group>
+                                <field name="active" widget="boolean_toggle"/>
+                            </group>
+                            <group string="Notes">
+                                <field name="notes" nolabel="1" colspan="2"/>
+                            </group>
+                        </page>
+
+                    </notebook>
+                </sheet>
+
+                <!-- Chatter -->
+                <chatter/>
+
+            </form>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         KANBAN VIEW
+    ================================================================ -->
+    <record id="view_transit_driver_kanban" model="ir.ui.view">
+        <field name="name">transit.driver.kanban</field>
+        <field name="model">transit.driver</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="driver_status" class="o_kanban_small_column">
+                <field name="driver_id"/>
+                <field name="name"/>
+                <field name="photo"/>
+                <field name="phone"/>
+                <field name="license_status"/>
+                <field name="license_expiry_warning"/>
+                <field name="driver_status"/>
+                <field name="vehicle_id"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="d-flex align-items-center mb-2">
+                            <field name="photo" widget="image"
+                                   class="o_kanban_image me-2"
+                                   style="width:48px;height:48px;border-radius:50%;object-fit:cover;"/>
+                            <div>
+                                <strong><field name="name"/></strong>
+                                <div class="text-muted small"><field name="driver_id"/></div>
+                            </div>
+                        </div>
+                        <div>
+                            <span>📞 </span><field name="phone"/>
+                        </div>
+                        <div>
+                            <span>🚗 </span>
+                            <field name="vehicle_id"/>
+                        </div>
+                        <div class="mt-1">
+                            <field name="license_status" widget="badge"
+                                   decoration-success="license_status == 'active'"
+                                   decoration-danger="license_status == 'expired'"
+                                   decoration-warning="license_status == 'suspended'"/>
+                            <span t-if="record.license_expiry_warning.raw_value"
+                                  class="badge text-bg-warning ms-1">⚠ Expiring Soon</span>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         SEARCH VIEW
+    ================================================================ -->
+    <record id="view_transit_driver_search" model="ir.ui.view">
+        <field name="name">transit.driver.search</field>
+        <field name="model">transit.driver</field>
+        <field name="arch" type="xml">
+            <search string="Search Drivers">
+
+                <!-- Search fields -->
+                <field name="name" string="Driver Name"/>
+                <field name="driver_id" string="Driver ID"/>
+                <field name="license_number" string="License Number"/>
+                <field name="vehicle_id" string="Vehicle"/>
+
+                <!-- Filters -->
+                <filter name="available" string="Available"
+                        domain="[('driver_status', '=', 'available')]"/>
+                <filter name="on_trip" string="On Trip"
+                        domain="[('driver_status', '=', 'on_trip')]"/>
+                <filter name="on_leave" string="On Leave"
+                        domain="[('driver_status', '=', 'on_leave')]"/>
+                <filter name="suspended" string="Suspended"
+                        domain="[('driver_status', '=', 'suspended')]"/>
+
+                <separator/>
+
+                <filter name="license_expiring_soon" string="License Expiring Soon"
+                        domain="[('license_expiry_warning', '=', True)]"/>
+                <filter name="expired_license" string="Expired License"
+                        domain="[('license_status', '=', 'expired')]"/>
+
+                <separator/>
+
+                <filter name="inactive" string="Archived"
+                        domain="[('active', '=', False)]"/>
+
+                <!-- Group By -->
+                <group expand="0" string="Group By">
+                    <filter name="group_driver_status" string="Driver Status"
+                            context="{'group_by': 'driver_status'}"/>
+                    <filter name="group_license_status" string="License Status"
+                            context="{'group_by': 'license_status'}"/>
+                    <filter name="group_license_type" string="License Type"
+                            context="{'group_by': 'license_type'}"/>
+                    <filter name="group_vehicle" string="Vehicle"
+                            context="{'group_by': 'vehicle_id'}"/>
+                </group>
+
+            </search>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         ACTION
+    ================================================================ -->
+    <record id="action_transit_driver" model="ir.actions.act_window">
+        <field name="name">Drivers</field>
+        <field name="res_model">transit.driver</field>
+        <field name="view_mode">list,kanban,form</field>
+        <field name="search_view_id" ref="view_transit_driver_search"/>
+        <field name="context">{'search_default_available': 0}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Add your first driver!
+            </p>
+            <p>Manage all your drivers, licenses, and vehicle assignments here.</p>
+        </field>
+    </record>
+
+    <!-- ================================================================
+         MENU STRUCTURE
+    ================================================================ -->
+    <!-- Drivers submenu (linked to root menu defined in transitops_vehicle) -->
+    <menuitem id="menu_transitops_drivers"
+              name="Drivers"
+              parent="transitops_vehicle.menu_transitops_root"
+              sequence="10"/>
+
+    <!-- Driver List -->
+    <menuitem id="menu_transitops_driver_list"
+              name="Driver List"
+              parent="menu_transitops_drivers"
+              action="action_transit_driver"
+              sequence="10"/>
+
+</odoo>

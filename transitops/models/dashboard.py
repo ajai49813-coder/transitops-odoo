@@ -49,12 +49,10 @@ class TransitDashboard(models.AbstractModel):
         """Return all chart datasets for the dashboard."""
         monthly_fuel = self.env['transit.fuel.analytics'].get_monthly_fuel()
 
-        # Trips by status
         Trip = self.env['transit.trip']
         trip_statuses = ['draft', 'scheduled', 'ongoing', 'completed', 'cancelled']
         trips_by_status = {s: Trip.search_count([('status', '=', s)]) for s in trip_statuses}
 
-        # Vehicle usage: trip count per vehicle (top 10)
         self.env.cr.execute("""
             SELECT v.name, COUNT(t.id) AS trip_count
             FROM transit_vehicle v
@@ -65,7 +63,6 @@ class TransitDashboard(models.AbstractModel):
         """)
         vehicle_usage = self.env.cr.dictfetchall()
 
-        # Monthly trip trend (last 12 months)
         self.env.cr.execute("""
             SELECT TO_CHAR(scheduled_date, 'YYYY-MM') AS month, COUNT(*) AS count
             FROM transit_trip
@@ -74,7 +71,6 @@ class TransitDashboard(models.AbstractModel):
         """)
         monthly_trips = self.env.cr.dictfetchall()
 
-        # Fuel efficiency per vehicle (km/L)
         self.env.cr.execute("""
             SELECT v.name,
                    CASE WHEN SUM(f.quantity_liters) > 0
@@ -115,7 +111,6 @@ class TransitDashboard(models.AbstractModel):
                 domain.append(('driver_id', '=', driver_id))
             return Notif.search_count(domain) > 0
 
-        # Insurance expiry
         for v in self.env['transit.vehicle'].search([('insurance_expiry', '!=', False)]):
             days = (v.insurance_expiry - today).days
             if days <= warning_days and not _exists('insurance_expiry', vehicle_id=v.id):
@@ -128,7 +123,6 @@ class TransitDashboard(models.AbstractModel):
                     'description': f'Insurance expires in {days} days ({v.insurance_expiry}).',
                 })
 
-        # Registration expiry
         for v in self.env['transit.vehicle'].search([('registration_expiry', '!=', False)]):
             days = (v.registration_expiry - today).days
             if days <= warning_days and not _exists('vehicle_doc_expiry', vehicle_id=v.id):
@@ -141,7 +135,6 @@ class TransitDashboard(models.AbstractModel):
                     'description': f'Registration expires in {days} days ({v.registration_expiry}).',
                 })
 
-        # Driver license expiry
         for d in self.env['transit.driver'].search([('license_expiry', '!=', False)]):
             days = (d.license_expiry - today).days
             if days <= warning_days and not _exists('driver_license_expiry', driver_id=d.id):
@@ -154,7 +147,6 @@ class TransitDashboard(models.AbstractModel):
                     'description': f'Driver license expires in {days} days ({d.license_expiry}).',
                 })
 
-        # Pending maintenance overdue
         for m in self.env['transit.maintenance'].search([
             ('status', '=', 'pending'),
             ('scheduled_date', '<', today),
