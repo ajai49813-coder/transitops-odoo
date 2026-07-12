@@ -19,6 +19,7 @@ class TransitNotification(models.Model):
         ('vehicle_doc_expiry', 'Vehicle Document Expiry'),
         ('driver_license_expiry', 'Driver License Expiry'),
         ('general', 'General'),
+        ('fuel_anomaly', 'Fuel Anomaly'),
     ], string='Alert Type', required=True)
     description = fields.Text('Description')
     vehicle_id = fields.Many2one('transit.vehicle', string='Related Vehicle')
