@@ -12,6 +12,7 @@
                 <field name="destination"/>
                 <field name="total_distance" sum="Total Distance"/>
                 <field name="estimated_travel_time" widget="float_time"/>
+                <field name="total_stops"/>
                 <field name="active" widget="boolean_toggle"/>
             </tree>
         </field>
@@ -24,6 +25,17 @@
         <field name="arch" type="xml">
             <form string="Route">
                 <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_trips" type="object" class="oe_stat_button" icon="fa-road">
+                            <field name="trip_count" widget="statinfo" string="Trips"/>
+                        </button>
+                        <button name="action_view_completed_trips" type="object" class="oe_stat_button" icon="fa-check" decoration-success="1">
+                            <field name="completed_trip_count" widget="statinfo" string="Completed"/>
+                        </button>
+                        <button name="action_view_cancelled_trips" type="object" class="oe_stat_button" icon="fa-ban" decoration-danger="1">
+                            <field name="cancelled_trip_count" widget="statinfo" string="Cancelled"/>
+                        </button>
+                    </div>
                     <widget name="web_ribbon" title="Archived" bg_color="text-danger" invisible="active"/>
                     <div class="oe_title">
                         <label for="route_id" class="oe_edit_only"/>
@@ -46,10 +58,32 @@
                             <field name="estimated_travel_time" widget="float_time"/>
                         </group>
                     </group>
+
+                    <!-- Route Visualization Section -->
+                    <group name="route_visualization" string="Active Trip Visualization">
+                        <group>
+                            <field name="total_stops"/>
+                            <field name="remaining_stops"/>
+                        </group>
+                        <group>
+                            <field name="distance_covered"/>
+                            <field name="remaining_distance"/>
+                        </group>
+                    </group>
+
                     <notebook>
-                        <page name="stops_page" string="Stops &amp; Details">
+                        <page name="stops_page" string="Stops &amp; Sequence">
+                            <field name="stop_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name" placeholder="e.g. Stop A"/>
+                                    <field name="distance_from_start"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page name="stops_desc" string="Additional Details">
                             <group>
-                                <field name="stops" placeholder="List key stops along this route..."/>
+                                <field name="stops" placeholder="Describe the stops and other details here..."/>
                             </group>
                         </page>
                     </notebook>
@@ -68,7 +102,7 @@
                 Create a new Route
             </p>
             <p>
-                Define your transport routes, including source, destination, distances, and estimated travel times.
+                Define your transport routes, configure stops sequence, and monitor live status.
             </p>
         </field>
     </record>

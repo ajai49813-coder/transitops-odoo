@@ -11,6 +11,9 @@ This module enables fleet managers to:
 * Schedule and track transport trips with vehicle and driver allocations.
 * Monitor real-time status and trip progression.
 * View business intelligence and metrics (Total distance, active/completed trips).
+* Advanced Live Tracking features (Latitude, Longitude, Speed, dynamic ETA, and GPS simulation).
+* Driver performance statistics and Vehicle utilization metrics.
+* PDF report printouts for Trips, Routes, Vehicles distance summary, and Drivers trip history.
     """,
     'author': 'TransitOps Team',
     'category': 'Operations/Transportation',
@@ -24,6 +27,9 @@ This module enables fleet managers to:
         'data/sequence.xml',
         'views/route_views.xml',
         'views/trip_views.xml',
+        'views/partner_views.xml',
+        'views/vehicle_views.xml',
+        'views/report_templates.xml',
         'views/menu.xml',
     ],
     'installable': True,
