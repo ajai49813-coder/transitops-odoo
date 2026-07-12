@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_transport_route_user,access_transport_route_user,model_transport_route,group_transitops_user,1,1,1,0
+access_transport_route_manager,access_transport_route_manager,model_transport_route,group_transitops_manager,1,1,1,1
+access_transport_trip_user,access_transport_trip_user,model_transport_trip,group_transitops_user,1,1,1,0
+access_transport_trip_manager,access_transport_trip_manager,model_transport_trip,group_transitops_manager,1,1,1,1

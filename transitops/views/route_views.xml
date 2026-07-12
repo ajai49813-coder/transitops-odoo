@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Route Tree View -->
+    <record id="view_transport_route_tree" model="ir.ui.view">
+        <field name="name">transport.route.tree</field>
+        <field name="model">transport.route</field>
+        <field name="arch" type="xml">
+            <tree string="Routes">
+                <field name="route_id"/>
+                <field name="name"/>
+                <field name="source"/>
+                <field name="destination"/>
+                <field name="total_distance" sum="Total Distance"/>
+                <field name="estimated_travel_time" widget="float_time"/>
+                <field name="active" widget="boolean_toggle"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Route Form View -->
+    <record id="view_transport_route_form" model="ir.ui.view">
+        <field name="name">transport.route.form</field>
+        <field name="model">transport.route</field>
+        <field name="arch" type="xml">
+            <form string="Route">
+                <sheet>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <label for="route_id" class="oe_edit_only"/>
+                        <h1>
+                            <field name="route_id" placeholder="e.g. ROUTE-001"/>
+                        </h1>
+                        <label for="name" class="oe_edit_only"/>
+                        <h2>
+                            <field name="name" placeholder="e.g. Central - North Express"/>
+                        </h2>
+                    </div>
+                    <group>
+                        <group name="route_details" string="Route Locations">
+                            <field name="source" placeholder="e.g. Central Station"/>
+                            <field name="destination" placeholder="e.g. North Terminal"/>
+                            <field name="active" invisible="1"/>
+                        </group>
+                        <group name="route_metrics" string="Metrics">
+                            <field name="total_distance"/>
+                            <field name="estimated_travel_time" widget="float_time"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="stops_page" string="Stops &amp; Details">
+                            <group>
+                                <field name="stops" placeholder="List key stops along this route..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Route Action -->
+    <record id="action_transport_route" model="ir.actions.act_window">
+        <field name="name">Routes</field>
+        <field name="res_model">transport.route</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a new Route
+            </p>
+            <p>
+                Define your transport routes, including source, destination, distances, and estimated travel times.
+            </p>
+        </field>
+    </record>
+</odoo>
