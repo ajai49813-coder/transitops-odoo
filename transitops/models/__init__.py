@@ -4,3 +4,4 @@ from . import route
 from . import trip
 from . import partner
 from . import vehicle
+from . import dashboard

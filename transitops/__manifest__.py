@@ -15,6 +15,7 @@ This module enables fleet managers to:
 * Driver performance statistics and Vehicle utilization metrics.
 * PDF report printouts for Trips, Routes, Vehicles distance summary, and Drivers trip history.
 * Premium hackathon-ready UI with custom backend styling, row color coding, Kanban cards animations, and Pivot/Graph/Calendar dashboard views.
+* SaaS-styled Operations Dashboard showing live KPIs, vehicle active rates, and real-time trip monitoring.
     """,
     'author': 'TransitOps Team',
     'category': 'Operations/Transportation',
@@ -30,8 +31,12 @@ This module enables fleet managers to:
         'views/trip_views.xml',
         'views/partner_views.xml',
         'views/vehicle_views.xml',
+        'views/dashboard_views.xml',
         'views/report_templates.xml',
         'views/menu.xml',
+    ],
+    'demo': [
+        'demo/transitops_demo.xml',
     ],
     'assets': {
         'web.assets_backend': [
