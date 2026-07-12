@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Inherit Vehicle Form View to inject Driver assignments list -->
+    <record id="view_transit_vehicle_form_inherit_driver" model="ir.ui.view">
+        <field name="name">transit.vehicle.form.inherit.driver</field>
+        <field name="model">transit.vehicle</field>
+        <field name="inherit_id" ref="transitops_vehicle.view_transit_vehicle_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <notebook>
+                    <page string="Assigned Drivers" name="assigned_drivers">
+                        <field name="driver_ids" readonly="1">
+                            <list>
+                                <field name="driver_id"/>
+                                <field name="name"/>
+                                <field name="phone"/>
+                                <field name="driver_status" widget="badge"
+                                       decoration-success="driver_status == 'available'"
+                                       decoration-info="driver_status == 'on_trip'"
+                                       decoration-warning="driver_status == 'on_leave' or driver_status == 'off_duty'"
+                                       decoration-danger="driver_status == 'suspended'"/>
+                            </list>
+                        </field>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>
