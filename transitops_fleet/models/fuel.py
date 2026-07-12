@@ -6,7 +6,8 @@ from odoo.exceptions import ValidationError
 class TransitFuel(models.Model):
     """
     Fuel log entry for a fleet vehicle.
-    Automatically calculates total cost and fuel efficiency (mileage).
+    Auto-calculates: total cost, mileage per fill-up,
+    average mileage across all entries, and fuel consumption rate.
     """
     _name = 'transit.fuel'
     _description = 'Vehicle Fuel Log'
@@ -17,110 +18,88 @@ class TransitFuel(models.Model):
     # ─── Reference ────────────────────────────────────────────────────────────
 
     reference = fields.Char(
-        string='Fuel Entry ID',
-        required=True,
-        copy=False,
-        readonly=True,
-        default=lambda self: _('New'),
+        string='Fuel Entry ID', required=True, copy=False,
+        readonly=True, default=lambda self: _('New'),
     )
 
     # ─── Core Fields ──────────────────────────────────────────────────────────
 
     vehicle_id = fields.Many2one(
-        comodel_name='transit.vehicle',
-        string='Vehicle',
-        required=True,
-        ondelete='cascade',
-        tracking=True,
-        index=True,
+        comodel_name='transit.vehicle', string='Vehicle',
+        required=True, ondelete='cascade', tracking=True, index=True,
     )
     fuel_station = fields.Char(string='Fuel Station', tracking=True)
     fuel_date = fields.Date(
-        string='Fuel Date',
-        required=True,
-        default=fields.Date.today,
-        tracking=True,
+        string='Fuel Date', required=True,
+        default=fields.Date.today, tracking=True,
     )
     fuel_type = fields.Selection(
-        related='vehicle_id.fuel_type',
-        string='Fuel Type',
-        store=True,
-        readonly=True,
-        help='Pulled automatically from the vehicle record',
+        related='vehicle_id.fuel_type', string='Fuel Type',
+        store=True, readonly=True,
     )
     quantity = fields.Float(
-        string='Quantity (Litres)',
-        required=True,
-        digits=(16, 3),
-        tracking=True,
+        string='Quantity (Litres)', required=True,
+        digits=(16, 3), tracking=True,
     )
     cost_per_litre = fields.Float(
-        string='Cost Per Litre',
-        required=True,
-        digits=(16, 2),
-        tracking=True,
-    )
-    # ─── Computed: Total Cost ─────────────────────────────────────────────────
-    total_cost = fields.Float(
-        string='Total Cost',
-        compute='_compute_total_cost',
-        store=True,
-        digits=(16, 2),
-        tracking=True,
+        string='Cost Per Litre', required=True,
+        digits=(16, 2), tracking=True,
     )
     odometer_reading = fields.Float(
-        string='Odometer Reading (km)',
-        required=True,
-        digits=(16, 2),
-        tracking=True,
-        help='Odometer at the time of fuelling',
-    )
-    # ─── Computed: Mileage (km/L) ─────────────────────────────────────────────
-    mileage = fields.Float(
-        string='Mileage (km/L)',
-        compute='_compute_mileage',
-        store=True,
-        digits=(16, 2),
-        help='Fuel efficiency calculated from previous fuel entry odometer',
+        string='Odometer Reading (km)', required=True,
+        digits=(16, 2), tracking=True,
     )
     payment_method = fields.Selection(
         selection=[
-            ('cash', 'Cash'),
-            ('card', 'Card'),
-            ('upi', 'UPI'),
-            ('company_account', 'Company Account'),
+            ('cash', 'Cash'), ('card', 'Card'),
+            ('upi', 'UPI'), ('company_account', 'Company Account'),
         ],
-        string='Payment Method',
-        default='cash',
+        string='Payment Method', default='cash',
     )
     notes = fields.Text(string='Notes')
 
-    # ─── Compute Methods ──────────────────────────────────────────────────────
+    # ─── Computed Fields ──────────────────────────────────────────────────────
+
+    total_cost = fields.Float(
+        string='Total Cost', compute='_compute_total_cost',
+        store=True, digits=(16, 2), tracking=True,
+    )
+    mileage = fields.Float(
+        string='Mileage (km/L)', compute='_compute_mileage',
+        store=True, digits=(16, 2),
+        help='Fuel efficiency for this fill-up vs previous odometer',
+    )
+    avg_mileage = fields.Float(
+        string='Avg Mileage (km/L)', compute='_compute_avg_mileage',
+        digits=(16, 2),
+        help='Average mileage across all fuel entries for this vehicle',
+    )
+    fuel_consumption = fields.Float(
+        string='Fuel Consumption (L/100km)', compute='_compute_fuel_consumption',
+        digits=(16, 2),
+        help='Litres consumed per 100 km (inverse of mileage)',
+    )
 
     @api.depends('quantity', 'cost_per_litre')
     def _compute_total_cost(self):
         for rec in self:
             rec.total_cost = rec.quantity * rec.cost_per_litre
 
-    @api.depends('odometer_reading', 'vehicle_id', 'fuel_date')
+    @api.depends('odometer_reading', 'vehicle_id', 'quantity')
     def _compute_mileage(self):
         """
-        Mileage = (current odometer – previous odometer) / quantity.
-        Looks up the most recent prior fuel entry for the same vehicle.
+        Mileage (km/L) = distance since last fill-up / quantity filled.
+        Finds the previous fuel entry by odometer reading.
         """
         for rec in self:
             if not rec.vehicle_id or not rec.odometer_reading or not rec.quantity:
                 rec.mileage = 0.0
                 continue
-
             prev = self.search(
-                [
-                    ('vehicle_id', '=', rec.vehicle_id.id),
-                    ('odometer_reading', '<', rec.odometer_reading),
-                    ('id', '!=', rec.id),
-                ],
-                order='odometer_reading desc',
-                limit=1,
+                [('vehicle_id', '=', rec.vehicle_id.id),
+                 ('odometer_reading', '<', rec.odometer_reading),
+                 ('id', '!=', rec.id)],
+                order='odometer_reading desc', limit=1,
             )
             if prev:
                 distance = rec.odometer_reading - prev.odometer_reading
@@ -128,17 +107,40 @@ class TransitFuel(models.Model):
             else:
                 rec.mileage = 0.0
 
-    # ─── Sequence Generation ──────────────────────────────────────────────────
+    @api.depends('vehicle_id')
+    def _compute_avg_mileage(self):
+        """Average mileage = total distance / total fuel for the vehicle."""
+        for rec in self:
+            if not rec.vehicle_id:
+                rec.avg_mileage = 0.0
+                continue
+            all_entries = self.search(
+                [('vehicle_id', '=', rec.vehicle_id.id),
+                 ('mileage', '>', 0)],
+            )
+            if all_entries:
+                rec.avg_mileage = sum(all_entries.mapped('mileage')) / len(all_entries)
+            else:
+                rec.avg_mileage = 0.0
+
+    @api.depends('mileage')
+    def _compute_fuel_consumption(self):
+        """Fuel consumption in L/100km = 100 / mileage."""
+        for rec in self:
+            rec.fuel_consumption = (100.0 / rec.mileage) if rec.mileage else 0.0
+
+    # ─── Sequence ─────────────────────────────────────────────────────────────
 
     @api.model_create_multi
     def create(self, vals_list):
         for vals in vals_list:
             if vals.get('reference', _('New')) == _('New'):
-                vals['reference'] = self.env['ir.sequence'].next_by_code(
-                    'transit.fuel'
-                ) or _('New')
-            # Update vehicle odometer if this reading is higher
+                vals['reference'] = (
+                    self.env['ir.sequence'].next_by_code('transit.fuel')
+                    or _('New')
+                )
         records = super().create(vals_list)
+        # Keep vehicle odometer in sync with latest reading
         for rec in records:
             if rec.odometer_reading > rec.vehicle_id.odometer:
                 rec.vehicle_id.odometer = rec.odometer_reading
@@ -161,11 +163,9 @@ class TransitFuel(models.Model):
     @api.constrains('odometer_reading', 'vehicle_id')
     def _check_odometer(self):
         for rec in self:
-            if rec.odometer_reading < rec.vehicle_id.odometer:
-                # Allow equal (same fill-up point) but not less
-                if rec.odometer_reading < (rec.vehicle_id.odometer - 1):
-                    raise ValidationError(
-                        _('Odometer reading (%s km) is less than the vehicle\'s '
-                          'current odometer (%s km).')
-                        % (rec.odometer_reading, rec.vehicle_id.odometer)
-                    )
+            if rec.odometer_reading < (rec.vehicle_id.odometer - 1):
+                raise ValidationError(
+                    _('Odometer reading (%s km) is less than the vehicle\'s '
+                      'current odometer (%s km).')
+                    % (rec.odometer_reading, rec.vehicle_id.odometer)
+                )

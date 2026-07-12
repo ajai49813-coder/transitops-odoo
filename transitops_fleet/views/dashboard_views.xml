@@ -92,8 +92,7 @@
         <field name="name">transit.vehicle.dashboard</field>
         <field name="model">transit.vehicle</field>
         <field name="arch" type="xml">
-            <list string="Fleet Dashboard" create="false" delete="false"
-                  editable="false">
+            <list string="Fleet Dashboard" create="false" delete="false">
                 <!-- KPI summary row using optional columns -->
                 <field name="name" string="Vehicle"/>
                 <field name="vehicle_type" string="Type"/>
@@ -111,57 +110,5 @@
             </list>
         </field>
     </record>
-
-    <!-- Dashboard Actions for Charts (used in menu or embedded) -->
-    <record id="action_vehicle_pie_chart" model="ir.actions.act_window">
-        <field name="name">Fleet Status Chart</field>
-        <field name="res_model">transit.vehicle</field>
-        <field name="view_mode">graph</field>
-        <field name="view_id" ref="view_vehicle_graph_pie"/>
-    </record>
-
-    <record id="action_fuel_graph" model="ir.actions.act_window">
-        <field name="name">Fuel Cost Analysis</field>
-        <field name="res_model">transit.fuel</field>
-        <field name="view_mode">graph,pivot</field>
-        <field name="view_id" ref="view_fuel_graph"/>
-    </record>
-
-    <record id="action_maintenance_graph" model="ir.actions.act_window">
-        <field name="name">Maintenance Cost Analysis</field>
-        <field name="res_model">transit.maintenance</field>
-        <field name="view_mode">graph,pivot</field>
-        <field name="view_id" ref="view_maintenance_graph"/>
-    </record>
-
-    <!-- Analytics sub-menus -->
-    <menuitem
-        id="menu_analytics_root"
-        name="Analytics"
-        parent="transitops_fleet.menu_transitops_root"
-        sequence="40"
-        groups="transitops_fleet.group_fleet_user"
-    />
-    <menuitem
-        id="menu_fleet_status_chart"
-        name="Fleet Status"
-        parent="menu_analytics_root"
-        action="action_vehicle_pie_chart"
-        sequence="1"
-    />
-    <menuitem
-        id="menu_fuel_analysis"
-        name="Fuel Analysis"
-        parent="menu_analytics_root"
-        action="action_fuel_graph"
-        sequence="2"
-    />
-    <menuitem
-        id="menu_maintenance_analysis"
-        name="Maintenance Analysis"
-        parent="menu_analytics_root"
-        action="action_maintenance_graph"
-        sequence="3"
-    />
 
 </odoo>

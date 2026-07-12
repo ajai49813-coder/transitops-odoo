@@ -1,125 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
 
-    <!-- ═══════════════════════════════════════════════════════════════
-         TOP-LEVEL APP MENU
-    ═══════════════════════════════════════════════════════════════ -->
-
+    <!-- ═══ TOP-LEVEL APP ═══════════════════════════════════════════ -->
     <menuitem
         id="menu_transitops_root"
         name="TransitOps Fleet"
         sequence="10"
         web_icon="transitops_fleet,static/src/img/icon.png"
-        groups="transitops_fleet.group_fleet_user"
+        groups="transitops_fleet.group_fleet_operator"
     />
 
-    <!-- ═══════════════════════════════════════════════════════════════
-         DASHBOARD
-    ═══════════════════════════════════════════════════════════════ -->
-
-    <menuitem
-        id="menu_fleet_dashboard"
-        name="Dashboard"
+    <!-- ═══ DASHBOARD ═══════════════════════════════════════════════ -->
+    <menuitem id="menu_fleet_dashboard" name="Dashboard"
         parent="menu_transitops_root"
         action="action_fleet_dashboard"
         sequence="1"
-        groups="transitops_fleet.group_fleet_user"
-    />
+        groups="transitops_fleet.group_fleet_operator"/>
 
-    <!-- ═══════════════════════════════════════════════════════════════
-         VEHICLES
-    ═══════════════════════════════════════════════════════════════ -->
+    <!-- ═══ VEHICLES ════════════════════════════════════════════════ -->
+    <menuitem id="menu_vehicles_root" name="Vehicles"
+        parent="menu_transitops_root" sequence="10"
+        groups="transitops_fleet.group_fleet_operator"/>
 
-    <menuitem
-        id="menu_vehicles_root"
-        name="Vehicles"
-        parent="menu_transitops_root"
-        sequence="10"
-        groups="transitops_fleet.group_fleet_user"
-    />
-
-    <menuitem
-        id="menu_all_vehicles"
-        name="All Vehicles"
+    <menuitem id="menu_all_vehicles" name="All Vehicles"
         parent="menu_vehicles_root"
-        action="action_transit_vehicle"
-        sequence="1"
-    />
+        action="action_transit_vehicle" sequence="1"/>
 
-    <menuitem
-        id="menu_available_vehicles"
-        name="Available"
+    <menuitem id="menu_available_vehicles" name="Available"
         parent="menu_vehicles_root"
-        action="action_vehicle_available"
-        sequence="2"
-    />
+        action="action_vehicle_available" sequence="2"/>
 
-    <menuitem
-        id="menu_vehicles_in_maintenance"
-        name="Under Maintenance"
+    <menuitem id="menu_vehicles_in_maintenance" name="Under Maintenance"
         parent="menu_vehicles_root"
-        action="action_vehicle_maintenance"
-        sequence="3"
-    />
+        action="action_vehicle_maintenance" sequence="3"/>
 
-    <!-- ═══════════════════════════════════════════════════════════════
-         MAINTENANCE
-    ═══════════════════════════════════════════════════════════════ -->
+    <!-- ═══ MAINTENANCE ══════════════════════════════════════════════ -->
+    <menuitem id="menu_maintenance_root" name="Maintenance"
+        parent="menu_transitops_root" sequence="20"
+        groups="transitops_fleet.group_fleet_operator"/>
 
-    <menuitem
-        id="menu_maintenance_root"
-        name="Maintenance"
-        parent="menu_transitops_root"
-        sequence="20"
-        groups="transitops_fleet.group_fleet_user"
-    />
-
-    <menuitem
-        id="menu_all_maintenance"
-        name="All Records"
+    <menuitem id="menu_all_maintenance" name="All Records"
         parent="menu_maintenance_root"
-        action="action_transit_maintenance"
-        sequence="1"
-    />
+        action="action_transit_maintenance" sequence="1"/>
 
-    <menuitem
-        id="menu_scheduled_maintenance"
-        name="Scheduled / In Progress"
+    <menuitem id="menu_scheduled_maintenance" name="Scheduled / In Progress"
         parent="menu_maintenance_root"
-        action="action_maintenance_scheduled"
-        sequence="2"
-    />
+        action="action_maintenance_scheduled" sequence="2"/>
 
-    <!-- ═══════════════════════════════════════════════════════════════
-         FUEL
-    ═══════════════════════════════════════════════════════════════ -->
+    <!-- ═══ FUEL ═════════════════════════════════════════════════════ -->
+    <menuitem id="menu_fuel_root" name="Fuel"
+        parent="menu_transitops_root" sequence="30"
+        groups="transitops_fleet.group_fleet_operator"/>
 
-    <menuitem
-        id="menu_fuel_root"
-        name="Fuel"
-        parent="menu_transitops_root"
-        sequence="30"
-        groups="transitops_fleet.group_fleet_user"
-    />
-
-    <menuitem
-        id="menu_all_fuel"
-        name="Fuel Logs"
+    <menuitem id="menu_all_fuel" name="Fuel Logs"
         parent="menu_fuel_root"
-        action="action_transit_fuel"
-        sequence="1"
-    />
+        action="action_transit_fuel" sequence="1"/>
 
-    <!-- ═══════════════════════════════════════════════════════════════
-         CONFIGURATION (Manager only)
-    ═══════════════════════════════════════════════════════════════ -->
+    <!-- ═══ DOCUMENTS ════════════════════════════════════════════════ -->
+    <menuitem id="menu_documents_root" name="Documents"
+        parent="menu_transitops_root" sequence="40"
+        groups="transitops_fleet.group_fleet_user"/>
 
-    <menuitem
-        id="menu_fleet_config"
-        name="Configuration"
-        parent="menu_transitops_root"
-        sequence="99"
-        groups="transitops_fleet.group_fleet_manager"
-    />
+    <menuitem id="menu_all_documents" name="All Documents"
+        parent="menu_documents_root"
+        action="action_transit_document" sequence="1"/>
+
+    <menuitem id="menu_expiring_documents" name="Expiring Soon"
+        parent="menu_documents_root"
+        action="action_document_expiring" sequence="2"/>
+
+    <!-- ═══ ANALYTICS ════════════════════════════════════════════════ -->
+    <menuitem id="menu_analytics_root" name="Analytics"
+        parent="menu_transitops_root" sequence="50"
+        groups="transitops_fleet.group_fleet_user"/>
+
+    <menuitem id="menu_fleet_status_chart" name="Fleet Status"
+        parent="menu_analytics_root"
+        action="action_vehicle_pie_chart" sequence="1"/>
+
+    <menuitem id="menu_fuel_analysis" name="Fuel Analysis"
+        parent="menu_analytics_root"
+        action="action_fuel_graph" sequence="2"/>
+
+    <menuitem id="menu_maintenance_analysis" name="Maintenance Analysis"
+        parent="menu_analytics_root"
+        action="action_maintenance_graph" sequence="3"/>
+
+    <!-- ═══ REPORTS ══════════════════════════════════════════════════ -->
+    <menuitem id="menu_reports_root" name="Reports"
+        parent="menu_transitops_root" sequence="60"
+        groups="transitops_fleet.group_fleet_user"/>
+
+    <menuitem id="menu_report_fleet" name="Fleet Report"
+        parent="menu_reports_root"
+        action="action_report_fleet" sequence="1"/>
+
+    <menuitem id="menu_report_fuel" name="Fuel Report"
+        parent="menu_reports_root"
+        action="action_report_fuel_list" sequence="2"/>
+
+    <menuitem id="menu_report_maintenance" name="Maintenance Report"
+        parent="menu_reports_root"
+        action="action_report_maintenance_list" sequence="3"/>
+
+    <!-- ═══ CONFIGURATION ════════════════════════════════════════════ -->
+    <menuitem id="menu_fleet_config" name="Configuration"
+        parent="menu_transitops_root" sequence="99"
+        groups="transitops_fleet.group_fleet_manager"/>
 
 </odoo>

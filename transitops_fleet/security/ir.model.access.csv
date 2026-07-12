@@ -1,7 +1,13 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_vehicle_user,transit.vehicle user,model_transit_vehicle,transitops_fleet.group_fleet_user,1,0,0,0
+access_vehicle_operator,transit.vehicle operator,model_transit_vehicle,transitops_fleet.group_fleet_operator,1,0,0,0
+access_vehicle_user,transit.vehicle user,model_transit_vehicle,transitops_fleet.group_fleet_user,1,1,1,0
 access_vehicle_manager,transit.vehicle manager,model_transit_vehicle,transitops_fleet.group_fleet_manager,1,1,1,1
-access_maintenance_user,transit.maintenance user,model_transit_maintenance,transitops_fleet.group_fleet_user,1,0,1,0
+access_maintenance_operator,transit.maintenance operator,model_transit_maintenance,transitops_fleet.group_fleet_operator,1,0,0,0
+access_maintenance_user,transit.maintenance user,model_transit_maintenance,transitops_fleet.group_fleet_user,1,1,1,0
 access_maintenance_manager,transit.maintenance manager,model_transit_maintenance,transitops_fleet.group_fleet_manager,1,1,1,1
-access_fuel_user,transit.fuel user,model_transit_fuel,transitops_fleet.group_fleet_user,1,0,1,0
+access_fuel_operator,transit.fuel operator,model_transit_fuel,transitops_fleet.group_fleet_operator,1,0,1,0
+access_fuel_user,transit.fuel user,model_transit_fuel,transitops_fleet.group_fleet_user,1,1,1,0
 access_fuel_manager,transit.fuel manager,model_transit_fuel,transitops_fleet.group_fleet_manager,1,1,1,1
+access_document_operator,transit.vehicle.document operator,model_transit_vehicle_document,transitops_fleet.group_fleet_operator,1,0,0,0
+access_document_user,transit.vehicle.document user,model_transit_vehicle_document,transitops_fleet.group_fleet_user,1,1,1,0
+access_document_manager,transit.vehicle.document manager,model_transit_vehicle_document,transitops_fleet.group_fleet_manager,1,1,1,1

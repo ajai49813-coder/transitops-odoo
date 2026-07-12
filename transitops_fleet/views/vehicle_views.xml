@@ -128,6 +128,11 @@
                             <field name="fuel_count" widget="statinfo"
                                    string="Fuel Logs"/>
                         </button>
+                        <button name="action_view_documents" type="object"
+                                class="oe_stat_button" icon="fa-file-text-o">
+                            <field name="document_count" widget="statinfo"
+                                   string="Documents"/>
+                        </button>
                     </div>
 
                     <!-- Vehicle Image -->
@@ -213,6 +218,18 @@
                                     <field name="quantity"/>
                                     <field name="total_cost"/>
                                     <field name="mileage"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Documents" name="documents">
+                            <field name="document_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="document_type"/>
+                                    <field name="document_number"/>
+                                    <field name="expiry_date"/>
+                                    <field name="days_to_expiry"/>
+                                    <field name="is_expired"/>
                                 </list>
                             </field>
                         </page>

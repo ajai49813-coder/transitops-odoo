@@ -65,10 +65,10 @@ if exist "odoo18\venv" (
     echo  Virtual environment already exists, skipping.
 ) else (
     py -3.12 -m venv odoo18\venv
-    echo  Installing Odoo dependencies (this takes 3-5 minutes)...
+    echo  Installing Odoo dependencies, this takes 3-5 minutes...
     odoo18\venv\Scripts\pip install --upgrade pip setuptools wheel
     odoo18\venv\Scripts\pip install -r odoo18\requirements.txt
-    :: Extra packages sometimes missing from requirements.txt
+    rem Extra packages sometimes missing from requirements.txt
     odoo18\venv\Scripts\pip install psycopg2-binary Pillow
 )
 echo  Virtual environment ready!

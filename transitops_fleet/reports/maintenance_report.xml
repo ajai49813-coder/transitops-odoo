@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_maintenance_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="text-center mb-4">
+                        <h2>Vehicle Maintenance Report</h2>
+                        <p class="text-muted">Generated on <span t-esc="context_today().strftime('%B %d, %Y')"/></p>
+                    </div>
+
+                    <!-- Maintenance Table -->
+                    <table class="table table-bordered table-striped mt-4">
+                        <thead class="bg-primary text-white">
+                            <tr>
+                                <th>Maintenance ID</th>
+                                <th>Vehicle</th>
+                                <th>Service Type</th>
+                                <th>Service Date</th>
+                                <th>Next Service Due</th>
+                                <th>Garage / Workshop</th>
+                                <th class="text-right">Cost</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="docs" t-as="m">
+                                <tr>
+                                    <td><span t-field="m.reference"/></td>
+                                    <td><span t-field="m.vehicle_id.name"/></td>
+                                    <td><span t-field="m.service_type"/></td>
+                                    <td><span t-field="m.service_date"/></td>
+                                    <td><span t-field="m.next_service_date"/></td>
+                                    <td><span t-field="m.garage_name"/></td>
+                                    <td class="text-right">$<span t-field="m.cost" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                                    <td>
+                                        <span class="badge" t-attf-class="badge #{
+                                            m.status == 'scheduled' and 'bg-info' or
+                                            m.status == 'in_progress' and 'bg-warning' or
+                                            m.status == 'completed' and 'bg-success' or 'bg-danger'
+                                        }"><span t-field="m.status"/></span>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                        <tfoot>
+                            <tr class="font-weight-bold table-active">
+                                <td colspan="6">Total</td>
+                                <td class="text-right">$<span t-esc="sum(docs.mapped('cost'))" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </t>
+        </t>
+    </template>
+</odoo>

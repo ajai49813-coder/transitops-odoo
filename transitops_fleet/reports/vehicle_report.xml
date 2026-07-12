@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_vehicle_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="text-center mb-4">
+                            <h2>Vehicle Detailed Report: <span t-field="doc.name"/></h2>
+                            <p class="text-muted">Fleet No: <span t-field="doc.vehicle_number"/> | Generated on <span t-esc="context_today().strftime('%B %d, %Y')"/></p>
+                        </div>
+
+                        <!-- Specifications & Operational Status -->
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <h5 class="border-bottom pb-2">Vehicle Specifications</h5>
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td><strong>Registration Number:</strong></td>
+                                        <td><span t-field="doc.registration_number"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Vehicle Type:</strong></td>
+                                        <td><span t-field="doc.vehicle_type"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Brand &amp; Model:</strong></td>
+                                        <td><span t-field="doc.brand"/> <span t-field="doc.model"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Mfg Year / Age:</strong></td>
+                                        <td><span t-field="doc.manufacturing_year"/> (<span t-field="doc.vehicle_age"/> Years)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Fuel Type:</strong></td>
+                                        <td><span t-field="doc.fuel_type"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Chassis Number:</strong></td>
+                                        <td><span t-field="doc.chassis_number"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <h5 class="border-bottom pb-2">Operational Status</h5>
+                                <table class="table table-sm table-borderless">
+                                    <tr>
+                                        <td><strong>Current Odometer:</strong></td>
+                                        <td><span t-field="doc.odometer"/> km</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Status:</strong></td>
+                                        <td><span t-field="doc.status"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Assigned Driver:</strong></td>
+                                        <td><span t-field="doc.driver_id.name"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Maintenance Cost:</strong></td>
+                                        <td>$<span t-field="doc.total_maintenance_cost" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Total Fuel Cost:</strong></td>
+                                        <td>$<span t-field="doc.total_fuel_cost" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- Compliance Status -->
+                        <div class="mb-4">
+                            <h5 class="border-bottom pb-2">Compliance &amp; Document Validity</h5>
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="card p-2 text-center" t-attf-style="border: 1px solid #{doc.insurance_alert and 'red' or 'green'};">
+                                        <h6>Insurance Expiry</h6>
+                                        <p class="mb-0"><strong t-field="doc.insurance_expiry"/></p>
+                                        <small class="text-muted">(<span t-field="doc.insurance_days_left"/> Days Left)</small>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="card p-2 text-center" t-attf-style="border: 1px solid #{doc.pollution_alert and 'red' or 'green'};">
+                                        <h6>Pollution (PUC) Expiry</h6>
+                                        <p class="mb-0"><strong t-field="doc.pollution_cert_expiry"/></p>
+                                        <small class="text-muted">(<span t-field="doc.pollution_days_left"/> Days Left)</small>
+                                    </div>
+                                </div>
+                                <div class="col-4">
+                                    <div class="card p-2 text-center" style="border: 1px solid green;">
+                                        <h6>RC Expiry</h6>
+                                        <p class="mb-0"><strong t-field="doc.rc_expiry"/></p>
+                                        <small class="text-muted">(<span t-field="doc.rc_days_left"/> Days Left)</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Maintenance History -->
+                        <div class="mb-4">
+                            <h5 class="border-bottom pb-2">Recent Maintenance Records</h5>
+                            <t t-if="doc.maintenance_ids">
+                                <table class="table table-sm table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Reference</th>
+                                            <th>Service Type</th>
+                                            <th>Service Date</th>
+                                            <th>Garage</th>
+                                            <th class="text-right">Cost</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="doc.maintenance_ids[:5]" t-as="m">
+                                            <tr>
+                                                <td><span t-field="m.reference"/></td>
+                                                <td><span t-field="m.service_type"/></td>
+                                                <td><span t-field="m.service_date"/></td>
+                                                <td><span t-field="m.garage_name"/></td>
+                                                <td class="text-right">$<span t-field="m.cost" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                                                <td><span t-field="m.status"/></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </t>
+                            <t t-else="">
+                                <p class="text-muted">No maintenance records found for this vehicle.</p>
+                            </t>
+                        </div>
+
+                        <!-- Fuel logs -->
+                        <div class="mb-4">
+                            <h5 class="border-bottom pb-2">Recent Fuel Logs</h5>
+                            <t t-if="doc.fuel_ids">
+                                <table class="table table-sm table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Reference</th>
+                                            <th>Fuel Date</th>
+                                            <th class="text-right">Odometer</th>
+                                            <th class="text-right">Quantity (L)</th>
+                                            <th class="text-right">Total Cost</th>
+                                            <th class="text-right">Mileage (km/L)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="doc.fuel_ids[:5]" t-as="f">
+                                            <tr>
+                                                <td><span t-field="f.reference"/></td>
+                                                <td><span t-field="f.fuel_date"/></td>
+                                                <td class="text-right"><span t-field="f.odometer_reading"/> km</td>
+                                                <td class="text-right"><span t-field="f.quantity" t-options="{'widget': 'float', 'precision': 1}"/> L</td>
+                                                <td class="text-right">$<span t-field="f.total_cost" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                                                <td class="text-right"><span t-field="f.mileage" t-options="{'widget': 'float', 'precision': 2}"/></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </t>
+                            <t t-else="">
+                                <p class="text-muted">No fuel logs found for this vehicle.</p>
+                            </t>
+                        </div>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

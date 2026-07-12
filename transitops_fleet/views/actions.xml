@@ -9,16 +9,12 @@
         <field name="name">Vehicles</field>
         <field name="res_model">transit.vehicle</field>
         <field name="view_mode">kanban,list,form</field>
-        <field name="context">{}</field>
         <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Add your first vehicle!
-            </p>
+            <p class="o_view_nocontent_smiling_face">Add your first vehicle!</p>
             <p>Manage your entire fleet from here.</p>
         </field>
     </record>
 
-    <!-- Filtered shortcuts -->
     <record id="action_vehicle_available" model="ir.actions.act_window">
         <field name="name">Available Vehicles</field>
         <field name="res_model">transit.vehicle</field>
@@ -41,16 +37,13 @@
         <field name="name">Maintenance Records</field>
         <field name="res_model">transit.maintenance</field>
         <field name="view_mode">list,form,calendar</field>
-        <field name="context">{}</field>
         <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Schedule your first maintenance!
-            </p>
+            <p class="o_view_nocontent_smiling_face">Schedule your first maintenance!</p>
         </field>
     </record>
 
     <record id="action_maintenance_scheduled" model="ir.actions.act_window">
-        <field name="name">Scheduled Maintenance</field>
+        <field name="name">Scheduled / In Progress</field>
         <field name="res_model">transit.maintenance</field>
         <field name="view_mode">list,calendar,form</field>
         <field name="domain">[('status', 'in', ['scheduled', 'in_progress'])]</field>
@@ -63,13 +56,30 @@
     <record id="action_transit_fuel" model="ir.actions.act_window">
         <field name="name">Fuel Logs</field>
         <field name="res_model">transit.fuel</field>
-        <field name="view_mode">list,form</field>
-        <field name="context">{}</field>
+        <field name="view_mode">list,form,graph,pivot</field>
         <field name="help" type="html">
-            <p class="o_view_nocontent_smiling_face">
-                Log your first fuel entry!
-            </p>
+            <p class="o_view_nocontent_smiling_face">Log your first fuel entry!</p>
         </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         DOCUMENT ACTIONS
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="action_transit_document" model="ir.actions.act_window">
+        <field name="name">Vehicle Documents</field>
+        <field name="res_model">transit.vehicle.document</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Upload your first document!</p>
+        </field>
+    </record>
+
+    <record id="action_document_expiring" model="ir.actions.act_window">
+        <field name="name">Expiring Documents</field>
+        <field name="res_model">transit.vehicle.document</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('days_to_expiry', '&lt;=', 30), ('expiry_date', '!=', False)]</field>
     </record>
 
     <!-- ═══════════════════════════════════════════════════════════════
@@ -81,6 +91,31 @@
         <field name="res_model">transit.vehicle</field>
         <field name="view_mode">list</field>
         <field name="view_id" ref="view_fleet_dashboard"/>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         ANALYTICS ACTIONS
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="action_vehicle_pie_chart" model="ir.actions.act_window">
+        <field name="name">Fleet Status Chart</field>
+        <field name="res_model">transit.vehicle</field>
+        <field name="view_mode">graph,list</field>
+        <field name="view_id" ref="view_vehicle_graph_pie"/>
+    </record>
+
+    <record id="action_fuel_graph" model="ir.actions.act_window">
+        <field name="name">Fuel Cost Analysis</field>
+        <field name="res_model">transit.fuel</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_id" ref="view_fuel_graph"/>
+    </record>
+
+    <record id="action_maintenance_graph" model="ir.actions.act_window">
+        <field name="name">Maintenance Cost Analysis</field>
+        <field name="res_model">transit.maintenance</field>
+        <field name="view_mode">graph,pivot,list</field>
+        <field name="view_id" ref="view_maintenance_graph"/>
     </record>
 
 </odoo>

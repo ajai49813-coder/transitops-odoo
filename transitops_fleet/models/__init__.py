@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-# Vehicle must be imported first – Maintenance and Fuel depend on it
+# Import order matters: vehicle first, then dependent models
 from . import vehicle
 from . import maintenance
 from . import fuel
+from . import vehicle_documents
