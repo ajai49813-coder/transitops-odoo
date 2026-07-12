@@ -5,6 +5,145 @@ It covers fleet management, trip scheduling, driver allocation, fuel monitoring,
 
 ---
 
+## Docker Setup (Recommended)
+
+### Prerequisites
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) installed and running
+- No other service using port `8069` or `5432`
+
+### Project layout after Docker files are added
+
+```
+transitops-odoo/          ← project root (this folder)
+├── transitops/           ← Odoo module (mounted into container)
+├── docker-compose.yml
+├── odoo.conf
+├── .gitignore
+└── README.md
+```
+
+### 1. Start the environment
+
+Open a terminal in the project root (`transitops-odoo/`) and run:
+
+```bash
+docker compose up -d
+```
+
+This will:
+- Pull `postgres:15` and `odoo:17` images if not already present
+- Start a PostgreSQL container (`transitops_db`)
+- Start an Odoo 17 container (`transitops_odoo`) on port **8069**
+- Mount `./transitops` into the container at `/mnt/extra-addons/transitops`
+- Persist database data in the `transitops_db_data` Docker volume
+- Persist Odoo filestore in the `transitops_odoo_data` Docker volume
+
+### 2. Open Odoo
+
+Navigate to: **http://localhost:8069**
+
+On first run, Odoo will show the database creation screen.
+
+Fill in:
+| Field | Value |
+|---|---|
+| Master Password | `admin` (default) |
+| Database Name | `transitops` |
+| Email | `admin@example.com` |
+| Password | `admin` |
+| Language | English |
+| Demo data | ❌ Leave unchecked |
+
+Click **Create database**.
+
+### 3. Install the TransitOps module
+
+After the database is created:
+
+1. Go to **Settings → Activate Developer Mode**  
+   (URL shortcut: add `?debug=1` to any page URL)
+2. Go to **Apps → Update Apps List** → click **Update**
+3. Search for **TransitOps**
+4. Click **Install**
+
+### 4. Access the Dashboard
+
+Navigate to **TransitOps → Dashboard** in the top menu.
+
+---
+
+## Docker Commands Reference
+
+### Start containers
+```bash
+docker compose up -d
+```
+
+### Stop containers
+```bash
+docker compose down
+```
+
+### Stop and remove volumes (full reset — deletes all data)
+```bash
+docker compose down -v
+```
+
+### View Odoo logs (live)
+```bash
+docker logs -f transitops_odoo
+```
+
+### View PostgreSQL logs
+```bash
+docker logs -f transitops_db
+```
+
+### Restart only Odoo (after code changes)
+```bash
+docker compose restart odoo
+```
+
+### Upgrade the transitops module
+```bash
+docker exec transitops_odoo odoo -u transitops -d transitops --stop-after-init
+```
+
+Then restart Odoo:
+```bash
+docker compose restart odoo
+```
+
+### Open a shell inside the Odoo container
+```bash
+docker exec -it transitops_odoo bash
+```
+
+### Open a psql shell
+```bash
+docker exec -it transitops_db psql -U odoo -d transitops
+```
+
+---
+
+## Configuration
+
+The `odoo.conf` file is mounted read-only into the container at `/etc/odoo/odoo.conf`.
+
+Key settings:
+
+| Setting | Value |
+|---|---|
+| `addons_path` | `/mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons` |
+| `db_host` | `db` (Docker service name) |
+| `db_user` | `odoo` |
+| `db_password` | `odoo` |
+| `http_port` | `8069` |
+
+To override settings locally without affecting git, create `odoo.local.conf` (already in `.gitignore`) and pass it as an additional config.
+
+---
+
 ## Module Structure
 
 ```
@@ -118,7 +257,7 @@ Access via the **Print** button on any record.
 
 ---
 
-## Installation
+## Manual Installation (without Docker)
 
 1. Copy the `transitops/` folder into your Odoo addons path.
 2. Restart the Odoo server.
@@ -126,24 +265,19 @@ Access via the **Print** button on any record.
 4. Go to **Apps → Update Apps List**.
 5. Search for **TransitOps** and click **Install**.
 
-## Module Upgrade
-
+### Module Upgrade (manual)
 ```bash
 ./odoo-bin -u transitops -d <your_database>
 ```
 
-Or via UI: **Apps → TransitOps → Upgrade**.
+---
 
 ## Required Dependencies
 
-- `base`
-- `mail`
-- `web`
-- Chart.js (loaded from Odoo's CDN or bundled — ensure `web` module is present)
+- `base`, `mail`, `web` (all standard Odoo modules)
+- Chart.js — loaded via Odoo's web assets bundle
 
-## Accessing the Dashboard
-
-Navigate to **TransitOps → Dashboard** in the top menu.
+---
 
 ## How Scheduled Alerts Work
 

@@ -216,3 +216,14 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Docker
+.docker/
+docker-compose.override.yml
+
+# Odoo local config override (keep odoo.conf in git, ignore local overrides)
+odoo.local.conf
+
+# Odoo filestore / sessions generated locally
+filestore/
+sessions/
