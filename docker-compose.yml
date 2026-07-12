@@ -25,8 +25,6 @@ services:
       USER: odoo
       PASSWORD: odoo
     volumes:
-      # Mount the PARENT folder (transitops-odoo) as extra-addons
-      # so Odoo finds /mnt/extra-addons/transitops_fleet/__manifest__.py
       - .:/mnt/extra-addons
       - odoo_data:/var/lib/odoo
     ports:

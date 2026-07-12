@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_transit_driver_admin,transit.driver.admin,model_transit_driver,base.group_system,1,1,1,1
+access_transit_driver_user,transit.driver.user,model_transit_driver,base.group_user,1,1,1,0
+access_transit_vehicle_admin,transit.vehicle.admin,model_transit_vehicle,base.group_system,1,1,1,1
+access_transit_vehicle_user,transit.vehicle.user,model_transit_vehicle,base.group_user,1,1,1,0
+

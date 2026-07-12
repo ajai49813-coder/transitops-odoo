@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Report Action: Trip Report -->
+    <record id="action_report_transport_trip" model="ir.actions.report">
+        <field name="name">Trip Report</field>
+        <field name="model">transport.trip</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transitops.report_trip_template</field>
+        <field name="report_file">transitops.report_trip_template</field>
+        <field name="print_report_name">'Trip - %s' % (object.trip_id)</field>
+        <field name="binding_model_id" ref="model_transport_trip"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Report Action: Route Report -->
+    <record id="action_report_transport_route" model="ir.actions.report">
+        <field name="name">Route Report</field>
+        <field name="model">transport.route</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transitops.report_route_template</field>
+        <field name="report_file">transitops.report_route_template</field>
+        <field name="print_report_name">'Route - %s' % (object.route_id)</field>
+        <field name="binding_model_id" ref="model_transport_route"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Report Action: Vehicle Distance Summary -->
+    <record id="action_report_distance_summary" model="ir.actions.report">
+        <field name="name">Vehicle Distance Summary</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transitops.report_distance_summary_template</field>
+        <field name="report_file">transitops.report_distance_summary_template</field>
+        <field name="print_report_name">'Vehicle Distance Summary'</field>
+        <field name="binding_model_id" ref="fleet.model_fleet_vehicle"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Report Action: Driver History -->
+    <record id="action_report_driver_history" model="ir.actions.report">
+        <field name="name">Driver Trip History</field>
+        <field name="model">res.partner</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transitops.report_driver_history_template</field>
+        <field name="report_file">transitops.report_driver_history_template</field>
+        <field name="print_report_name">'Driver History - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- QWeb Template: Trip Report -->
+    <template id="report_trip_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <h2>Trip Sheet: <t t-esc="o.trip_id"/></h2>
+                                <h4><t t-esc="o.name"/></h4>
+                                <hr/>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-6">
+                                <strong>Logistics Details:</strong>
+                                <table class="table table-sm table-borderless">
+                                    <tr><td><strong>Route:</strong></td><td><t t-esc="o.route_id.name"/></td></tr>
+                                    <tr><td><strong>Vehicle:</strong></td><td><t t-esc="o.vehicle_id.name"/> (<t t-esc="o.vehicle_id.license_plate"/>)</td></tr>
+                                    <tr><td><strong>Driver:</strong></td><td><t t-esc="o.driver_id.name"/></td></tr>
+                                    <tr><td><strong>Current Location:</strong></td><td><t t-esc="o.current_location or 'N/A'"/></td></tr>
+                                    <tr><td><strong>Progress:</strong></td><td><t t-esc="o.progress"/>%</td></tr>
+                                </table>
+                            </div>
+                            <div class="col-6">
+                                <strong>Schedule Details:</strong>
+                                <table class="table table-sm table-borderless">
+                                    <tr><td><strong>Start Location:</strong></td><td><t t-esc="o.start_location"/></td></tr>
+                                    <tr><td><strong>End Location:</strong></td><td><t t-esc="o.end_location"/></td></tr>
+                                    <tr><td><strong>Departure:</strong></td><td><t t-esc="o.departure_time"/></td></tr>
+                                    <tr><td><strong>Expected Arrival:</strong></td><td><t t-esc="o.expected_arrival_time"/></td></tr>
+                                    <tr><td><strong>Actual Arrival:</strong></td><td><t t-esc="o.actual_arrival_time or 'N/A'"/></td></tr>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <strong>Live GPS Tracking logs:</strong>
+                                <table class="table table-sm table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Latitude</th>
+                                            <th>Longitude</th>
+                                            <th>Current Speed</th>
+                                            <th>Estimated ETA</th>
+                                            <th>Tracking Status</th>
+                                            <th>Last Update</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><t t-esc="o.current_latitude"/></td>
+                                            <td><t t-esc="o.current_longitude"/></td>
+                                            <td><t t-esc="o.speed"/> km/h</td>
+                                            <td><t t-esc="o.eta or 'N/A'"/></td>
+                                            <td><t t-esc="o.tracking_status"/></td>
+                                            <td><t t-esc="o.last_updated_time or 'N/A'"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- QWeb Template: Route Report -->
+    <template id="report_route_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <h2>Route details: <t t-esc="o.route_id"/></h2>
+                                <h3><t t-esc="o.name"/></h3>
+                                <hr/>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-6">
+                                <strong>Locations:</strong>
+                                <p><strong>Source:</strong> <t t-esc="o.source"/></p>
+                                <p><strong>Destination:</strong> <t t-esc="o.destination"/></p>
+                            </div>
+                            <div class="col-6">
+                                <strong>Route Information:</strong>
+                                <p><strong>Total Distance:</strong> <t t-esc="o.total_distance"/> km</p>
+                                <p><strong>Est. Travel Time:</strong> <t t-esc="o.estimated_travel_time"/> hours</p>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h4>Stops and Waypoints Sequence</h4>
+                                <table class="table table-sm table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Sequence</th>
+                                            <th>Stop Name</th>
+                                            <th>Distance from Start (km)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="o.stop_ids" t-as="stop">
+                                            <tr>
+                                                <td><t t-esc="stop.sequence"/></td>
+                                                <td><t t-esc="stop.name"/></td>
+                                                <td><t t-esc="stop.distance_from_start"/> km</td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <!-- QWeb Template: Distance Summary -->
+    <template id="report_distance_summary_template">
+        <t t-call="web.html_container">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <h2>Vehicle Distance &amp; Utilization Summary</h2>
+                            <hr/>
+                        </div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-12">
+                            <table class="table table-sm table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Vehicle License Plate</th>
+                                        <th>Model</th>
+                                        <th>Total Trips</th>
+                                        <th>Distance Covered (km)</th>
+                                        <th>Running Hours (Hours)</th>
+                                        <th>Average Daily Usage (km/day)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="docs" t-as="o">
+                                        <tr>
+                                            <td><t t-esc="o.license_plate"/></td>
+                                            <td><t t-esc="o.model_id.name"/></td>
+                                            <td><t t-esc="o.total_trips"/></td>
+                                            <td><t t-esc="o.total_distance"/></td>
+                                            <td><t t-esc="o.running_hours"/></td>
+                                            <td><t t-esc="o.average_daily_usage"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <!-- QWeb Template: Driver History -->
+    <template id="report_driver_history_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div class="row">
+                            <div class="col-12 text-center">
+                                <h2>Driver Trip History &amp; Performance Worksheet</h2>
+                                <h3>Driver Name: <t t-esc="o.name"/></h3>
+                                <hr/>
+                            </div>
+                        </div>
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <h4>Performance Metrics Summary</h4>
+                                <table class="table table-sm table-bordered">
+                                    <thead>
+                                        <tr class="table-active">
+                                            <th>Total Trips</th>
+                                            <th>Completed Trips</th>
+                                            <th>Cancelled Trips</th>
+                                            <th>Average Trip Time</th>
+                                            <th>Average Distance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><t t-esc="o.total_trips"/></td>
+                                            <td><t t-esc="o.completed_trips"/></td>
+                                            <td><t t-esc="o.cancelled_trips"/></td>
+                                            <td><t t-esc="o.average_trip_time"/> hours</td>
+                                            <td><t t-esc="o.average_distance"/> km</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col-12">
+                                <h4>Assigned Trip List History</h4>
+                                <table class="table table-sm table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Trip ID</th>
+                                            <th>Trip Name</th>
+                                            <th>Route Name</th>
+                                            <th>Vehicle</th>
+                                            <th>Departure Date</th>
+                                            <th>Actual Arrival Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="o.trip_ids" t-as="trip">
+                                            <tr>
+                                                <td><t t-esc="trip.trip_id"/></td>
+                                                <td><t t-esc="trip.name"/></td>
+                                                <td><t t-esc="trip.route_id.name"/></td>
+                                                <td><t t-esc="trip.vehicle_id.license_plate"/></td>
+                                                <td><t t-esc="trip.departure_time"/></td>
+                                                <td><t t-esc="trip.actual_arrival_time or 'N/A'"/></td>
+                                                <td><t t-esc="trip.status"/></td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

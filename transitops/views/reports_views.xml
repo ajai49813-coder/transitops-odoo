@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ===== VEHICLE REPORT ===== -->
+    <record id="view_report_vehicle_pivot" model="ir.ui.view">
+        <field name="name">transit.vehicle.pivot</field>
+        <field name="model">transit.vehicle</field>
+        <field name="arch" type="xml">
+            <pivot string="Vehicle Report">
+                <field name="vehicle_type" type="row"/>
+                <field name="status" type="col"/>
+                <field name="trip_count" type="measure"/>
+                <field name="fuel_count" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_report_vehicle_graph" model="ir.ui.view">
+        <field name="name">transit.vehicle.graph</field>
+        <field name="model">transit.vehicle</field>
+        <field name="arch" type="xml">
+            <graph string="Vehicles by Type" type="bar">
+                <field name="vehicle_type" type="row"/>
+                <field name="trip_count" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_report_vehicles" model="ir.actions.act_window">
+        <field name="name">Vehicle Report</field>
+        <field name="res_model">transit.vehicle</field>
+        <field name="view_mode">pivot,graph,tree</field>
+        <field name="search_view_id" ref="view_transit_vehicle_search"/>
+    </record>
+
+    <!-- ===== TRIP REPORT ===== -->
+    <record id="view_report_trip_pivot" model="ir.ui.view">
+        <field name="name">transit.trip.pivot</field>
+        <field name="model">transit.trip</field>
+        <field name="arch" type="xml">
+            <pivot string="Trip Report">
+                <field name="vehicle_id" type="row"/>
+                <field name="status" type="col"/>
+                <field name="actual_distance" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_report_trip_graph" model="ir.ui.view">
+        <field name="name">transit.trip.graph</field>
+        <field name="model">transit.trip</field>
+        <field name="arch" type="xml">
+            <graph string="Trips by Status" type="pie">
+                <field name="status" type="row"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_report_trips" model="ir.actions.act_window">
+        <field name="name">Trip Report</field>
+        <field name="res_model">transit.trip</field>
+        <field name="view_mode">pivot,graph,tree</field>
+        <field name="search_view_id" ref="view_transit_trip_search"/>
+    </record>
+
+    <!-- ===== FUEL REPORT ===== -->
+    <record id="view_report_fuel_pivot" model="ir.ui.view">
+        <field name="name">transit.fuel.pivot</field>
+        <field name="model">transit.fuel</field>
+        <field name="arch" type="xml">
+            <pivot string="Fuel Report">
+                <field name="vehicle_id" type="row"/>
+                <field name="date" interval="month" type="col"/>
+                <field name="quantity_liters" type="measure"/>
+                <field name="total_cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_report_fuel_graph" model="ir.ui.view">
+        <field name="name">transit.fuel.graph</field>
+        <field name="model">transit.fuel</field>
+        <field name="arch" type="xml">
+            <graph string="Fuel Consumption by Month" type="bar">
+                <field name="date" interval="month" type="row"/>
+                <field name="quantity_liters" type="measure"/>
+                <field name="total_cost" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_report_fuel" model="ir.actions.act_window">
+        <field name="name">Fuel Report</field>
+        <field name="res_model">transit.fuel</field>
+        <field name="view_mode">pivot,graph,tree</field>
+        <field name="search_view_id" ref="view_transit_fuel_search"/>
+    </record>
+
+    <!-- ===== DRIVER REPORT ===== -->
+    <record id="view_report_driver_pivot" model="ir.ui.view">
+        <field name="name">transit.driver.pivot</field>
+        <field name="model">transit.driver</field>
+        <field name="arch" type="xml">
+            <pivot string="Driver Report">
+                <field name="status" type="row"/>
+                <field name="license_class" type="col"/>
+                <field name="trip_count" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_report_driver_graph" model="ir.ui.view">
+        <field name="name">transit.driver.graph</field>
+        <field name="model">transit.driver</field>
+        <field name="arch" type="xml">
+            <graph string="Drivers by Status" type="pie">
+                <field name="status" type="row"/>
+                <field name="trip_count" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_report_drivers" model="ir.actions.act_window">
+        <field name="name">Driver Report</field>
+        <field name="res_model">transit.driver</field>
+        <field name="view_mode">pivot,graph,tree</field>
+        <field name="search_view_id" ref="view_transit_driver_search"/>
+    </record>
+
+    <!-- ===== MAINTENANCE REPORT ===== -->
+    <record id="view_report_maintenance_pivot" model="ir.ui.view">
+        <field name="name">transit.maintenance.pivot</field>
+        <field name="model">transit.maintenance</field>
+        <field name="arch" type="xml">
+            <pivot string="Maintenance Report">
+                <field name="vehicle_id" type="row"/>
+                <field name="maintenance_type" type="col"/>
+                <field name="cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_report_maintenance_graph" model="ir.ui.view">
+        <field name="name">transit.maintenance.graph</field>
+        <field name="model">transit.maintenance</field>
+        <field name="arch" type="xml">
+            <graph string="Maintenance Cost by Vehicle" type="bar">
+                <field name="vehicle_id" type="row"/>
+                <field name="cost" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="action_report_maintenance" model="ir.actions.act_window">
+        <field name="name">Maintenance Report</field>
+        <field name="res_model">transit.maintenance</field>
+        <field name="view_mode">pivot,graph,tree</field>
+        <field name="search_view_id" ref="view_transit_maintenance_search"/>
+    </record>
+
+    <!-- ===== REPORT MENUS ===== -->
+    <menuitem id="menu_report_vehicles"
+              name="Vehicle Report"
+              parent="menu_transitops_reports"
+              action="action_report_vehicles"
+              sequence="1"/>
+
+    <menuitem id="menu_report_trips"
+              name="Trip Report"
+              parent="menu_transitops_reports"
+              action="action_report_trips"
+              sequence="2"/>
+
+    <menuitem id="menu_report_fuel"
+              name="Fuel Report"
+              parent="menu_transitops_reports"
+              action="action_report_fuel"
+              sequence="3"/>
+
+    <menuitem id="menu_report_drivers"
+              name="Driver Report"
+              parent="menu_transitops_reports"
+              action="action_report_drivers"
+              sequence="4"/>
+
+    <menuitem id="menu_report_maintenance"
+              name="Maintenance Report"
+              parent="menu_transitops_reports"
+              action="action_report_maintenance"
+              sequence="5"/>
+</odoo>

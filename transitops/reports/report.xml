@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vehicle Summary PDF Report -->
+    <record id="action_report_vehicle_pdf" model="ir.actions.report">
+        <field name="name">Vehicle Summary Report</field>
+        <field name="model">transit.vehicle</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transitops.report_vehicle_summary</field>
+        <field name="report_file">transitops.report_vehicle_summary</field>
+        <field name="binding_model_id" ref="model_transit_vehicle"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Trip Summary PDF Report -->
+    <record id="action_report_trip_pdf" model="ir.actions.report">
+        <field name="name">Trip Summary Report</field>
+        <field name="model">transit.trip</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transitops.report_trip_summary</field>
+        <field name="report_file">transitops.report_trip_summary</field>
+        <field name="binding_model_id" ref="model_transit_trip"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Fuel Consumption PDF Report -->
+    <record id="action_report_fuel_pdf" model="ir.actions.report">
+        <field name="name">Fuel Consumption Report</field>
+        <field name="model">transit.fuel</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transitops.report_fuel_consumption</field>
+        <field name="report_file">transitops.report_fuel_consumption</field>
+        <field name="binding_model_id" ref="model_transit_fuel"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Driver Summary PDF Report -->
+    <record id="action_report_driver_pdf" model="ir.actions.report">
+        <field name="name">Driver Summary Report</field>
+        <field name="model">transit.driver</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transitops.report_driver_summary</field>
+        <field name="report_file">transitops.report_driver_summary</field>
+        <field name="binding_model_id" ref="model_transit_driver"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Maintenance Summary PDF Report -->
+    <record id="action_report_maintenance_pdf" model="ir.actions.report">
+        <field name="name">Maintenance Summary Report</field>
+        <field name="model">transit.maintenance</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">transitops.report_maintenance_summary</field>
+        <field name="report_file">transitops.report_maintenance_summary</field>
+        <field name="binding_model_id" ref="model_transit_maintenance"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

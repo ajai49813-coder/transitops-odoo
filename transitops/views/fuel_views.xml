@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_transit_fuel_form" model="ir.ui.view">
+        <field name="name">transit.fuel.form</field>
+        <field name="model">transit.fuel</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="vehicle_id"/>
+                            <field name="driver_id"/>
+                            <field name="trip_id"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="fuel_type"/>
+                            <field name="quantity_liters"/>
+                            <field name="cost_per_liter"/>
+                            <field name="total_cost"/>
+                            <field name="odometer_reading"/>
+                            <field name="fuel_station"/>
+                        </group>
+                    </group>
+                    <field name="notes"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_transit_fuel_tree" model="ir.ui.view">
+        <field name="name">transit.fuel.tree</field>
+        <field name="model">transit.fuel</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="date"/>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <field name="trip_id"/>
+                <field name="fuel_type"/>
+                <field name="quantity_liters"/>
+                <field name="cost_per_liter"/>
+                <field name="total_cost"/>
+                <field name="odometer_reading"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_transit_fuel_search" model="ir.ui.view">
+        <field name="name">transit.fuel.search</field>
+        <field name="model">transit.fuel</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="vehicle_id"/>
+                <field name="driver_id"/>
+                <field name="trip_id"/>
+                <filter string="This Month" name="this_month"
+                        domain="[('date','&gt;=', (context_today()).strftime('%Y-%m-01'))]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Vehicle" name="group_vehicle" context="{'group_by': 'vehicle_id'}"/>
+                    <filter string="Driver" name="group_driver" context="{'group_by': 'driver_id'}"/>
+                    <filter string="Fuel Type" name="group_fuel_type" context="{'group_by': 'fuel_type'}"/>
+                    <filter string="Month" name="group_month" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_transit_fuel" model="ir.actions.act_window">
+        <field name="name">Fuel Records</field>
+        <field name="res_model">transit.fuel</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_transit_fuel_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Log your first fuel record!</p>
+        </field>
+    </record>
+</odoo>
