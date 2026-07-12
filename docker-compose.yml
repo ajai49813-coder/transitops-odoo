@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+
+  # ── PostgreSQL Database ──────────────────────────────────────
+  db:
+    image: postgres:15
+    container_name: transitops_db
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  # ── Odoo 18 Application ──────────────────────────────────────
+  odoo:
+    image: odoo:18.0
+    container_name: transitops_odoo
+    depends_on:
+      - db
+    environment:
+      HOST: db
+      USER: odoo
+      PASSWORD: odoo
+    volumes:
+      # Mount your custom module into Odoo's extra addons folder
+      - ./transitops_fleet:/mnt/extra-addons/transitops_fleet
+      - odoo_data:/var/lib/odoo
+    ports:
+      - "8069:8069"
+    command: >
+      odoo
+      --db_host=db
+      --db_user=odoo
+      --db_password=odoo
+      --addons-path=/mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons
+      --dev=all
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  odoo_data:

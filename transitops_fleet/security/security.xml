@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         SECURITY GROUPS
+         Fleet Manager  – full CRUD on all fleet records
+         Fleet User     – read + create own records, no delete
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="module_category_transitops" model="ir.module.category">
+        <field name="name">TransitOps</field>
+        <field name="description">TransitOps Transport Operations Platform</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="group_fleet_user" model="res.groups">
+        <field name="name">Fleet User</field>
+        <field name="category_id" ref="module_category_transitops"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Can view and create fleet records. Cannot delete.</field>
+    </record>
+
+    <record id="group_fleet_manager" model="res.groups">
+        <field name="name">Fleet Manager</field>
+        <field name="category_id" ref="module_category_transitops"/>
+        <field name="implied_ids" eval="[(4, ref('group_fleet_user'))]"/>
+        <field name="users" eval="[(4, ref('base.user_admin'))]"/>
+        <field name="comment">Full access to all fleet, maintenance, and fuel records.</field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         RECORD RULES
+         Fleet Users can only see records belonging to their company.
+         Fleet Managers see all records (no restriction).
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <!-- Vehicle: Users see all vehicles (read-only restriction handled by ACL) -->
+    <record id="rule_vehicle_user" model="ir.rule">
+        <field name="name">Vehicle: User sees all (own company)</field>
+        <field name="model_id" ref="model_transit_vehicle"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_fleet_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="False"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="rule_vehicle_manager" model="ir.rule">
+        <field name="name">Vehicle: Manager full access</field>
+        <field name="model_id" ref="model_transit_vehicle"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_fleet_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- Maintenance record rules -->
+    <record id="rule_maintenance_user" model="ir.rule">
+        <field name="name">Maintenance: User read-only</field>
+        <field name="model_id" ref="model_transit_maintenance"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_fleet_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="rule_maintenance_manager" model="ir.rule">
+        <field name="name">Maintenance: Manager full access</field>
+        <field name="model_id" ref="model_transit_maintenance"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_fleet_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- Fuel record rules -->
+    <record id="rule_fuel_user" model="ir.rule">
+        <field name="name">Fuel: User read + create</field>
+        <field name="model_id" ref="model_transit_fuel"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_fleet_user'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="False"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="False"/>
+    </record>
+
+    <record id="rule_fuel_manager" model="ir.rule">
+        <field name="name">Fuel: Manager full access</field>
+        <field name="model_id" ref="model_transit_fuel"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+        <field name="groups" eval="[(4, ref('group_fleet_manager'))]"/>
+        <field name="perm_read" eval="True"/>
+        <field name="perm_write" eval="True"/>
+        <field name="perm_create" eval="True"/>
+        <field name="perm_unlink" eval="True"/>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         IR SEQUENCES  (for auto-generated reference numbers)
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="seq_transit_maintenance" model="ir.sequence">
+        <field name="name">Transit Maintenance Reference</field>
+        <field name="code">transit.maintenance</field>
+        <field name="prefix">MNT/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+
+    <record id="seq_transit_fuel" model="ir.sequence">
+        <field name="name">Transit Fuel Reference</field>
+        <field name="code">transit.fuel</field>
+        <field name="prefix">FUEL/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="number_next">1</field>
+        <field name="number_increment">1</field>
+    </record>
+
+</odoo>

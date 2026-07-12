@@ -1,0 +1,65 @@
+/* TransitOps Fleet – Dashboard Styles
+   Follows Odoo Enterprise design language */
+
+/* ── KPI Card Row ─────────────────────────────────────────── */
+.o_transitops_kpi_row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    padding: 16px 0;
+}
+
+.o_transitops_kpi_card {
+    flex: 1 1 160px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px 16px;
+    text-align: center;
+    border-top: 4px solid #875a7b; /* Odoo Enterprise purple */
+    transition: box-shadow 0.2s;
+}
+
+.o_transitops_kpi_card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.o_transitops_kpi_card .kpi_value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #212529;
+    line-height: 1.2;
+}
+
+.o_transitops_kpi_card .kpi_label {
+    font-size: 0.8rem;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 4px;
+}
+
+/* ── Status-specific card accents ────────────────────────── */
+.kpi_available   { border-top-color: #28a745; }
+.kpi_on_trip     { border-top-color: #007bff; }
+.kpi_maintenance { border-top-color: #ffc107; }
+.kpi_oos         { border-top-color: #dc3545; }
+.kpi_fuel_cost   { border-top-color: #17a2b8; }
+.kpi_maint_cost  { border-top-color: #fd7e14; }
+
+/* ── Alert badges in list view ───────────────────────────── */
+.o_list_view .o_data_row.o_decoration_danger td {
+    background-color: #fff5f5 !important;
+}
+
+/* ── Vehicle Kanban card image ───────────────────────────── */
+.o_kanban_view .o_kanban_image img {
+    object-fit: cover;
+    border-radius: 6px 0 0 6px;
+}
+
+/* ── Status badge colours (supplement Odoo defaults) ─────── */
+.badge.status_available    { background-color: #28a745; color: #fff; }
+.badge.status_on_trip      { background-color: #007bff; color: #fff; }
+.badge.status_maintenance  { background-color: #ffc107; color: #212529; }
+.badge.status_oos          { background-color: #dc3545; color: #fff; }

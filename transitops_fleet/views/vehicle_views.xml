@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         VEHICLE KANBAN VIEW
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="view_vehicle_kanban" model="ir.ui.view">
+        <field name="name">transit.vehicle.kanban</field>
+        <field name="model">transit.vehicle</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="status" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="vehicle_number"/>
+                <field name="status"/>
+                <field name="vehicle_type"/>
+                <field name="driver_id"/>
+                <field name="vehicle_image"/>
+                <field name="insurance_alert"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="o_kanban_image">
+                            <img t-if="record.vehicle_image.value"
+                                 t-att-src="record.vehicle_image.value"
+                                 alt="Vehicle" class="o_image_64_cover"/>
+                            <img t-else=""
+                                 src="/transitops_fleet/static/src/img/vehicle_default.png"
+                                 alt="Vehicle" class="o_image_64_cover"/>
+                        </div>
+                        <div class="oe_kanban_details">
+                            <strong class="o_kanban_record_title">
+                                <field name="name"/>
+                            </strong>
+                            <div class="o_kanban_tags_section">
+                                <span class="badge rounded-pill"
+                                      t-attf-class="badge rounded-pill
+                                        #{record.status.raw_value == 'available' ? 'text-bg-success' :
+                                          record.status.raw_value == 'on_trip' ? 'text-bg-primary' :
+                                          record.status.raw_value == 'maintenance' ? 'text-bg-warning' :
+                                          record.status.raw_value == 'out_of_service' ? 'text-bg-danger' :
+                                          'text-bg-secondary'}">
+                                    <field name="status"/>
+                                </span>
+                            </div>
+                            <ul>
+                                <li>No: <field name="vehicle_number"/></li>
+                                <li t-if="record.driver_id.value">
+                                    Driver: <field name="driver_id"/>
+                                </li>
+                            </ul>
+                            <t t-if="record.insurance_alert.raw_value">
+                                <div class="text-danger fw-bold">
+                                    ⚠ Insurance Expiring Soon!
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         VEHICLE LIST (TREE) VIEW
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="view_vehicle_list" model="ir.ui.view">
+        <field name="name">transit.vehicle.list</field>
+        <field name="model">transit.vehicle</field>
+        <field name="arch" type="xml">
+            <list string="Vehicles" decoration-danger="insurance_alert == True"
+                  decoration-muted="status == 'out_of_service'">
+                <field name="vehicle_image" widget="image" options="{'size': [38, 38]}"/>
+                <field name="name"/>
+                <field name="vehicle_number"/>
+                <field name="registration_number"/>
+                <field name="vehicle_type"/>
+                <field name="brand"/>
+                <field name="fuel_type"/>
+                <field name="driver_id"/>
+                <field name="odometer" string="Odometer (km)"/>
+                <field name="status" widget="badge"
+                       decoration-success="status == 'available'"
+                       decoration-info="status == 'assigned'"
+                       decoration-primary="status == 'on_trip'"
+                       decoration-warning="status == 'maintenance'"
+                       decoration-danger="status == 'out_of_service'"/>
+                <field name="insurance_expiry"/>
+                <field name="insurance_alert" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         VEHICLE FORM VIEW
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="view_vehicle_form" model="ir.ui.view">
+        <field name="name">transit.vehicle.form</field>
+        <field name="model">transit.vehicle</field>
+        <field name="arch" type="xml">
+            <form string="Vehicle">
+                <!-- Status Bar -->
+                <header>
+                    <button name="action_set_available" string="Set Available"
+                            type="object" class="btn-success"
+                            invisible="status == 'available'"/>
+                    <button name="action_set_maintenance" string="Send to Maintenance"
+                            type="object" class="btn-warning"
+                            invisible="status == 'maintenance'"/>
+                    <button name="action_set_out_of_service" string="Out of Service"
+                            type="object" class="btn-danger"
+                            invisible="status == 'out_of_service'"/>
+                    <field name="status" widget="statusbar"
+                           statusbar_visible="available,assigned,on_trip,maintenance,out_of_service"/>
+                </header>
+
+                <sheet>
+                    <!-- Smart Buttons -->
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_maintenance" type="object"
+                                class="oe_stat_button" icon="fa-wrench">
+                            <field name="maintenance_count" widget="statinfo"
+                                   string="Maintenance"/>
+                        </button>
+                        <button name="action_view_fuel" type="object"
+                                class="oe_stat_button" icon="fa-tint">
+                            <field name="fuel_count" widget="statinfo"
+                                   string="Fuel Logs"/>
+                        </button>
+                    </div>
+
+                    <!-- Vehicle Image -->
+                    <field name="vehicle_image" widget="image"
+                           class="oe_avatar" options="{'preview_image': 'vehicle_image'}"/>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Vehicle Name"/>
+                        </h1>
+                        <h2>
+                            <field name="vehicle_number" placeholder="Fleet Number"/>
+                        </h2>
+                    </div>
+
+                    <!-- Insurance Alert Banner -->
+                    <div class="alert alert-warning" role="alert"
+                         invisible="not insurance_alert">
+                        <strong>⚠ Insurance Expiring Soon!</strong>
+                        Insurance expires on <field name="insurance_expiry" readonly="1"/>.
+                        Please renew immediately.
+                    </div>
+
+                    <group>
+                        <!-- Left Column: Vehicle Details -->
+                        <group string="Vehicle Details">
+                            <field name="registration_number"/>
+                            <field name="vehicle_type"/>
+                            <field name="brand"/>
+                            <field name="model"/>
+                            <field name="manufacturing_year"/>
+                            <field name="capacity"/>
+                            <field name="fuel_type"/>
+                            <field name="odometer"/>
+                        </group>
+
+                        <!-- Right Column: Assignment -->
+                        <group string="Assignment">
+                            <field name="driver_id"/>
+                            <field name="current_trip_id"/>
+                            <field name="total_maintenance_cost" readonly="1"/>
+                            <field name="total_fuel_cost" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- Documents / Compliance -->
+                    <group string="Compliance Documents">
+                        <group>
+                            <field name="insurance_number"/>
+                            <field name="insurance_expiry"/>
+                            <field name="insurance_days_left" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="pollution_cert_number"/>
+                            <field name="pollution_cert_expiry"/>
+                            <field name="pollution_days_left" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <!-- Notes -->
+                    <group string="Notes">
+                        <field name="notes" nolabel="1" colspan="2"/>
+                    </group>
+
+                    <!-- Related Records Tabs -->
+                    <notebook>
+                        <page string="Maintenance History" name="maintenance">
+                            <field name="maintenance_ids" readonly="1">
+                                <list>
+                                    <field name="reference"/>
+                                    <field name="service_type"/>
+                                    <field name="service_date"/>
+                                    <field name="cost"/>
+                                    <field name="status" widget="badge"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Fuel History" name="fuel">
+                            <field name="fuel_ids" readonly="1">
+                                <list>
+                                    <field name="reference"/>
+                                    <field name="fuel_date"/>
+                                    <field name="quantity"/>
+                                    <field name="total_cost"/>
+                                    <field name="mileage"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <!-- Chatter -->
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         VEHICLE SEARCH VIEW
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="view_vehicle_search" model="ir.ui.view">
+        <field name="name">transit.vehicle.search</field>
+        <field name="model">transit.vehicle</field>
+        <field name="arch" type="xml">
+            <search string="Search Vehicles">
+                <field name="name" string="Vehicle"/>
+                <field name="vehicle_number"/>
+                <field name="registration_number"/>
+                <field name="driver_id"/>
+                <field name="brand"/>
+
+                <!-- Filters -->
+                <filter name="filter_available" string="Available"
+                        domain="[('status', '=', 'available')]"/>
+                <filter name="filter_on_trip" string="On Trip"
+                        domain="[('status', '=', 'on_trip')]"/>
+                <filter name="filter_maintenance" string="Under Maintenance"
+                        domain="[('status', '=', 'maintenance')]"/>
+                <filter name="filter_insurance_alert" string="Insurance Expiring"
+                        domain="[('insurance_alert', '=', True)]"/>
+                <separator/>
+                <filter name="filter_electric" string="Electric"
+                        domain="[('fuel_type', '=', 'electric')]"/>
+
+                <!-- Group By -->
+                <group expand="0" string="Group By">
+                    <filter name="group_status" string="Status"
+                            context="{'group_by': 'status'}"/>
+                    <filter name="group_type" string="Vehicle Type"
+                            context="{'group_by': 'vehicle_type'}"/>
+                    <filter name="group_fuel" string="Fuel Type"
+                            context="{'group_by': 'fuel_type'}"/>
+                    <filter name="group_driver" string="Driver"
+                            context="{'group_by': 'driver_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+</odoo>

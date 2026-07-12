@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         FLEET DASHBOARD – Custom List View acting as KPI Dashboard
+         Uses Odoo's native graph/pivot views for charts.
+         The main dashboard is a styled list view with search panel.
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <!-- Vehicle Status PIE CHART -->
+    <record id="view_vehicle_graph_pie" model="ir.ui.view">
+        <field name="name">transit.vehicle.graph.status</field>
+        <field name="model">transit.vehicle</field>
+        <field name="arch" type="xml">
+            <graph string="Fleet Status Distribution" type="pie">
+                <field name="status" type="row"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Vehicle Type BAR CHART -->
+    <record id="view_vehicle_graph_bar" model="ir.ui.view">
+        <field name="name">transit.vehicle.graph.type</field>
+        <field name="model">transit.vehicle</field>
+        <field name="arch" type="xml">
+            <graph string="Vehicles by Type" type="bar">
+                <field name="vehicle_type" type="row"/>
+                <field name="status" type="col"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Maintenance Cost BAR CHART -->
+    <record id="view_maintenance_graph" model="ir.ui.view">
+        <field name="name">transit.maintenance.graph</field>
+        <field name="model">transit.maintenance</field>
+        <field name="arch" type="xml">
+            <graph string="Maintenance Cost by Vehicle" type="bar">
+                <field name="vehicle_id" type="row"/>
+                <field name="cost" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Fuel Cost LINE CHART -->
+    <record id="view_fuel_graph" model="ir.ui.view">
+        <field name="name">transit.fuel.graph</field>
+        <field name="model">transit.fuel</field>
+        <field name="arch" type="xml">
+            <graph string="Fuel Cost Over Time" type="line">
+                <field name="fuel_date" type="row" interval="month"/>
+                <field name="total_cost" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Fuel Pivot Table -->
+    <record id="view_fuel_pivot" model="ir.ui.view">
+        <field name="name">transit.fuel.pivot</field>
+        <field name="model">transit.fuel</field>
+        <field name="arch" type="xml">
+            <pivot string="Fuel Analysis">
+                <field name="vehicle_id" type="row"/>
+                <field name="fuel_date" type="col" interval="month"/>
+                <field name="total_cost" type="measure"/>
+                <field name="quantity" type="measure"/>
+                <field name="mileage" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Maintenance Pivot Table -->
+    <record id="view_maintenance_pivot" model="ir.ui.view">
+        <field name="name">transit.maintenance.pivot</field>
+        <field name="model">transit.maintenance</field>
+        <field name="arch" type="xml">
+            <pivot string="Maintenance Analysis">
+                <field name="vehicle_id" type="row"/>
+                <field name="service_type" type="col"/>
+                <field name="cost" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         DASHBOARD MAIN VIEW
+         A custom list view styled as a dashboard landing page.
+         KPI numbers are shown via the search panel + stat buttons.
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="view_fleet_dashboard" model="ir.ui.view">
+        <field name="name">transit.vehicle.dashboard</field>
+        <field name="model">transit.vehicle</field>
+        <field name="arch" type="xml">
+            <list string="Fleet Dashboard" create="false" delete="false"
+                  editable="false">
+                <!-- KPI summary row using optional columns -->
+                <field name="name" string="Vehicle"/>
+                <field name="vehicle_type" string="Type"/>
+                <field name="status" widget="badge"
+                       decoration-success="status == 'available'"
+                       decoration-primary="status == 'on_trip'"
+                       decoration-warning="status == 'maintenance'"
+                       decoration-danger="status == 'out_of_service'"/>
+                <field name="driver_id" string="Driver"/>
+                <field name="odometer" string="Odometer (km)"/>
+                <field name="total_maintenance_cost" string="Maint. Cost" sum="Total"/>
+                <field name="total_fuel_cost" string="Fuel Cost" sum="Total"/>
+                <field name="insurance_expiry" string="Insurance Expiry"/>
+                <field name="insurance_alert" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Dashboard Actions for Charts (used in menu or embedded) -->
+    <record id="action_vehicle_pie_chart" model="ir.actions.act_window">
+        <field name="name">Fleet Status Chart</field>
+        <field name="res_model">transit.vehicle</field>
+        <field name="view_mode">graph</field>
+        <field name="view_id" ref="view_vehicle_graph_pie"/>
+    </record>
+
+    <record id="action_fuel_graph" model="ir.actions.act_window">
+        <field name="name">Fuel Cost Analysis</field>
+        <field name="res_model">transit.fuel</field>
+        <field name="view_mode">graph,pivot</field>
+        <field name="view_id" ref="view_fuel_graph"/>
+    </record>
+
+    <record id="action_maintenance_graph" model="ir.actions.act_window">
+        <field name="name">Maintenance Cost Analysis</field>
+        <field name="res_model">transit.maintenance</field>
+        <field name="view_mode">graph,pivot</field>
+        <field name="view_id" ref="view_maintenance_graph"/>
+    </record>
+
+    <!-- Analytics sub-menus -->
+    <menuitem
+        id="menu_analytics_root"
+        name="Analytics"
+        parent="transitops_fleet.menu_transitops_root"
+        sequence="40"
+        groups="transitops_fleet.group_fleet_user"
+    />
+    <menuitem
+        id="menu_fleet_status_chart"
+        name="Fleet Status"
+        parent="menu_analytics_root"
+        action="action_vehicle_pie_chart"
+        sequence="1"
+    />
+    <menuitem
+        id="menu_fuel_analysis"
+        name="Fuel Analysis"
+        parent="menu_analytics_root"
+        action="action_fuel_graph"
+        sequence="2"
+    />
+    <menuitem
+        id="menu_maintenance_analysis"
+        name="Maintenance Analysis"
+        parent="menu_analytics_root"
+        action="action_maintenance_graph"
+        sequence="3"
+    />
+
+</odoo>

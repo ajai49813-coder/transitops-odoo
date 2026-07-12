@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         FUEL LIST VIEW
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="view_fuel_list" model="ir.ui.view">
+        <field name="name">transit.fuel.list</field>
+        <field name="model">transit.fuel</field>
+        <field name="arch" type="xml">
+            <list string="Fuel Logs">
+                <field name="reference"/>
+                <field name="vehicle_id"/>
+                <field name="fuel_date"/>
+                <field name="fuel_station"/>
+                <field name="fuel_type"/>
+                <field name="quantity" sum="Total Litres"/>
+                <field name="cost_per_litre"/>
+                <field name="total_cost" sum="Total Cost"/>
+                <field name="odometer_reading"/>
+                <field name="mileage" string="km/L"/>
+                <field name="payment_method"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         FUEL FORM VIEW
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="view_fuel_form" model="ir.ui.view">
+        <field name="name">transit.fuel.form</field>
+        <field name="model">transit.fuel</field>
+        <field name="arch" type="xml">
+            <form string="Fuel Log Entry">
+                <sheet>
+                    <!-- KPI Row: auto-calculated values shown prominently -->
+                    <div class="o_stat_buttons">
+                        <div class="o_stat_button" style="cursor:default;">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="total_cost" readonly="1"/>
+                                </span>
+                                <span class="o_stat_text">Total Cost (₹)</span>
+                            </div>
+                        </div>
+                        <div class="o_stat_button" style="cursor:default;">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_value">
+                                    <field name="mileage" readonly="1"/>
+                                </span>
+                                <span class="o_stat_text">Mileage (km/L)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="oe_title">
+                        <h1>
+                            <field name="reference" readonly="1"/>
+                        </h1>
+                    </div>
+
+                    <group>
+                        <group string="Fuel Details">
+                            <field name="vehicle_id"/>
+                            <field name="fuel_date"/>
+                            <field name="fuel_station"/>
+                            <field name="fuel_type" readonly="1"/>
+                            <field name="payment_method"/>
+                        </group>
+                        <group string="Quantity &amp; Cost">
+                            <field name="quantity"/>
+                            <field name="cost_per_litre"/>
+                            <field name="total_cost" readonly="1"
+                                   class="fw-bold text-success"/>
+                            <field name="odometer_reading"/>
+                            <field name="mileage" readonly="1"
+                                   class="fw-bold"/>
+                        </group>
+                    </group>
+
+                    <group string="Notes">
+                        <field name="notes" nolabel="1" colspan="2"/>
+                    </group>
+                </sheet>
+
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         FUEL SEARCH VIEW
+    ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="view_fuel_search" model="ir.ui.view">
+        <field name="name">transit.fuel.search</field>
+        <field name="model">transit.fuel</field>
+        <field name="arch" type="xml">
+            <search string="Search Fuel Logs">
+                <field name="reference"/>
+                <field name="vehicle_id"/>
+                <field name="fuel_station"/>
+
+                <filter name="filter_cash" string="Cash Payment"
+                        domain="[('payment_method', '=', 'cash')]"/>
+                <filter name="filter_this_month" string="This Month"
+                        domain="[('fuel_date', '&gt;=', (context_today()).strftime('%Y-%m-01'))]"/>
+                <separator/>
+                <filter name="filter_petrol" string="Petrol"
+                        domain="[('fuel_type', '=', 'petrol')]"/>
+                <filter name="filter_diesel" string="Diesel"
+                        domain="[('fuel_type', '=', 'diesel')]"/>
+
+                <group expand="0" string="Group By">
+                    <filter name="group_vehicle" string="Vehicle"
+                            context="{'group_by': 'vehicle_id'}"/>
+                    <filter name="group_fuel_type" string="Fuel Type"
+                            context="{'group_by': 'fuel_type'}"/>
+                    <filter name="group_month" string="Month"
+                            context="{'group_by': 'fuel_date:month'}"/>
+                    <filter name="group_payment" string="Payment Method"
+                            context="{'group_by': 'payment_method'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+</odoo>
